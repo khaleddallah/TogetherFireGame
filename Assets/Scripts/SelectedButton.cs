@@ -20,6 +20,7 @@ public class SelectedButton : MonoBehaviour
             movFireList.transform.position = new Vector3(movFireList.transform.position.x, transform.position.y, 0f);
             movFireList.SetActive(true);
             aD.actionTempNum = int.Parse(transform.parent.name);
+            aD.actions[aD.actionTempNum-1].txt=transform.GetChild(0).gameObject;
         }
     }
 

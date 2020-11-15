@@ -12,6 +12,7 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
 
     private void Awake() {
         rectTransform = GetComponent<RectTransform>();
+        canvas = GameObject.FindGameObjectWithTag("canvas").GetComponent<Canvas>();
     }
 
 
@@ -30,7 +31,9 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
 
 
     public void OnEndDrag(PointerEventData eventData){
-        Debug.Log("OnEndDrag");
+        Debug.Log("OnEndDrag");        
+        Debug.Log("## pos :"+rectTransform.TransformPoint(rectTransform.transform.position));
+        Debug.Log("## Cam pos :"+Camera.main.WorldToViewportPoint(rectTransform.TransformPoint(rectTransform.transform.position)));
     }
          
 

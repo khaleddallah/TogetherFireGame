@@ -857,6 +857,7 @@ GameObject:
   - component: {fileID: 162430489}
   - component: {fileID: 162430488}
   - component: {fileID: 162430487}
+  - component: {fileID: 162430490}
   m_Layer: 5
   m_Name: Submit
   m_TagString: Untagged
@@ -926,7 +927,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 162430488}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 162430490}
+        m_TargetAssemblyTypeName: Preview, Assembly-CSharp
+        m_MethodName: Submit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &162430488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -965,6 +978,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 162430485}
   m_CullTransparentMesh: 0
+--- !u!114 &162430490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 162430485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d171b20f6d8468f42836355c4a3a0849, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myChar: {fileID: 695142887}
+  aD: {fileID: 1999494992}
 --- !u!1 &168219131
 GameObject:
   m_ObjectHideFlags: 0
@@ -1252,8 +1279,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 69.41, y: -84.45}
-  m_SizeDelta: {x: 138.7764, y: 118.12067}
+  m_AnchoredPosition: {x: 69.41, y: -84.7}
+  m_SizeDelta: {x: 138.7764, y: 118.62012}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &261394581
 MonoBehaviour:
@@ -1712,6 +1739,9 @@ MonoBehaviour:
   gunList: {fileID: 788105651}
   offset: 0
   aD: {fileID: 1999494992}
+  tfire: {fileID: 3551993689812628035, guid: 6d5d323ccd60222e88d62af9e1563c81, type: 3}
+  targets: {fileID: 1287846734}
+  color: {r: 0.9716981, g: 0.44547102, b: 0.08250269, a: 1}
 --- !u!1 &359691873
 GameObject:
   m_ObjectHideFlags: 0
@@ -1962,7 +1992,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 326896403}
+      - m_Target: {fileID: 390671611}
         m_TargetAssemblyTypeName: GunsButton, Assembly-CSharp
         m_MethodName: ChooseGun
         m_Mode: 1
@@ -2028,6 +2058,9 @@ MonoBehaviour:
   gunList: {fileID: 788105651}
   offset: 0
   aD: {fileID: 1999494992}
+  tfire: {fileID: 3551993689812628035, guid: 6d5d323ccd60222e88d62af9e1563c81, type: 3}
+  targets: {fileID: 1287846734}
+  color: {r: 0.9716981, g: 0.44547102, b: 0.08250269, a: 1}
 --- !u!1 &396256860
 GameObject:
   m_ObjectHideFlags: 0
@@ -3073,7 +3106,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 6ddaedb5a1a0bacaa9b02d3d4c0a3700, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6dddbbc3f62e6014eb4d51f1b39c91e8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -3093,7 +3126,7 @@ Transform:
   m_GameObject: {fileID: 695142887}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.25, y: -4.33, z: 0}
-  m_LocalScale: {x: 0.093927525, y: 0.11165988, z: 1}
+  m_LocalScale: {x: 0.12790112, y: 0.15204726, z: 1.3617}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
@@ -4594,6 +4627,9 @@ MonoBehaviour:
   gunList: {fileID: 788105651}
   offset: -20
   aD: {fileID: 1999494992}
+  tmov: {fileID: 8846560988946098879, guid: 81926c9aa17cd4bb9b74377992766ca6, type: 3}
+  targets: {fileID: 1287846734}
+  color: {r: 0.42930663, g: 0.8962264, b: 0, a: 1}
 --- !u!1 &1046446405
 GameObject:
   m_ObjectHideFlags: 0
@@ -4620,7 +4656,7 @@ Transform:
   m_GameObject: {fileID: 1046446405}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.88, y: 0.92, z: 0}
-  m_LocalScale: {x: 0.093927525, y: 0.11165988, z: 1}
+  m_LocalScale: {x: 0.24446517, y: 0.29061717, z: 2.6027}
   m_Children: []
   m_Father: {fileID: 359691874}
   m_RootOrder: 0
@@ -4665,7 +4701,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 6ddaedb5a1a0bacaa9b02d3d4c0a3700, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 340eeac63226dca10a7fecba3f3aedbe, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -4739,7 +4775,7 @@ Transform:
   m_GameObject: {fileID: 1054607677}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.83, y: 1.04, z: 0}
-  m_LocalScale: {x: 0.093927525, y: 0.11165988, z: 1}
+  m_LocalScale: {x: 0.2214717, y: 0.2632828, z: 2.3579}
   m_Children: []
   m_Father: {fileID: 359691874}
   m_RootOrder: 2
@@ -4784,7 +4820,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 6ddaedb5a1a0bacaa9b02d3d4c0a3700, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a55733cf1d757cf57a18f9c560ad27eb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -4916,7 +4952,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 326896403}
+      - m_Target: {fileID: 1222213286}
         m_TargetAssemblyTypeName: GunsButton, Assembly-CSharp
         m_MethodName: ChooseGun
         m_Mode: 1
@@ -4982,6 +5018,9 @@ MonoBehaviour:
   gunList: {fileID: 788105651}
   offset: 0
   aD: {fileID: 1999494992}
+  tfire: {fileID: 3551993689812628035, guid: 6d5d323ccd60222e88d62af9e1563c81, type: 3}
+  targets: {fileID: 1287846734}
+  color: {r: 0.9716981, g: 0.44547102, b: 0.08250269, a: 1}
 --- !u!1 &1231205462
 GameObject:
   m_ObjectHideFlags: 0
@@ -5134,7 +5173,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1281603477}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.18396, y: -0.000015258789, z: 0}
+  m_LocalPosition: {x: 3.183899, y: -0.000045776367, z: 0}
   m_LocalScale: {x: 10, y: 10, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -5924,7 +5963,7 @@ GameObject:
   - component: {fileID: 1475502645}
   m_Layer: 5
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: canvas
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6040,7 +6079,7 @@ Transform:
   m_GameObject: {fileID: 1485309037}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.4, y: 5.37, z: 0}
-  m_LocalScale: {x: 0.093927525, y: 0.11165988, z: 1}
+  m_LocalScale: {x: 0.2121635, y: 0.25221732, z: 2.2588}
   m_Children: []
   m_Father: {fileID: 359691874}
   m_RootOrder: 1
@@ -6085,7 +6124,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 6ddaedb5a1a0bacaa9b02d3d4c0a3700, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 33ae960f76254c18886cb6d5d6734b34, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -7158,6 +7197,9 @@ MonoBehaviour:
   gunList: {fileID: 788105651}
   offset: -20
   aD: {fileID: 1999494992}
+  tmov: {fileID: 8846560988946098879, guid: 81926c9aa17cd4bb9b74377992766ca6, type: 3}
+  targets: {fileID: 1287846734}
+  color: {r: 0.42930663, g: 0.8962264, b: 0, a: 1}
 --- !u!1 &1999494990
 GameObject:
   m_ObjectHideFlags: 0
@@ -7673,7 +7715,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 326896403}
+      - m_Target: {fileID: 2113969756}
         m_TargetAssemblyTypeName: GunsButton, Assembly-CSharp
         m_MethodName: ChooseGun
         m_Mode: 1
@@ -7739,6 +7781,9 @@ MonoBehaviour:
   gunList: {fileID: 788105651}
   offset: 0
   aD: {fileID: 1999494992}
+  tfire: {fileID: 3551993689812628035, guid: 6d5d323ccd60222e88d62af9e1563c81, type: 3}
+  targets: {fileID: 1287846734}
+  color: {r: 0.9716981, g: 0.44547102, b: 0.08250269, a: 1}
 --- !u!1 &2128234688
 GameObject:
   m_ObjectHideFlags: 0

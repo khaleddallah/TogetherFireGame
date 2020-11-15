@@ -5,7 +5,8 @@ using UnityEngine;
 public class Action{
     public string type="0"; // move | fire
     public string gun="0"; // specific property
-    public Vector3 target= new Vector3(0f,0f,0f);
+    public GameObject target;
+    public GameObject txt;
 }
 
 public class ActionsData : MonoBehaviour
