@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | togetherFire</title>
+  </head>
+  <body style="text-align: center; margin: 0px; padding: 0px">
+    <canvas id="unity-canvas" style="width: 100%; background: #231F20"></canvas>
+  </body>
+    <script src="Build/BuildWeb.loader.js"></script>
+    <script>
+      createUnityInstance(document.querySelector("#unity-canvas"), {
+        dataUrl: "Build/BuildWeb.data",
+        frameworkUrl: "Build/BuildWeb.framework.js",
+        codeUrl: "Build/BuildWeb.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "togetherFire",
+        productVersion: "1.0",
+      });
+    </script>
+
+</html>

@@ -18,6 +18,7 @@ public class GunsButton : MonoBehaviour
 
     public Color color;
 
+
     public void ChooseGun(){
 
         //run choose ShootTarget process
