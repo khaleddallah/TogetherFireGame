@@ -39,6 +39,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: MainBase
+    uniqueID: 2885060061
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
