@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class uib_apply : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    [SerializeField] private GameObject actionSelectingUnit;
+
+    public void ApplyPressed(){
+        actionSelectingUnit.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

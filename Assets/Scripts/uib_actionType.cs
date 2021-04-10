@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
 
 public class uib_actionType : MonoBehaviour
 {
@@ -12,8 +12,10 @@ public class uib_actionType : MonoBehaviour
     [SerializeField] private GameObject moveButton;
     [SerializeField] private GameObject fireButton;
 
+    [SerializeField] private GameObject ActionParent;
 
-    [SerializeField] private string actionType;
+
+    public string actionType;
 
     public Color colorAfterPressed;
 
@@ -38,12 +40,17 @@ public class uib_actionType : MonoBehaviour
             firePage.SetActive(false);
             GetComponent<Image>().color = colorAfterPressed;
             fireButton.GetComponent<Image>().color = Color.white;
+            TextMeshProUGUI xt = ActionParent.transform.GetChild(GM.gm.actionIndex).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+            xt.text = "move";
+            xt.color = colorAfterPressed;
         }
         else if(actionType=="fire"){
             movePage.SetActive(false);
             firePage.SetActive(true);
             GetComponent<Image>().color = colorAfterPressed;
             moveButton.GetComponent<Image>().color = Color.white;
+            GameObject x = GM.gm.gd.episodes[GM.gm.episodeIndex].roleplays[GM.gm.gd.playerIndex].actions[GM.gm.actionIndex].target;
+            Destroy(x);
         }
             
         GM.gm.gd.episodes[GM.gm.episodeIndex].roleplays[GM.gm.gd.playerIndex].actions[GM.gm.actionIndex].type = actionType;

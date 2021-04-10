@@ -22,8 +22,9 @@ public class Roleplay{
 [Serializable]
 public class Action{
     public string type="0"; // move | fire
-    public GameObject target;
     public string gunType="0"; // specific property
+    public GameObject target;
+
 }
 
 
