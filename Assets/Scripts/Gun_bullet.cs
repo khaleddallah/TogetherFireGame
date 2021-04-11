@@ -53,6 +53,7 @@ public class Gun_bullet : MonoBehaviour
     void OnTriggerExit2D(Collider2D other)
     {
         Debug.Log(transform.name+":: Exit ::"+other.transform.name);
+        if(transform.name.Substring(0,5) == "Sword") return;
         if(other.transform.name == "MainBase") Destroy(gameObject);
     }
 

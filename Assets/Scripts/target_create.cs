@@ -44,8 +44,6 @@ public class target_create : MonoBehaviour
         x.transform.position = targetsParent.transform.position;
         x.transform.SetParent(targetsParent.transform);
 
-
-
         TextMeshProUGUI xt = x.transform.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
         xt.text = (GM.gm.actionIndex+1).ToString("0");
     }

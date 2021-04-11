@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7882955963165368078}
-  - component: {fileID: 7882955963165368077}
   - component: {fileID: 7882955963165368067}
   - component: {fileID: 7882955963165368076}
+  - component: {fileID: -6913658600139554218}
   m_Layer: 0
   m_Name: Sword
   m_TagString: Untagged
@@ -34,21 +34,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7882955963165368077
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7882955963165368079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b515e085fb9c9fdd69ef1c3ca73e7da3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dest: {fileID: 0}
-  speed: 700
-  barriers: []
 --- !u!50 &7882955963165368067
 Rigidbody2D:
   serializedVersion: 4
@@ -96,6 +81,21 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.6238208, y: 6.5124397}
   m_EdgeRadius: 0
+--- !u!114 &-6913658600139554218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7882955963165368079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b515e085fb9c9fdd69ef1c3ca73e7da3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dest: {fileID: 0}
+  speed: 600
+  barriers: []
 --- !u!1 &7882955963335959871
 GameObject:
   m_ObjectHideFlags: 0
