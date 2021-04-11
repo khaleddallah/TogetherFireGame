@@ -11,6 +11,7 @@ public class uib_gunType : MonoBehaviour
     [SerializeField] private GameObject ActionParent;
 
     public string gunType;
+    public GameObject gunTypeObj;
 
     public Color colorAfterPressed;
 
@@ -23,16 +24,16 @@ public class uib_gunType : MonoBehaviour
 
     public void GunTypePressed(){
         GetComponent<Image>().color = colorAfterPressed;
-        GM.gm.gd.episodes[GM.gm.episodeIndex].roleplays[GM.gm.gd.playerIndex].actions[GM.gm.actionIndex].gunType = gunType;
+        GM.gm.gd.episodes[GM.gm.episodeIndex].roleplays[GM.gm.gd.playerIndex].actions[GM.gm.actionIndex].gunTypeObj = gunTypeObj; 
 
         for(int i=0; i<fireButtonS.transform.childCount; i++){
-            if(fireButtonS.transform.GetChild(i).GetComponent<uib_gunType>().gunType!=gunType){
+            if(fireButtonS.transform.GetChild(i).GetComponent<uib_gunType>().gunTypeObj.transform.name!=gunTypeObj.transform.name){
                 fireButtonS.transform.GetChild(i).GetComponent<Image>().color = Color.white;
             }
         }
 
         TextMeshProUGUI xt = ActionParent.transform.GetChild(GM.gm.actionIndex).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-        xt.text = gunType;
+        xt.text = gunTypeObj.transform.name;
         xt.color = colorAfterPressed;
     }
 }

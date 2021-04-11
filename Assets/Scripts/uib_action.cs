@@ -48,7 +48,7 @@ public class uib_action : MonoBehaviour
             moveButton.GetComponent<Image>().color = Color.white;
             fireButton.GetComponent<Image>().color = fireButton.GetComponent<uib_actionType>().colorAfterPressed;
             for(int i=0; i<fireButtonS.transform.childCount; i++){
-                if(GM.gm.gd.episodes[GM.gm.episodeIndex].roleplays[GM.gm.gd.playerIndex].actions[GM.gm.actionIndex].gunType==fireButtonS.transform.GetChild(i).GetComponent<uib_gunType>().gunType)
+                if(GM.gm.gd.episodes[GM.gm.episodeIndex].roleplays[GM.gm.gd.playerIndex].actions[GM.gm.actionIndex].gunTypeObj.transform.name==fireButtonS.transform.GetChild(i).GetComponent<uib_gunType>().gunTypeObj.transform.name)
                 {
                     fireButtonS.transform.GetChild(i).GetComponent<Image>().color = fireButtonS.transform.GetChild(i).GetComponent<uib_gunType>().colorAfterPressed;
                 }
