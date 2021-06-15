@@ -4,16 +4,22 @@ using UnityEngine;
 
 public class Gun_bullet : MonoBehaviour
 {
-
+    private bool active;
     public GameObject dest;
     public float speed;
+
+    public float healthDec;
     
-    public List<GameObject> barriers = new List<GameObject>();
+    public List<string> barriers = new List<string>();
+
+    private IEnumerator coroutine;
 
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(fire());
+        active = true;
+        coroutine = fire();
+        StartCoroutine(coroutine);
     }
 
     // Update Gun_bullet.csis called once per frame
@@ -34,7 +40,7 @@ public class Gun_bullet : MonoBehaviour
             transform.rotation = Quaternion.Euler(0.0f, 0.0f, z);
             yield return null;
             }
-            Destroy(gameObject);
+            DestroySpecial();
         }
         else{
             Vector3 movementDir =  (dest.transform.position-transform.position).normalized; 
@@ -42,10 +48,13 @@ public class Gun_bullet : MonoBehaviour
             float rotz = Mathf.Atan2(movementDir.y,movementDir.x)*Mathf.Rad2Deg;    
             transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotz-90);
 
-            while (true) {
+            while (active) {
+                Debug.Log(gameObject);
                 transform.position += Time.deltaTime * movementDir * speed;
                 yield return null;
             }
+            yield return null;
+
         }
     }
 
@@ -54,22 +63,47 @@ public class Gun_bullet : MonoBehaviour
     {
         Debug.Log(transform.name+":: Exit ::"+other.transform.name);
         if(transform.name.Substring(0,5) == "Sword") return;
-        if(other.transform.name == "MainBase") Destroy(gameObject);
+        if(other.transform.name == "MainBase") {
+            DestroySpecial();
+        }
     }
 
 
     void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log(transform.name+":: Enter ::"+other.transform.name);
-        if(barriers.Contains(other.transform.gameObject)) Destroy(gameObject);
+        
+        // if bullet bumped into Player (character)
+        if(other.gameObject.CompareTag("Player")){
+            int plind= int.Parse(other.transform.name[1].ToString());
+            Debug.Log("&&&&"+plind);
+            if(plind != GM.gm.gd.playerIndex){
+                GM.gm.gd.VitalDatas[plind].health-=healthDec;
+                DestroySpecial();
+            }
+            else{
+                return;
+            }
+        }
+
+        // if bullet bumped into barriers (that are assigned into the Inspector )
+        else if(barriers.Contains(other.gameObject.tag)) {
+            DestroySpecial();
+        }
     }
 
 
-    void OnDestroy()
+    void DestroySpecial()
     {
-        GM.gm.transform.gameObject.GetComponent<phys_action>().working=false; 
-        GM.gm.transform.gameObject.GetComponent<phys_action>().action+=1; 
-
+        if(gameObject && active){
+            active=false;
+            StopCoroutine(coroutine);
+            Debug.Log("!! Destroy :: "+gameObject.transform.name);
+            GM.gm.transform.gameObject.GetComponent<EpisodeMngr>().working=false; 
+            GM.gm.transform.gameObject.GetComponent<EpisodeMngr>().action+=1; 
+            // gameObject.SetActive(false);
+            Destroy(gameObject);
+        }
     }
 
 }

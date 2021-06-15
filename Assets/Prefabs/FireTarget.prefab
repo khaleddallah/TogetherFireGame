@@ -82,6 +82,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &6645335235229417785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,7 +246,7 @@ GameObject:
   - component: {fileID: 6645335236289857588}
   - component: {fileID: 6645335236289857590}
   - component: {fileID: 6645335236289857595}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: FireTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -260,7 +261,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6645335236289857594}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -5}
   m_LocalScale: {x: 0.15, y: 0.16, z: 1}
   m_Children:
   - {fileID: 6645335235229417784}
@@ -278,6 +279,7 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1

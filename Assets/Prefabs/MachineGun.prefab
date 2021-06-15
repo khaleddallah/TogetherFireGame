@@ -99,6 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dest: {fileID: 0}
   speed: 5
+  healthDec: 20
   barriers: []
 --- !u!50 &346066025382910615
 Rigidbody2D:

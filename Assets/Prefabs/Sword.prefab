@@ -95,6 +95,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dest: {fileID: 0}
   speed: 600
+  healthDec: 50
   barriers: []
 --- !u!1 &7882955963335959871
 GameObject:

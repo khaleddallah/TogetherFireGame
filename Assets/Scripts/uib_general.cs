@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class uib_submit : MonoBehaviour
+public class uib_general : MonoBehaviour
 {
+
+    [SerializeField] private GameObject actionSelectingUnit;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,5 +18,9 @@ public class uib_submit : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void ApplyPressed(){
+        actionSelectingUnit.SetActive(false);
     }
 }

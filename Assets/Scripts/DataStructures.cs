@@ -3,10 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+
 [Serializable]
 public class GameData{
     public int playerIndex;
     public List<Episode> episodes = new List<Episode>();
+    public List<VitalData> VitalDatas = new List<VitalData>();
+}
+
+[Serializable]
+public class VitalData{
+    public float health;
+    public int Golds;
 }
 
 [Serializable]
@@ -16,7 +24,6 @@ public class Episode{
 
 [Serializable]
 public class Roleplay{
-    // here
     public List<Action> actions = new List<Action>();
 }
 
@@ -26,6 +33,9 @@ public class Action{
     // public string gunType="0"; // specific property
     public GameObject gunTypeObj; 
     public GameObject target;
+
+    public string ser; 
+    // public float[] ser_target;
 
 }
 
