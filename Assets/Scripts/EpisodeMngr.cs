@@ -7,17 +7,14 @@ using UnityEngine.Networking;
 public class EpisodeMngr : MonoBehaviour
 {
 
-    public float actionTime = 3.0f;
-    public GameObject playersParent;
+    public float actionTime = 3.0f; // How action will take
+    public GameObject playersParent; // The parents of players
 
-    public int player = 0 ;
-    public int action = 0 ; 
+    public int player = 0 ; // index of the current player
+    public int action = 0 ; // index of the current action
 
-    public bool previewPressed = false;
-    public bool working = false;
-
-    public List<GameObject> gunTypes = new List<GameObject>();
-    public List<GameObject> TargetTypes = new List<GameObject>();
+    public bool previewPressed = false; // true when the "Preview" pressed, until the preview process ends.
+    public bool working = false; // working indicator of single action.
 
 
     void Start()
@@ -35,11 +32,9 @@ public class EpisodeMngr : MonoBehaviour
     // move object to distination
     public IEnumerator move(GameObject playerObj, GameObject dest) {
         Vector3 movementDir =  (dest.transform.position-playerObj.transform.position).normalized;         
-
         float distance = Vector3.Distance(dest.transform.position, playerObj.transform.position);
         float speed0 = distance/actionTime;
         float t0 = 0f;
-
         while (t0<actionTime) {
             playerObj.transform.position += Time.deltaTime * movementDir * speed0;
             t0+=Time.deltaTime;
@@ -91,22 +86,23 @@ public class EpisodeMngr : MonoBehaviour
             }
         }
         else{
-        previewPressed=false;
+            previewPressed=false;
         }
     }
     
 
-
+    // when Preview pressed
     public void previewPress(){
         previewPressed=true;
     }
 
+    // when Submit pressed
     public void submitPress(){
         StartCoroutine(GetText());
-
     }
 
 
+    // part of Submit process
     IEnumerator GetText() {
         UnityWebRequest www = UnityWebRequest.Get("http://127.0.0.1:5000");
         yield return www.SendWebRequest();
@@ -123,6 +119,8 @@ public class EpisodeMngr : MonoBehaviour
     }
 
 
+
+    // file actions of OTHER players
     void fillEpisode(string x){
         Episode ep = JsonUtility.FromJson<Episode>(x);
         foreach (Roleplay rp in ep.roleplays){

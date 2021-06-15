@@ -16,12 +16,8 @@ public class GM : MonoBehaviour
     public Episode templateEpisode;
 
 
-
-
-
     void Awake()
     {
-
         if(gm != null){
             GameObject.Destroy(gm);
         }
@@ -67,7 +63,7 @@ public class GM : MonoBehaviour
         }
     }
 
- 
+    // reload the scene
     public void reload(){
         Destroy(GM.gm.gameObject);
         Scene scene = SceneManager.GetActiveScene(); 

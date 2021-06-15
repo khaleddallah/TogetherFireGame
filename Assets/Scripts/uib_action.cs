@@ -17,10 +17,7 @@ public class uib_action : MonoBehaviour
     [SerializeField] private int actionNum;
 
     public void ActionPressed(){
-
         actionSelectingUnit.SetActive(true);
-
-
         GM.gm.actionIndex=actionNum;
 
         // Editing Time
@@ -34,6 +31,7 @@ public class uib_action : MonoBehaviour
                 fireButtonS.transform.GetChild(i).GetComponent<Image>().color = Color.white;
             }
         }
+
         // if move already
         else if(GM.gm.gd.episodes[GM.gm.episodeIndex].roleplays[GM.gm.gd.playerIndex].actions[GM.gm.actionIndex].type=="move"){
             movePage.SetActive(true);
@@ -41,7 +39,8 @@ public class uib_action : MonoBehaviour
             moveButton.GetComponent<Image>().color = moveButton.GetComponent<uib_actionType>().colorAfterPressed;
             fireButton.GetComponent<Image>().color = Color.white;
         }
-        // if 
+
+
         else if(GM.gm.gd.episodes[GM.gm.episodeIndex].roleplays[GM.gm.gd.playerIndex].actions[GM.gm.actionIndex].type=="fire"){
             movePage.SetActive(false);
             firePage.SetActive(true);

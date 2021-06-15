@@ -28,7 +28,7 @@ public class Gun_bullet : MonoBehaviour
         
     }
 
-
+    // fire process
     public IEnumerator fire(){
         Debug.Log("####"+transform.name.Substring(0,5));
         if(transform.name.Substring(0,5) == "Sword"){

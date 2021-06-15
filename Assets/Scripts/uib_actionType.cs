@@ -33,8 +33,6 @@ public class uib_actionType : MonoBehaviour
     }
 
     public void ActionTypePressed(){
-
-
         if(actionType=="move"){
             movePage.SetActive(true);
             firePage.SetActive(false);
@@ -44,6 +42,7 @@ public class uib_actionType : MonoBehaviour
             xt.text = "move";
             xt.color = colorAfterPressed;
         }
+        
         else if(actionType=="fire"){
             movePage.SetActive(false);
             firePage.SetActive(true);

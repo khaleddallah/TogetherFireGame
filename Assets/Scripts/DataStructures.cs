@@ -4,39 +4,45 @@ using UnityEngine;
 using System;
 
 
+
+// the data of all players at a complete game.
 [Serializable]
 public class GameData{
-    public int playerIndex;
-    public List<Episode> episodes = new List<Episode>();
-    public List<VitalData> VitalDatas = new List<VitalData>();
+    public int playerIndex; // the index of the player
+    public List<Episode> episodes = new List<Episode>(); // The episodes data
+    public List<VitalData> VitalDatas = new List<VitalData>(); // the vital data of all players 
 }
 
+
+// the vidal data of single character
 [Serializable]
 public class VitalData{
     public float health;
     public int Golds;
 }
 
+
+// the actionS of ALL characterS
 [Serializable]
 public class Episode{
     public List<Roleplay> roleplays = new List<Roleplay>();
 }
 
+
+// the actionS of one character
 [Serializable]
 public class Roleplay{
     public List<Action> actions = new List<Action>();
 }
 
+
+// The single action data
 [Serializable]
 public class Action{
-    public string type="0"; // move | fire
-    // public string gunType="0"; // specific property
-    public GameObject gunTypeObj; 
-    public GameObject target;
-
-    public string ser; 
-    // public float[] ser_target;
-
+    public string type="0"; // type of the action (move | fire)
+    public GameObject gunTypeObj; // type of the gun 
+    public GameObject target; // target of the action either move or fire
+    public string ser; // Serialization of previous data
 }
 
 
