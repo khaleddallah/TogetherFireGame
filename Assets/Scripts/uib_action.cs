@@ -18,11 +18,11 @@ public class uib_action : MonoBehaviour
 
     public void ActionPressed(){
         actionSelectingUnit.SetActive(true);
-        GM.gm.actionIndex=actionNum;
+        Sdata.sdata.actionIndex=actionNum;
 
         // Editing Time
         // First Time
-        if(GM.gm.gd.episodes[GM.gm.episodeIndex].roleplays[GM.gm.gd.playerIndex].actions[GM.gm.actionIndex].type=="0"){
+        if(Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.gd.playerIndex].actions[Sdata.sdata.actionIndex].type=="0"){
             moveButton.GetComponent<Image>().color = Color.white;
             fireButton.GetComponent<Image>().color = Color.white;
             movePage.SetActive(false);
@@ -33,7 +33,7 @@ public class uib_action : MonoBehaviour
         }
 
         // if move already
-        else if(GM.gm.gd.episodes[GM.gm.episodeIndex].roleplays[GM.gm.gd.playerIndex].actions[GM.gm.actionIndex].type=="move"){
+        else if(Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.gd.playerIndex].actions[Sdata.sdata.actionIndex].type=="move"){
             movePage.SetActive(true);
             firePage.SetActive(false);
             moveButton.GetComponent<Image>().color = moveButton.GetComponent<uib_actionType>().colorAfterPressed;
@@ -41,13 +41,13 @@ public class uib_action : MonoBehaviour
         }
 
 
-        else if(GM.gm.gd.episodes[GM.gm.episodeIndex].roleplays[GM.gm.gd.playerIndex].actions[GM.gm.actionIndex].type=="fire"){
+        else if(Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.gd.playerIndex].actions[Sdata.sdata.actionIndex].type=="fire"){
             movePage.SetActive(false);
             firePage.SetActive(true);
             moveButton.GetComponent<Image>().color = Color.white;
             fireButton.GetComponent<Image>().color = fireButton.GetComponent<uib_actionType>().colorAfterPressed;
             for(int i=0; i<fireButtonS.transform.childCount; i++){
-                if(GM.gm.gd.episodes[GM.gm.episodeIndex].roleplays[GM.gm.gd.playerIndex].actions[GM.gm.actionIndex].gunTypeObj.transform.name==fireButtonS.transform.GetChild(i).GetComponent<uib_gunType>().gunTypeObj.transform.name)
+                if(Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.gd.playerIndex].actions[Sdata.sdata.actionIndex].gunTypeObj.transform.name==fireButtonS.transform.GetChild(i).GetComponent<uib_gunType>().gunTypeObj.transform.name)
                 {
                     fireButtonS.transform.GetChild(i).GetComponent<Image>().color = fireButtonS.transform.GetChild(i).GetComponent<uib_gunType>().colorAfterPressed;
                 }

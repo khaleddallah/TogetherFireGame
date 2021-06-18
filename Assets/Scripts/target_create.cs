@@ -23,31 +23,31 @@ public class target_create : MonoBehaviour
 
     public void InstTarget(){
         // NOT exist before 
-        if(!GM.gm.gd.episodes[GM.gm.episodeIndex].roleplays[GM.gm.gd.playerIndex].actions[GM.gm.actionIndex].target)
+        if(!Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.gd.playerIndex].actions[Sdata.sdata.actionIndex].target)
         {
             // if Move
-            if(GM.gm.gd.episodes[GM.gm.episodeIndex].roleplays[GM.gm.gd.playerIndex].actions[GM.gm.actionIndex].type=="move"){
+            if(Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.gd.playerIndex].actions[Sdata.sdata.actionIndex].type=="move"){
                 CreateTargetObj();
             }
             // if Fire && not "Sword"
             else{
-                if (GM.gm.gd.episodes[GM.gm.episodeIndex].roleplays[GM.gm.gd.playerIndex].actions[GM.gm.actionIndex].gunTypeObj.transform.name!="Sword"){
+                if (Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.gd.playerIndex].actions[Sdata.sdata.actionIndex].gunTypeObj.transform.name!="Sword"){
                     CreateTargetObj();
                 }
             }
         }
         // exist before
         else{
-            GameObject x = GM.gm.gd.episodes[GM.gm.episodeIndex].roleplays[GM.gm.gd.playerIndex].actions[GM.gm.actionIndex].target;
+            GameObject x = Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.gd.playerIndex].actions[Sdata.sdata.actionIndex].target;
             
             // if Gun "sword" pressed destroy Target
-            Debug.Log(GM.gm.gd.episodes[GM.gm.episodeIndex].roleplays[GM.gm.gd.playerIndex].actions[GM.gm.actionIndex].gunTypeObj.transform.name);
-            if (GM.gm.gd.episodes[GM.gm.episodeIndex].roleplays[GM.gm.gd.playerIndex].actions[GM.gm.actionIndex].gunTypeObj.transform.name=="Sword"){
+            Debug.Log(Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.gd.playerIndex].actions[Sdata.sdata.actionIndex].gunTypeObj.transform.name);
+            if (Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.gd.playerIndex].actions[Sdata.sdata.actionIndex].gunTypeObj.transform.name=="Sword"){
                 Destroy(x);
             }
             
             // Move before & Fire Now || or conversely 
-            else if (GM.gm.gd.episodes[GM.gm.episodeIndex].roleplays[GM.gm.gd.playerIndex].actions[GM.gm.actionIndex].type!=x.GetComponent<target_drag>().targetType)
+            else if (Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.gd.playerIndex].actions[Sdata.sdata.actionIndex].type!=x.GetComponent<target_drag>().targetType)
             {
                 Destroy(x);
                 CreateTargetObj();
@@ -58,14 +58,14 @@ public class target_create : MonoBehaviour
 
     public void CreateTargetObj(){
         GameObject x = Instantiate(targetObj) as GameObject;
-        GM.gm.gd.episodes[GM.gm.episodeIndex].roleplays[GM.gm.gd.playerIndex].actions[GM.gm.actionIndex].target = x;
+        Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.gd.playerIndex].actions[Sdata.sdata.actionIndex].target = x;
     
-        x.GetComponent<target_drag>().targetType=GM.gm.gd.episodes[GM.gm.episodeIndex].roleplays[GM.gm.gd.playerIndex].actions[GM.gm.actionIndex].type;
+        x.GetComponent<target_drag>().targetType=Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.gd.playerIndex].actions[Sdata.sdata.actionIndex].type;
         x.transform.position = targetsParent.transform.position;
         x.transform.SetParent(targetsParent.transform);
 
 
         TextMeshProUGUI xt = x.transform.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-        xt.text = (GM.gm.actionIndex+1).ToString("0");
+        xt.text = (Sdata.sdata.actionIndex+1).ToString("0");
     }
 }

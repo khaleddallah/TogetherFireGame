@@ -5355,7 +5355,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireButtonS: {fileID: 408360146}
   ActionParent: {fileID: 2140825875}
-  gunType: pistol
   gunTypeObj: {fileID: 8028529909031204358, guid: a9105a24aea50cc65b99c80973d189d9, type: 3}
   colorAfterPressed: {r: 1, g: 0.7090996, b: 0, a: 1}
 --- !u!114 &747450321
@@ -6166,6 +6165,59 @@ RectTransform:
   m_AnchoredPosition: {x: 12.17512, y: 0.000030518}
   m_SizeDelta: {x: 315.36432, y: 168.00485}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &940959687
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 940959689}
+  - component: {fileID: 940959688}
+  m_Layer: 0
+  m_Name: Sdata
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &940959688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 940959687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93a74e4c51c41a8be89183740f3cc2dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  actionIndex: 0
+  episodeIndex: -1
+  gd:
+    playerIndex: 0
+    episodes: []
+    VitalDatas: []
+  participantNum: 4
+  actionsNum: 4
+  templateEpisode:
+    roleplays: []
+--- !u!4 &940959689
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 940959687}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &946243257
 GameObject:
   m_ObjectHideFlags: 0
@@ -9570,16 +9622,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1acf3d456e2f52b69af8bc20485822e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionIndex: 0
-  episodeIndex: -1
-  gd:
-    playerIndex: 0
-    episodes: []
-    VitalDatas: []
-  participantNum: 4
-  actionsNum: 4
-  templateEpisode:
-    roleplays: []
 --- !u!114 &1610572438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9598,8 +9640,12 @@ MonoBehaviour:
   action: 0
   previewPressed: 0
   working: 0
-  gunTypes: []
-  TargetTypes: []
+  submitPressed: 1
+  gunTypesObjs:
+  - {fileID: 3505746068904520643, guid: 6e093c73b040efd6a9f0e633307e4cc3, type: 3}
+  - {fileID: 8028529909031204358, guid: a9105a24aea50cc65b99c80973d189d9, type: 3}
+  - {fileID: 346066025382910608, guid: 217a18fc65f04f236938d8649e40ddab, type: 3}
+  - {fileID: 7882955963165368079, guid: f15ff0909bb980412ab81124ccc95df1, type: 3}
 --- !u!1 &1615003999
 GameObject:
   m_ObjectHideFlags: 0
@@ -11578,7 +11624,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireButtonS: {fileID: 408360146}
   ActionParent: {fileID: 2140825875}
-  gunType: machineGun
   gunTypeObj: {fileID: 346066025382910608, guid: 217a18fc65f04f236938d8649e40ddab, type: 3}
   colorAfterPressed: {r: 1, g: 0.7090996, b: 0, a: 1}
 --- !u!114 &1899029987
@@ -12124,7 +12169,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireButtonS: {fileID: 408360146}
   ActionParent: {fileID: 2140825875}
-  gunType: grenade
   gunTypeObj: {fileID: 3505746068904520643, guid: 6e093c73b040efd6a9f0e633307e4cc3, type: 3}
   colorAfterPressed: {r: 1, g: 0.7090996, b: 0, a: 1}
 --- !u!114 &1935985161
@@ -13160,7 +13204,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireButtonS: {fileID: 408360146}
   ActionParent: {fileID: 2140825875}
-  gunType: sword
   gunTypeObj: {fileID: 7882955963165368079, guid: f15ff0909bb980412ab81124ccc95df1, type: 3}
   colorAfterPressed: {r: 1, g: 0.7090996, b: 0, a: 1}
 --- !u!114 &2056070776

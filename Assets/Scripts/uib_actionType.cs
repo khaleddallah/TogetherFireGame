@@ -38,7 +38,7 @@ public class uib_actionType : MonoBehaviour
             firePage.SetActive(false);
             GetComponent<Image>().color = colorAfterPressed;
             fireButton.GetComponent<Image>().color = Color.white;
-            TextMeshProUGUI xt = ActionParent.transform.GetChild(GM.gm.actionIndex).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+            TextMeshProUGUI xt = ActionParent.transform.GetChild(Sdata.sdata.actionIndex).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
             xt.text = "move";
             xt.color = colorAfterPressed;
         }
@@ -48,11 +48,11 @@ public class uib_actionType : MonoBehaviour
             firePage.SetActive(true);
             GetComponent<Image>().color = colorAfterPressed;
             moveButton.GetComponent<Image>().color = Color.white;
-            GameObject x = GM.gm.gd.episodes[GM.gm.episodeIndex].roleplays[GM.gm.gd.playerIndex].actions[GM.gm.actionIndex].target;
+            GameObject x = Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.gd.playerIndex].actions[Sdata.sdata.actionIndex].target;
             Destroy(x);
         }
             
-        GM.gm.gd.episodes[GM.gm.episodeIndex].roleplays[GM.gm.gd.playerIndex].actions[GM.gm.actionIndex].type = actionType;
+        Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.gd.playerIndex].actions[Sdata.sdata.actionIndex].type = actionType;
 
 
     }
