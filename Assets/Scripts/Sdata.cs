@@ -28,12 +28,12 @@ public class Sdata : MonoBehaviour
         // have to get this from the server
         sdata.gd.playerIndex=0;
 
-        // set players health & Golds
+        // set players health & golds
         for(int h=0; h< participantNum; h++){
             VitalData x = new VitalData();
-            sdata.gd.VitalDatas.Add(x);
-            sdata.gd.VitalDatas[h].health=100.0f;
-            sdata.gd.VitalDatas[h].Golds=0;
+            sdata.gd.vitalDatas.Add(x);
+            sdata.gd.vitalDatas[h].health=100.0f;
+            sdata.gd.vitalDatas[h].golds=0;
         }
 
 

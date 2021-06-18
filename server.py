@@ -3,36 +3,41 @@ from flask import Flask, jsonify, render_template, request, redirect, url_for, m
 import socket, random
 
 app = Flask(__name__)
-# app.config["CACHE_TYPE"] = "null"
-# app.config["DEBUG"] = True
 
 
-# data = {
-#     "roleplays":[
-#         {"actions":[
-#             {"type":"fire", "ser":"Grenade/9.0/30.0/30.4"},
-#             {"type":"fire", "ser":"Sword/9.0/30.0/30.4"},
-#             {"type":"fire", "ser":"MachineGun/9.0/30.0/30.4"},
-#             {"type":"fire", "ser":"Pistol/9.0/30.0/30.4"}
-#         ]},
-#         {"actions":[
-#             {"type":"fire", "ser":"Grenade/9.0/30.0/30.4"},
-#             {"type":"fire", "ser":"Grenade/9.0/30.0/30.4"},
-#             {"type":"fire", "ser":"Pistol/9.0/30.0/30.4"},
-#             {"type":"fire", "ser":"Grenade/9.0/30.0/30.4"}
-#         ]},
-#         {"actions":[
-#             {"type":"fire", "ser":"Grenade/9.0/30.0/30.4"},
-#             {"type":"fire", "ser":"Grenade/9.0/30.0/30.4"},
-#             {"type":"fire", "ser":"Grenade/9.0/30.0/30.4"},
-#             {"type":"fire", "ser":"MachineGun/9.0/30.0/30.4"}
-#         ]},
-#         {"actions":[
-#             {"type":"fire", "ser":"Grenade/9.0/30.0/30.4"},
-#             {"type":"fire", "ser":"Grenade/9.0/30.0/30.4"},
-#             {"type":"fire", "ser":"Grenade/9.0/30.0/30.4"},
-#             {"type":"fire", "ser":"Grenade/9.0/30.0/30.4"}
-#         ]}]}
+class Action(object):
+    def __init__(self, atype="0", gunType="0", target="0"):
+        self.atype = atype
+        self.gunType = gunType
+        self.target = target
+
+class Roleplay(object):
+    def __init__(self, actions):
+        self.actions = actions
+
+class Episode(object):
+    def __init__(self, roleplays):
+        self.roleplays = roleplays
+
+class VitalData(object):
+    def __init__(self, health, golds):
+        self.health = health
+        self.golds = golds
+
+class GameData(object):
+    def __init__(self):
+        self.episodes = episodes
+        self.vitalDatas = vitalDatas
+
+
+gameData = GameData()
+playersConut = 4
+episodeIndex = 0 
+
+
+def initialGame():
+    for i in range(playersConut):
+        gameData.vitalDatas = 
 
 @app.route('/pdata', methods=['GET'])
 def home():
@@ -42,14 +47,11 @@ def home():
 
 @app.route('/submit', methods=['POST'])
 def reroute():
-    # x = request
     print(request.json['pindex'])
     print(request.json['data'])
-    # print(request.stream.read())
-
-    # return('r'+msg[0]+':'+msg[1])
     return("Good")
-    # return jsonify(data)
+
+
 
 
 app.run(debug=False, host='127.0.0.1', port=5000) 

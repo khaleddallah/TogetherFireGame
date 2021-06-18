@@ -10,7 +10,7 @@ using System;
 public class GameData{
     public int playerIndex; // the index of the player
     public List<Episode> episodes = new List<Episode>(); // The episodes data
-    public List<VitalData> VitalDatas = new List<VitalData>(); // the vital data of all players 
+    public List<VitalData> vitalDatas = new List<VitalData>(); // the vital data of all players 
 }
 
 
@@ -18,7 +18,7 @@ public class GameData{
 [Serializable]
 public class VitalData{
     public float health;
-    public int Golds;
+    public int golds;
 }
 
 

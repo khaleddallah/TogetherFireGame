@@ -78,7 +78,7 @@ public class Gun_bullet : MonoBehaviour
             int plind= int.Parse(other.transform.name[1].ToString());
             Debug.Log("&&&&"+plind);
             if(plind != Sdata.sdata.gd.playerIndex){
-                Sdata.sdata.gd.VitalDatas[plind].health-=healthDec;
+                Sdata.sdata.gd.vitalDatas[plind].health-=healthDec;
                 DestroySpecial();
             }
             else{

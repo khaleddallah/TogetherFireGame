@@ -143,6 +143,7 @@ public class EpisodeMngr : MonoBehaviour
             Debug.Log(www.error);
         }
         else {
+            Debug.Log(www.downloadHandler.text);
             Debug.Log("@@@RESPONSE###");
         }
     }
@@ -150,7 +151,6 @@ public class EpisodeMngr : MonoBehaviour
 
     // post the data of the current player
     void submitCurrentPlayerRoleplay() {
-        // string msg = "{\"data\":{";
         string msg = "{";
         msg+= "\"pindex\":";
         msg+= "\""+sdata.gd.playerIndex.ToString()+"\"" ;
