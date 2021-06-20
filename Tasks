@@ -1,0 +1,8 @@
+{
+    "roleplays":[
+        {"actions":[
+            {"type":"fire", "ser":"Grenade/9.0/30.0/30.4"},
+            {"type":"fire", "ser":"Sword/9.0/30.0/30.4"},
+            {"type":"fire", "ser":"MachineGun/9.0/30.0/30.4"},
+            {"type":"fire", "ser":"Pistol/9.0/30.0/30.4"}
+        ]}

@@ -5,13 +5,6 @@ using System;
 
 
 
-// the data of all players at a complete game.
-[Serializable]
-public class GameData{
-    public int playerIndex; // the index of the player
-    public List<Episode> episodes = new List<Episode>(); // The episodes data
-    public List<VitalData> vitalDatas = new List<VitalData>(); // the vital data of all players 
-}
 
 
 // the vidal data of single character

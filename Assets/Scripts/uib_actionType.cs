@@ -48,11 +48,11 @@ public class uib_actionType : MonoBehaviour
             firePage.SetActive(true);
             GetComponent<Image>().color = colorAfterPressed;
             moveButton.GetComponent<Image>().color = Color.white;
-            GameObject x = Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.gd.playerIndex].actions[Sdata.sdata.actionIndex].target;
+            GameObject x = Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.playerIndex].actions[Sdata.sdata.actionIndex].target;
             Destroy(x);
         }
             
-        Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.gd.playerIndex].actions[Sdata.sdata.actionIndex].type = actionType;
+        Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.playerIndex].actions[Sdata.sdata.actionIndex].type = actionType;
 
 
     }

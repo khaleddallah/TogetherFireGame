@@ -23,7 +23,7 @@ public class uib_gunType : MonoBehaviour
 
     public void GunTypePressed(){
         GetComponent<Image>().color = colorAfterPressed;
-        Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.gd.playerIndex].actions[Sdata.sdata.actionIndex].gunTypeObj = gunTypeObj; 
+        Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.playerIndex].actions[Sdata.sdata.actionIndex].gunTypeObj = gunTypeObj; 
 
         for(int i=0; i<fireButtonS.transform.childCount; i++){
             if(fireButtonS.transform.GetChild(i).GetComponent<uib_gunType>().gunTypeObj.transform.name!=gunTypeObj.transform.name){

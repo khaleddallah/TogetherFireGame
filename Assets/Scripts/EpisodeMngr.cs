@@ -69,21 +69,21 @@ public class EpisodeMngr : MonoBehaviour
             if (working){
                 return;
             }
-            else if(Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[player].actions[action].type == "move")
+            else if(Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[player].actions[action].type == "move")
             {
                 working=true;
                 StartCoroutine(move(
                     playersParent.transform.GetChild(player).transform.GetChild(0).transform.gameObject,
-                    Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[player].actions[action].target
+                    Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[player].actions[action].target
                 ));
             }   
-            else if(Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.gd.playerIndex].actions[action].type == "fire")
+            else if(Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.playerIndex].actions[action].type == "fire")
             {
                 working=true;
                 StartCoroutine(fire(
                     playersParent.transform.GetChild(player).transform.GetChild(0).transform.gameObject,
-                    Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[player].actions[action].target,
-                    Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.gd.playerIndex].actions[action].gunTypeObj
+                    Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[player].actions[action].target,
+                    Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.playerIndex].actions[action].gunTypeObj
                 ));
             }
             else
@@ -115,7 +115,7 @@ public class EpisodeMngr : MonoBehaviour
     // Get the players data to start the episode 
     // run after submitTime ends || or || if all the playeres sumbitted
     IEnumerator GetPlayersRoleplays() {
-        UnityWebRequest www = UnityWebRequest.Get("http://127.0.0.1:5000/pdata");
+        UnityWebRequest www = UnityWebRequest.Get("http://0.0.0.0:5000/pdata");
         yield return www.SendWebRequest();
 
         if (www.result != UnityWebRequest.Result.Success) {
@@ -136,7 +136,7 @@ public class EpisodeMngr : MonoBehaviour
         DownloadHandlerBuffer downloadHandlerBuffer = new DownloadHandlerBuffer();
         UploadHandlerRaw uploadHandlerRaw = new UploadHandlerRaw(jsonBinary);
         uploadHandlerRaw.contentType = "application/json";
-        UnityWebRequest www = new UnityWebRequest("http://127.0.0.1:5000/"+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
+        UnityWebRequest www = new UnityWebRequest("http://0.0.0.0:5000/"+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
         yield return www.SendWebRequest();
         if (www.result != UnityWebRequest.Result.Success) {
             Debug.Log("@@@error@@@");
@@ -153,10 +153,10 @@ public class EpisodeMngr : MonoBehaviour
     void submitCurrentPlayerRoleplay() {
         string msg = "{";
         msg+= "\"pindex\":";
-        msg+= "\""+sdata.gd.playerIndex.ToString()+"\"" ;
+        msg+= "\""+sdata.playerIndex.ToString()+"\"" ;
         msg+= ",";
         msg+="\"data\":[";
-        foreach(Action a in sdata.gd.episodes[sdata.episodeIndex].roleplays[sdata.gd.playerIndex].actions){
+        foreach(Action a in sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions){
             msg+= "{\"type\":\""+a.type+"\"";
             if(a.gunTypeObj){
                 msg+= ",";
@@ -188,15 +188,15 @@ public class EpisodeMngr : MonoBehaviour
         foreach (Roleplay rp in ep.roleplays){
             actionInd=0;
             foreach(Action a in rp.actions){
-                Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[playerInd].actions[actionInd].type = a.type;
+                Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[playerInd].actions[actionInd].type = a.type;
                 string[] data = a.ser.Split(char.Parse("/"));
-                Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[playerInd].actions[actionInd].gunTypeObj = getGameObjByName(gunTypesObjs,data[0]);
+                Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[playerInd].actions[actionInd].gunTypeObj = getGameObjByName(gunTypesObjs,data[0]);
                 GameObject targetTemp = new GameObject();
                 targetTemp.transform.position = new Vector3(
                     float.Parse(data[1]),
                     float.Parse(data[2]),
                     float.Parse(data[3]));
-                Sdata.sdata.gd.episodes[Sdata.sdata.episodeIndex].roleplays[playerInd].actions[actionInd].target = targetTemp;   
+                Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[playerInd].actions[actionInd].target = targetTemp;   
                 actionInd+=1;
             }
             playerInd+=1;

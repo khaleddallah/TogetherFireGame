@@ -6,13 +6,20 @@ using UnityEngine.SceneManagement;
 public class Sdata : MonoBehaviour
 {
     public static Sdata sdata;
+
+    public string serverURL = "";
+    public string myName = "";
     public int actionIndex = 0;
+    public int playerIndex; // the index of the player
     public int episodeIndex = -1;
 
+    public List<Episode> episodes = new List<Episode>(); // The episodes data
+    public List<VitalData> vitalDatas = new List<VitalData>(); // the vital data of all players 
 
-    public GameData gd ;
+    // STATIC
     public int participantNum = 4;
     public int actionsNum = 4;
+
     public Episode templateEpisode;
 
 
@@ -26,14 +33,14 @@ public class Sdata : MonoBehaviour
         }
 
         // have to get this from the server
-        sdata.gd.playerIndex=0;
+        sdata.playerIndex=0;
 
         // set players health & golds
         for(int h=0; h< participantNum; h++){
             VitalData x = new VitalData();
-            sdata.gd.vitalDatas.Add(x);
-            sdata.gd.vitalDatas[h].health=100.0f;
-            sdata.gd.vitalDatas[h].golds=0;
+            sdata.vitalDatas.Add(x);
+            sdata.vitalDatas[h].health=100.0f;
+            sdata.vitalDatas[h].golds=0;
         }
 
 
@@ -50,7 +57,7 @@ public class Sdata : MonoBehaviour
         }
 
         episodeIndex+=1;
-        sdata.gd.episodes.Add(templateEpisode);
+        sdata.episodes.Add(templateEpisode);
 
         DontDestroyOnLoad(this);
     }
