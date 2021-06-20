@@ -58,6 +58,7 @@ public class ServerLogin : MonoBehaviour
             Debug.Log(www.error);
             string error0 = "ServerError:" + www.error;
             ErrorField.text = error0;
+            www.Dispose();
         }
         else {
             Debug.Log("@@@RESPONSE###");
@@ -78,7 +79,7 @@ public class ServerLogin : MonoBehaviour
                 ErrorField.text = error1;
                 Debug.Log(error1);
             }
-
+            www.Dispose();
         }
     }
 

@@ -18,6 +18,7 @@ public class GM : MonoBehaviour
     public TextMeshProUGUI SubmitTimeText;
 
     public GameObject ActionsUnit;
+    public EpisodeMngr episodeMngr;
 
     // private bool isStarted;
 
@@ -39,7 +40,7 @@ public class GM : MonoBehaviour
     {
         submitTime = submitTimeRef;
 
-
+        episodeMngr = GetComponent<EpisodeMngr>();
         sdata = Sdata.sdata;
         PlayersNames.transform.GetChild(sdata.playerIndex).GetComponent<TextMeshProUGUI>().text = sdata.myName;
         StartCoroutine(postIsStarted());
@@ -67,6 +68,7 @@ public class GM : MonoBehaviour
         if (www.result != UnityWebRequest.Result.Success) {
             Debug.Log("@@@error@@@");
             Debug.Log(www.error);
+            www.Dispose();
         }
         else {
             Debug.Log("@@@RESPONSE###");
@@ -81,7 +83,7 @@ public class GM : MonoBehaviour
 
             ActionsUnit.SetActive(true);
             StartCoroutine(submitDownTimer());
-
+            www.Dispose();
         }
     }
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-
+using UnityEngine.UI;
 
 public class EpisodeMngr : MonoBehaviour
 {
@@ -21,6 +21,7 @@ public class EpisodeMngr : MonoBehaviour
     public List<GameObject> gunTypesObjs = new List<GameObject>();
 
     private Sdata sdata;
+    public Button SubmitButton;
 
     void Start()
     {
@@ -31,9 +32,6 @@ public class EpisodeMngr : MonoBehaviour
     {
         if(previewPressed){
             run1PlayerEpisode();
-        }
-        if(submitPressed){
-
         }
     }
 
@@ -112,39 +110,26 @@ public class EpisodeMngr : MonoBehaviour
     }
 
 
-    // Get the players data to start the episode 
-    // run after submitTime ends || or || if all the playeres sumbitted
-    IEnumerator GetPlayersRoleplays() {
-        UnityWebRequest www = UnityWebRequest.Get("http://0.0.0.0:5000/pdata");
-        yield return www.SendWebRequest();
-
-        if (www.result != UnityWebRequest.Result.Success) {
-            Debug.Log(www.error);
-        }
-        else {
-            // Show results as text
-            Debug.Log(www.downloadHandler.text);
-            fillEpisode(www.downloadHandler.text);
-        }
-    }
-
-
 
     // post the data of the current player
-    IEnumerator postToServer(string msg, string route) {
+    IEnumerator submitpostToServer(string msg, string route) {
         byte[] jsonBinary = System.Text.Encoding.UTF8.GetBytes(msg);    
         DownloadHandlerBuffer downloadHandlerBuffer = new DownloadHandlerBuffer();
         UploadHandlerRaw uploadHandlerRaw = new UploadHandlerRaw(jsonBinary);
         uploadHandlerRaw.contentType = "application/json";
-        UnityWebRequest www = new UnityWebRequest("http://0.0.0.0:5000/"+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
+        UnityWebRequest www = new UnityWebRequest(sdata.serverURL+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
         yield return www.SendWebRequest();
         if (www.result != UnityWebRequest.Result.Success) {
             Debug.Log("@@@error@@@");
             Debug.Log(www.error);
+            www.Dispose();
         }
         else {
-            Debug.Log(www.downloadHandler.text);
+            string data = (www.downloadHandler.text);
+            Debug.Log(data);
             Debug.Log("@@@RESPONSE###");
+            fillEpisode(data);
+            www.Dispose();
         }
     }
 
@@ -175,28 +160,43 @@ public class EpisodeMngr : MonoBehaviour
         }
         msg = msg.Substring(0,msg.Length-1);
         msg+="]}";
-        StartCoroutine(postToServer(msg,"submit"));
+        Debug.Log(msg);
+        SubmitButton.interactable = false;
+        StartCoroutine(submitpostToServer(msg,"submit"));
     }
 
 
 
     // file actions of OTHER players
     void fillEpisode(string x){
+        Debug.Log(x);
         int playerInd = 0; 
         int actionInd = 0; 
         Episode ep = JsonUtility.FromJson<Episode>(x);
         foreach (Roleplay rp in ep.roleplays){
             actionInd=0;
             foreach(Action a in rp.actions){
-                Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[playerInd].actions[actionInd].type = a.type;
+                sdata.episodes[Sdata.sdata.episodeIndex].roleplays[playerInd].actions[actionInd].type = a.type;
                 string[] data = a.ser.Split(char.Parse("/"));
-                Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[playerInd].actions[actionInd].gunTypeObj = getGameObjByName(gunTypesObjs,data[0]);
-                GameObject targetTemp = new GameObject();
-                targetTemp.transform.position = new Vector3(
-                    float.Parse(data[1]),
-                    float.Parse(data[2]),
-                    float.Parse(data[3]));
-                Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[playerInd].actions[actionInd].target = targetTemp;   
+                if(a.type=="fire"){
+                    sdata.episodes[Sdata.sdata.episodeIndex].roleplays[playerInd].actions[actionInd].gunTypeObj = getGameObjByName(gunTypesObjs,data[0]);
+                    if(data[0]!="Sword"){
+                        GameObject targetTemp = new GameObject();
+                        targetTemp.transform.position = new Vector3(
+                            float.Parse(data[1]),
+                            float.Parse(data[2]),
+                            float.Parse(data[3]));
+                        Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[playerInd].actions[actionInd].target = targetTemp;
+                    }
+                }
+                else if(a.type=="move"){
+                    GameObject targetTemp = new GameObject();
+                    targetTemp.transform.position = new Vector3(
+                        float.Parse(data[0]),
+                        float.Parse(data[1]),
+                        float.Parse(data[2]));
+                    Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[playerInd].actions[actionInd].target = targetTemp;   
+                }
                 actionInd+=1;
             }
             playerInd+=1;

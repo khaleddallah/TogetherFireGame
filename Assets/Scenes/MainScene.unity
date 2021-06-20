@@ -9806,6 +9806,7 @@ MonoBehaviour:
   submitTime: 0
   SubmitTimeText: {fileID: 1495579428}
   ActionsUnit: {fileID: 412114581}
+  episodeMngr: {fileID: 0}
 --- !u!114 &1610572438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9830,6 +9831,7 @@ MonoBehaviour:
   - {fileID: 8028529909031204358, guid: a9105a24aea50cc65b99c80973d189d9, type: 3}
   - {fileID: 346066025382910608, guid: 217a18fc65f04f236938d8649e40ddab, type: 3}
   - {fileID: 7882955963165368079, guid: f15ff0909bb980412ab81124ccc95df1, type: 3}
+  SubmitButton: {fileID: 250753872}
 --- !u!1 &1615003999
 GameObject:
   m_ObjectHideFlags: 0
