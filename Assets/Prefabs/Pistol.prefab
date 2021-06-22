@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dest: {fileID: 0}
-  speed: 5
+  speed: 2
   healthDec: 20
   barriers: []
 --- !u!50 &8028529909031204355

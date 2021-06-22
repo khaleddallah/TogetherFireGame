@@ -14,11 +14,12 @@ public class Gun_bullet : MonoBehaviour
 
     private IEnumerator coroutineFire;
 
-    // Start is called before the first frame update
-    void Start()
+    public int myparent;
+
+    public void Start0()
     {
         active = true;
-        coroutineFire = fire();
+        coroutineFire = fire(myparent);
         StartCoroutine(coroutineFire);
     }
 
@@ -29,18 +30,21 @@ public class Gun_bullet : MonoBehaviour
     }
 
     // fire process
-    public IEnumerator fire(){
+    public IEnumerator fire(int parent){
+        myparent=parent;
         Debug.Log("####"+transform.name.Substring(0,5));
         if(transform.name.Substring(0,5) == "Sword"){
             float z = 0 ; 
             Debug.Log("Sword");
-            while(z<=359)
+            while(z<=359 && active)
             {
-            z+=1*speed*Time.deltaTime;
-            transform.rotation = Quaternion.Euler(0.0f, 0.0f, z);
-            yield return null;
+                z+=1*speed*Time.deltaTime;
+                transform.rotation = Quaternion.Euler(0.0f, 0.0f, z);
+                yield return null;
             }
             DestroySpecial();
+            yield return null;
+
         }
         else{
             Vector3 movementDir =  (dest.transform.position-transform.position).normalized; 
@@ -49,7 +53,6 @@ public class Gun_bullet : MonoBehaviour
             transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotz-90);
 
             while (active) {
-                // Debug.Log(gameObject);
                 transform.position += Time.deltaTime * movementDir * speed;
                 yield return null;
             }
@@ -76,8 +79,7 @@ public class Gun_bullet : MonoBehaviour
         // if bullet bumped into Player (character)
         if(other.gameObject.CompareTag("Player")){
             int plind= int.Parse(other.transform.name[1].ToString());
-            Debug.Log("&&&&"+plind);
-            if(plind != Sdata.sdata.playerIndex){
+            if(plind != myparent){
                 Sdata.sdata.vitalDatas[plind].health-=healthDec;
                 DestroySpecial();
             }
@@ -101,6 +103,8 @@ public class Gun_bullet : MonoBehaviour
             Debug.Log("!! Destroy :: "+gameObject.transform.name);
             GM.gm.transform.gameObject.GetComponent<EpisodeMngr>().working=false; // tell the episode mngr the the action (fire) finish
             GM.gm.transform.gameObject.GetComponent<EpisodeMngr>().action+=1; // complete to the other action
+            GM.gm.transform.gameObject.GetComponent<EpisodeMngr>().actionFire-=1; // complete to the other action
+
             Destroy(gameObject);
         }
     }

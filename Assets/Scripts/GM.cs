@@ -20,6 +20,10 @@ public class GM : MonoBehaviour
     public GameObject ActionsUnit;
     public EpisodeMngr episodeMngr;
 
+    public string firstSceneName;
+
+    public Coroutine submitTimerRoutine = null;
+
     // private bool isStarted;
 
     void Awake()
@@ -38,6 +42,7 @@ public class GM : MonoBehaviour
 
     void Start()
     {
+        
         submitTime = submitTimeRef;
 
         episodeMngr = GetComponent<EpisodeMngr>();
@@ -66,12 +71,10 @@ public class GM : MonoBehaviour
         UnityWebRequest www = new UnityWebRequest(sdata.serverURL+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
         yield return www.SendWebRequest();
         if (www.result != UnityWebRequest.Result.Success) {
-            Debug.Log("@@@error@@@");
             Debug.Log(www.error);
             www.Dispose();
         }
         else {
-            Debug.Log("@@@RESPONSE###");
             string data = www.downloadHandler.text;
             Debug.Log(data);
             Debug.Log("YEEES");
@@ -82,19 +85,35 @@ public class GM : MonoBehaviour
             }
 
             ActionsUnit.SetActive(true);
-            StartCoroutine(submitDownTimer());
+            startSubmitCoroutine();
             www.Dispose();
         }
     }
 
+    public void stopSubmitCoroutine(){
+        StopCoroutine(submitTimerRoutine);
+    }
 
-    IEnumerator submitDownTimer() {
+    public void startSubmitCoroutine(){
+        submitTimerRoutine = StartCoroutine(submitDownTimer());
+
+    }
+
+    public IEnumerator submitDownTimer() {
         while(submitTime>=0){
             SubmitTimeText.text = "EP "+ sdata.episodeIndex.ToString() +" : "+ submitTime.ToString();
             submitTime -= 1;
             yield return new WaitForSeconds(1f);
         }
-        Debug.Log("you should submit anyway.");
+        episodeMngr.submitPress();
+        yield return null;
+    }
+
+
+
+    public void loadFirstScene(){
+        Destroy(sdata.gameObject);
+        SceneManager.LoadScene(firstSceneName);
     }
 
 

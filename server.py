@@ -52,6 +52,8 @@ vitalPlayer = 0
 
 episodeEnd = False
 
+returnSubmit = 0
+
 
 def newEpisode():
     global episodeIndex, gameData
@@ -106,7 +108,7 @@ def isStarted():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    global whoSubmit,gameData
+    global whoSubmit, gameData, returnSubmit, episodeIndex
     pindex = request.json['pindex']
     data = request.json['data']
     print(pindex)
@@ -118,6 +120,8 @@ def submit():
         print(len(whoSubmit.keys()))
         time.sleep(0.1)
         continue
+    
+
 
     res = copy.deepcopy(gameData[episodeIndex])
     keys1 = list(res.keys())
@@ -141,19 +145,18 @@ def submit():
             
         temp0 = {"actions": res[key] }
         res2["roleplays"].append(temp0)
+    
+    
+    returnSubmit+=1
+    if(returnSubmit==4):
+        returnSubmit = 0
+        whoSubmit = dict()
+        newEpisode()
+    
     print(res2)
     return(jsonify(res2))
 
 
-
-@app.route('/pdata', methods=['POST'])
-def pdata():
-    global gameData, episodeIndex, vitalPlayer
-    data = copy.deepcopy(gameData[episodeIndex])
-
-    # send the vitalplayer (random)
-    data['isVital'] = int( int(request.json['index']) ==  vitalPlayer )
-    return jsonify(data)
 
 
 @app.route('/vital', methods=['POST'])

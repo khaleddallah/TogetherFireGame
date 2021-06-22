@@ -20,7 +20,7 @@ public class Sdata : MonoBehaviour
     public int participantNum = 4;
     public int actionsNum = 4;
 
-    public Episode templateEpisode;
+    // public Episode templateEpisode;
 
 
     void Awake()
@@ -44,7 +44,27 @@ public class Sdata : MonoBehaviour
         }
 
 
-        templateEpisode = new Episode();
+        CreateNewEpisode();
+        // templateEpisode = new Episode();
+
+        // for(int i=0; i<participantNum; i++){
+        //     Roleplay x = new Roleplay();
+        //     templateEpisode.roleplays.Add(x);
+
+        //     for(int a=0; a<actionsNum; a++){
+        //         Action y = new Action();
+        //         templateEpisode.roleplays[i].actions.Add(y);
+        //     }
+        // }
+
+        // episodeIndex+=1;
+        // sdata.episodes.Add(templateEpisode);
+
+        DontDestroyOnLoad(this);
+    }
+
+    public void CreateNewEpisode(){
+        Episode templateEpisode = new Episode();
 
         for(int i=0; i<participantNum; i++){
             Roleplay x = new Roleplay();
@@ -58,8 +78,6 @@ public class Sdata : MonoBehaviour
 
         episodeIndex+=1;
         sdata.episodes.Add(templateEpisode);
-
-        DontDestroyOnLoad(this);
     }
 
 }

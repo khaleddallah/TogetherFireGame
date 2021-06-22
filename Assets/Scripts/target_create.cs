@@ -41,7 +41,6 @@ public class target_create : MonoBehaviour
             GameObject x = Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.playerIndex].actions[Sdata.sdata.actionIndex].target;
             
             // if Gun "sword" pressed destroy Target
-            Debug.Log(Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.playerIndex].actions[Sdata.sdata.actionIndex].gunTypeObj.transform.name);
             if (Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.playerIndex].actions[Sdata.sdata.actionIndex].gunTypeObj.transform.name=="Sword"){
                 Destroy(x);
             }
