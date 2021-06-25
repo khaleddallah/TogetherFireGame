@@ -1404,8 +1404,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6db41d1738aff07d8b36bfdbfa15781, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainScene: MainScene
-  serverURL: http://127.0.0.1:5000/
+  mainScene: MainScene2
+  tempName: 
   nameField: {fileID: 653324429}
   serverField: {fileID: 2047019913}
   ErrorField: {fileID: 423180051}
@@ -1452,6 +1452,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93a74e4c51c41a8be89183740f3cc2dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serverURL: 
   myName: 
   actionIndex: 0
   playerIndex: 0
@@ -1460,8 +1461,6 @@ MonoBehaviour:
   vitalDatas: []
   participantNum: 4
   actionsNum: 4
-  templateEpisode:
-    roleplays: []
 --- !u!4 &1736790068
 Transform:
   m_ObjectHideFlags: 0

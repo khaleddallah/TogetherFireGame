@@ -9,13 +9,13 @@ using TMPro;
 public class ServerLogin : MonoBehaviour
 {
     public string mainScene;
-    private Sdata sdata;
-    public string tempName;
 
     public TMP_InputField nameField;
     public TMP_InputField serverField;
-
     public TextMeshProUGUI ErrorField;
+
+    string tempName;
+    Sdata sdata;
 
     // Start is called before the first frame update
     void Start()
@@ -23,11 +23,7 @@ public class ServerLogin : MonoBehaviour
         sdata = Sdata.sdata;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 
     // reload the scene
     public void LoadMainScene(){
@@ -46,7 +42,7 @@ public class ServerLogin : MonoBehaviour
     }
 
 
-    IEnumerator postToServer(string msg, string route) {
+    IEnumerator RegToServer(string msg, string route) {
         byte[] jsonBinary = System.Text.Encoding.UTF8.GetBytes(msg);    
         DownloadHandlerBuffer downloadHandlerBuffer = new DownloadHandlerBuffer();
         UploadHandlerRaw uploadHandlerRaw = new UploadHandlerRaw(jsonBinary);
@@ -72,12 +68,10 @@ public class ServerLogin : MonoBehaviour
             else if(data==-1){
                 string error0 = "Error:full";
                 ErrorField.text = error0;
-                Debug.Log(error0);
             }
             else if(data==-2){
                 string error1 = "Error:NameAlreadyExists";
                 ErrorField.text = error1;
-                Debug.Log(error1);
             }
             www.Dispose();
         }

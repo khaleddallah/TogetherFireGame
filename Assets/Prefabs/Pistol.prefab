@@ -95,13 +95,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 8028529909031204358}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b515e085fb9c9fdd69ef1c3ca73e7da3, type: 3}
+  m_Script: {fileID: 11500000, guid: 7096ef1c7710c39f3866f12fdee9cbe8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dest: {fileID: 0}
-  speed: 2
-  healthDec: 20
+  speed: 10
+  healthDec: 10
   barriers: []
+  dest: {fileID: 0}
+  myparent: 0
 --- !u!50 &8028529909031204355
 Rigidbody2D:
   serializedVersion: 4

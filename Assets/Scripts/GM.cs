@@ -8,8 +8,8 @@ using TMPro;
 
 public class GM : MonoBehaviour
 {
-    private Sdata sdata;
     public static GM gm;
+
     public GameObject PlayersNames;
     public GameObject waitingUI;
 
@@ -18,13 +18,13 @@ public class GM : MonoBehaviour
     public TextMeshProUGUI SubmitTimeText;
 
     public GameObject ActionsUnit;
-    public EpisodeMngr episodeMngr;
 
     public string firstSceneName;
 
-    public Coroutine submitTimerRoutine = null;
+    Coroutine submitTimerRoutine;
+    Sdata sdata;
+    EpisodeMngr episodeMngr;
 
-    // private bool isStarted;
 
     void Awake()
     {
@@ -42,25 +42,16 @@ public class GM : MonoBehaviour
 
     void Start()
     {
-        
         submitTime = submitTimeRef;
-
         episodeMngr = GetComponent<EpisodeMngr>();
         sdata = Sdata.sdata;
         PlayersNames.transform.GetChild(sdata.playerIndex).GetComponent<TextMeshProUGUI>().text = sdata.myName;
         StartCoroutine(postIsStarted());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-
  
 
-    // check if started sign
+    // send ifstarted signal & get players Names and Indexes
     IEnumerator postIsStarted() {
         string route = "isstarted";
         string msg = "{\"index\":\""+sdata.playerIndex.ToString()+"\"}";
@@ -76,15 +67,16 @@ public class GM : MonoBehaviour
         }
         else {
             string data = www.downloadHandler.text;
-            Debug.Log(data);
-            Debug.Log("YEEES");
+            Debug.Log("IsStartedResponse::"+data);
+
             waitingUI.SetActive(false);
+            ActionsUnit.SetActive(true);
+
             string[] players = data.Split('/');
             for(int i=1; i<players.Length; i++){
                 PlayersNames.transform.GetChild(i-1).GetComponent<TextMeshProUGUI>().text = players[i];
             }
 
-            ActionsUnit.SetActive(true);
             startSubmitCoroutine();
             www.Dispose();
         }
@@ -95,10 +87,12 @@ public class GM : MonoBehaviour
     }
 
     public void startSubmitCoroutine(){
+        submitTime = submitTimeRef;
         submitTimerRoutine = StartCoroutine(submitDownTimer());
 
     }
 
+    // submit Timer
     public IEnumerator submitDownTimer() {
         while(submitTime>=0){
             SubmitTimeText.text = "EP "+ sdata.episodeIndex.ToString() +" : "+ submitTime.ToString();
@@ -110,7 +104,7 @@ public class GM : MonoBehaviour
     }
 
 
-
+    // function of the home button ( in Participants names corner)
     public void loadFirstScene(){
         Destroy(sdata.gameObject);
         SceneManager.LoadScene(firstSceneName);

@@ -7,8 +7,13 @@ public class Sdata : MonoBehaviour
 {
     public static Sdata sdata;
 
+    // main data
+    public float gridLen;
+    public float maxRadius;
+
     public string serverURL = "";
     public string myName = "";
+
     public int actionIndex = 0;
     public int playerIndex; // the index of the player
     public int episodeIndex = -1;
@@ -19,8 +24,6 @@ public class Sdata : MonoBehaviour
     // STATIC
     public int participantNum = 4;
     public int actionsNum = 4;
-
-    // public Episode templateEpisode;
 
 
     void Awake()
@@ -43,29 +46,12 @@ public class Sdata : MonoBehaviour
             sdata.vitalDatas[h].golds=0;
         }
 
-
         CreateNewEpisode();
-        // templateEpisode = new Episode();
-
-        // for(int i=0; i<participantNum; i++){
-        //     Roleplay x = new Roleplay();
-        //     templateEpisode.roleplays.Add(x);
-
-        //     for(int a=0; a<actionsNum; a++){
-        //         Action y = new Action();
-        //         templateEpisode.roleplays[i].actions.Add(y);
-        //     }
-        // }
-
-        // episodeIndex+=1;
-        // sdata.episodes.Add(templateEpisode);
-
         DontDestroyOnLoad(this);
     }
 
     public void CreateNewEpisode(){
         Episode templateEpisode = new Episode();
-
         for(int i=0; i<participantNum; i++){
             Roleplay x = new Roleplay();
             templateEpisode.roleplays.Add(x);
@@ -75,7 +61,6 @@ public class Sdata : MonoBehaviour
                 templateEpisode.roleplays[i].actions.Add(y);
             }
         }
-
         episodeIndex+=1;
         sdata.episodes.Add(templateEpisode);
     }

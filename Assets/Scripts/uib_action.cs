@@ -16,13 +16,19 @@ public class uib_action : MonoBehaviour
 
     [SerializeField] private int actionNum;
 
+    Sdata sdata;
+
+    void Start()
+    {
+        sdata = Sdata.sdata;
+    }
+
     public void ActionPressed(){
         actionSelectingUnit.SetActive(true);
-        Sdata.sdata.actionIndex=actionNum;
+        sdata.actionIndex=actionNum;
 
-        // Editing Time
         // First Time
-        if(Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.playerIndex].actions[Sdata.sdata.actionIndex].type=="0"){
+        if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].type=="0"){
             moveButton.GetComponent<Image>().color = Color.white;
             fireButton.GetComponent<Image>().color = Color.white;
             movePage.SetActive(false);
@@ -33,7 +39,7 @@ public class uib_action : MonoBehaviour
         }
 
         // if move already
-        else if(Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.playerIndex].actions[Sdata.sdata.actionIndex].type=="move"){
+        else if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].type=="move"){
             movePage.SetActive(true);
             firePage.SetActive(false);
             moveButton.GetComponent<Image>().color = moveButton.GetComponent<uib_actionType>().colorAfterPressed;
@@ -41,13 +47,14 @@ public class uib_action : MonoBehaviour
         }
 
 
-        else if(Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.playerIndex].actions[Sdata.sdata.actionIndex].type=="fire"){
+        else if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].type=="fire"){
             movePage.SetActive(false);
             firePage.SetActive(true);
             moveButton.GetComponent<Image>().color = Color.white;
             fireButton.GetComponent<Image>().color = fireButton.GetComponent<uib_actionType>().colorAfterPressed;
+            //highlight the pre-assigned gunType in FirePage
             for(int i=0; i<fireButtonS.transform.childCount; i++){
-                if(Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.playerIndex].actions[Sdata.sdata.actionIndex].gunTypeObj.transform.name==fireButtonS.transform.GetChild(i).GetComponent<uib_gunType>().gunTypeObj.transform.name)
+                if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].gunTypeObj.transform.name==fireButtonS.transform.GetChild(i).GetComponent<uib_gunType>().gunTypeObj.transform.name)
                 {
                     fireButtonS.transform.GetChild(i).GetComponent<Image>().color = fireButtonS.transform.GetChild(i).GetComponent<uib_gunType>().colorAfterPressed;
                 }

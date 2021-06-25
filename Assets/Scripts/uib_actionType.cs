@@ -14,23 +14,19 @@ public class uib_actionType : MonoBehaviour
 
     [SerializeField] private GameObject ActionParent;
 
-
     public string actionType;
-
     public Color colorAfterPressed;
 
-    // Start is called before the first frame update
-    void Awake()
+    Sdata sdata;
+
+    void Start()
     {
+        sdata = Sdata.sdata;
         fireButton.GetComponent<Image>().color = Color.white;
         moveButton.GetComponent<Image>().color = Color.white;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 
     public void ActionTypePressed(){
         if(actionType=="move"){
@@ -38,7 +34,7 @@ public class uib_actionType : MonoBehaviour
             firePage.SetActive(false);
             GetComponent<Image>().color = colorAfterPressed;
             fireButton.GetComponent<Image>().color = Color.white;
-            TextMeshProUGUI xt = ActionParent.transform.GetChild(Sdata.sdata.actionIndex).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+            TextMeshProUGUI xt = ActionParent.transform.GetChild(sdata.actionIndex).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
             xt.text = "move";
             xt.color = colorAfterPressed;
         }
@@ -48,11 +44,11 @@ public class uib_actionType : MonoBehaviour
             firePage.SetActive(true);
             GetComponent<Image>().color = colorAfterPressed;
             moveButton.GetComponent<Image>().color = Color.white;
-            GameObject x = Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.playerIndex].actions[Sdata.sdata.actionIndex].target;
+            GameObject x = sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].target;
             Destroy(x);
         }
             
-        Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.playerIndex].actions[Sdata.sdata.actionIndex].type = actionType;
+        sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].type = actionType;
 
 
     }

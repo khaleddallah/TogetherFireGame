@@ -2,34 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gun_bullet : MonoBehaviour
+public class GunBullet : MonoBehaviour
 {
-    private bool active;
-    public GameObject dest;
-    public float speed;
 
+    public float speed;
     public float healthDec;
-    
     public List<string> barriers = new List<string>();
 
-    private IEnumerator coroutineFire;
-
+    public GameObject dest;
     public int myparent;
 
-    public void Start0()
+    Coroutine coroutineFire;
+    bool active;
+    Sdata sdata;
+
+
+    void Start()
+    {
+        sdata = Sdata.sdata;
+    }
+
+    public void launch()
     {
         active = true;
-        coroutineFire = fire(myparent);
-        StartCoroutine(coroutineFire);
+        coroutineFire = StartCoroutine(fire(myparent));
     }
 
-    // Update Gun_bullet.csis called once per frame
-    void Update()
-    {
-        
-    }
 
-    // fire process
     public IEnumerator fire(int parent){
         myparent=parent;
         Debug.Log("####"+transform.name.Substring(0,5));
@@ -44,22 +43,19 @@ public class Gun_bullet : MonoBehaviour
             }
             DestroySpecial();
             yield return null;
-
         }
         else{
             Vector3 movementDir =  (dest.transform.position-transform.position).normalized; 
-
             float rotz = Mathf.Atan2(movementDir.y,movementDir.x)*Mathf.Rad2Deg;    
             transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotz-90);
-
             while (active) {
                 transform.position += Time.deltaTime * movementDir * speed;
                 yield return null;
             }
             yield return null;
-
         }
     }
+
 
 
     void OnTriggerExit2D(Collider2D other)
@@ -75,12 +71,12 @@ public class Gun_bullet : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log(transform.name+":: Enter ::"+other.transform.name);
-        
+
         // if bullet bumped into Player (character)
         if(other.gameObject.CompareTag("Player")){
             int plind= int.Parse(other.transform.name[1].ToString());
             if(plind != myparent){
-                Sdata.sdata.vitalDatas[plind].health-=healthDec;
+                sdata.vitalDatas[plind].health-=healthDec;
                 DestroySpecial();
             }
             else{
@@ -101,10 +97,7 @@ public class Gun_bullet : MonoBehaviour
             active=false; // stop the movement of the bullet
             StopCoroutine(coroutineFire); 
             Debug.Log("!! Destroy :: "+gameObject.transform.name);
-            GM.gm.transform.gameObject.GetComponent<EpisodeMngr>().working=false; // tell the episode mngr the the action (fire) finish
-            GM.gm.transform.gameObject.GetComponent<EpisodeMngr>().action+=1; // complete to the other action
             GM.gm.transform.gameObject.GetComponent<EpisodeMngr>().actionFire-=1; // complete to the other action
-
             Destroy(gameObject);
         }
     }
