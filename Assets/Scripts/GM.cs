@@ -25,6 +25,11 @@ public class GM : MonoBehaviour
     Sdata sdata;
     EpisodeMngr episodeMngr;
 
+    public TextMeshProUGUI money;
+    public TextMeshProUGUI gold;
+    public TextMeshProUGUI health;
+
+
 
     void Awake()
     {
@@ -108,6 +113,13 @@ public class GM : MonoBehaviour
     public void loadFirstScene(){
         Destroy(sdata.gameObject);
         SceneManager.LoadScene(firstSceneName);
+    }
+
+    // Get gold
+    public void updataMGH(){
+        gold.text = "GOLDS : "+sdata.vitalDatas[sdata.playerIndex].golds.ToString();
+        health.text = "HEALTH : "+sdata.vitalDatas[sdata.playerIndex].health.ToString();
+
     }
 
 

@@ -210,6 +210,9 @@ public class TargetAssignHelper : MonoBehaviour
         if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].type=="move"){
             sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].target = pos0;
             GameObject x = Instantiate(myChrc) as GameObject;
+            Destroy(x.GetComponent<PlayerReaction>());
+            Destroy(x.GetComponent<BoxCollider2D>());
+            Destroy(x.GetComponent<Rigidbody2D>());
             x.transform.position = pos0;
             x.transform.SetParent(targetsParent.transform);
             TextMeshProUGUI xt = x.transform.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
