@@ -95,7 +95,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.030316412}
@@ -115,4 +115,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveTarget: {fileID: 5878772088525887277, guid: 0cd2f70e2492a40c69adb4e3a54701de, type: 3}
   fireTarget: {fileID: 6645335236289857594, guid: 4989b9c4da99870d9b66d166056cb452, type: 3}
+  targetParent: {fileID: 0}
   bigOffset: 2

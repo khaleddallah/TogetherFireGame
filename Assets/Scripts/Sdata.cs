@@ -23,7 +23,7 @@ public class Sdata : MonoBehaviour
 
     // STATIC
     public int participantNum = 4;
-    public int actionsNum = 4;
+    public int actionsNum = 3;
 
 
     void Awake()

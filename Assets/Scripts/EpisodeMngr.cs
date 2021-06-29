@@ -60,13 +60,12 @@ public class EpisodeMngr : MonoBehaviour
                 msg+= ",";
                 msg+= "\"gunType\":\""+a.gunTypeObj.transform.name+"\"";
             }
-
-            if(a.target){
+            if(!a.target.Equals(new Vector3(-999,-999,-999))){
                 msg+= ",";
                 msg+= "\"target\":\"";
-                msg+= a.target.transform.position.x.ToString()+"/";
-                msg+= a.target.transform.position.y.ToString()+"/";
-                msg+= a.target.transform.position.z.ToString();
+                msg+= a.target.x.ToString()+"/";
+                msg+= a.target.y.ToString()+"/";
+                msg+= a.target.z.ToString();
                 msg+= "\"";
             }
             msg+= "},";
@@ -117,22 +116,18 @@ public class EpisodeMngr : MonoBehaviour
                     if(a.type=="fire"){
                         sdata.episodes[sdata.episodeIndex].roleplays[playerInd].actions[actionInd].gunTypeObj = getGameObjByName(gunTypesObjs,data[0]);
                         if(data[0]!="Sword"){
-                            GameObject targetTemp = new GameObject();
-                            targetTemp.transform.position = new Vector3(
+                            Vector3 targetTemp = new Vector3(
                                 float.Parse(data[1]),
                                 float.Parse(data[2]),
                                 float.Parse(data[3]));
-                            targetTemp.transform.SetParent(targetsParent.transform);
                             sdata.episodes[sdata.episodeIndex].roleplays[playerInd].actions[actionInd].target = targetTemp;
                         }
                     }
                     else if(a.type=="move"){
-                        GameObject targetTemp = new GameObject();
-                        targetTemp.transform.position = new Vector3(
+                        Vector3 targetTemp = new Vector3(
                             float.Parse(data[0]),
                             float.Parse(data[1]),
                             float.Parse(data[2]));
-                        targetTemp.transform.SetParent(targetsParent.transform);
                         sdata.episodes[sdata.episodeIndex].roleplays[playerInd].actions[actionInd].target = targetTemp;   
                     }                    
                 }
@@ -165,7 +160,7 @@ public class EpisodeMngr : MonoBehaviour
         actionSelectingUnit.SetActive(false);
         GM.gm.stopSubmitCoroutine();
         GM.gm.SubmitTimeText.text = "EP "+ sdata.episodeIndex.ToString() +" : Working"; 
-        // Time.timeScale = 1.0f;
+        Time.timeScale = 0.3f;
         actionMove = 0 ;
         actionFire = 0 ;
         for(int actionT = 0 ; actionT<sdata.actionsNum ; actionT++){
@@ -217,9 +212,9 @@ public class EpisodeMngr : MonoBehaviour
 
 
     // move object to distination
-    public IEnumerator move(GameObject playerObj, GameObject dest) {
-        Vector3 movementDir =  (dest.transform.position-playerObj.transform.position).normalized;         
-        float distance = Vector3.Distance(dest.transform.position, playerObj.transform.position);
+    public IEnumerator move(GameObject playerObj, Vector3 dest) {
+        Vector3 movementDir =  (dest-playerObj.transform.position).normalized;         
+        float distance = Vector3.Distance(dest, playerObj.transform.position);
         float speed0 = distance/actionTime;
         float t0 = 0f;
         while (t0<actionTime) {
@@ -232,30 +227,25 @@ public class EpisodeMngr : MonoBehaviour
 
 
     // fire bullet from playerObj to dest
-    public IEnumerator fire(int parent, GameObject playerObj, GameObject dest, GameObject bullet) {
+    public IEnumerator fire(int parent, GameObject playerObj, Vector3 dest, GameObject bullet) {
         GameObject x = Instantiate(bullet) as GameObject;
         x.transform.position = playerObj.transform.position;
         x.GetComponent<GunBullet>().dest = dest;
-        x.GetComponent<GunBullet>().myparent = parent;
-        x.GetComponent<GunBullet>().launch();
+        x.GetComponent<GunBullet>().launch(parent);
         yield return null;
     }
 
 
 
-    // reset UI & delete targets
+    // reset UI
     public void resetEpisodeUI(){
+        TargetAssignHelper.tah.moveError = false;
         actionSelectingUnit.SetActive(false);
         SubmitButton.interactable = true;
         // reset ui Actions to ""
         for(int i=0; i<sdata.actionsNum ; i++){
             TextMeshProUGUI xt = ActionParent.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
             xt.text = "";
-        }
-        // destroy all targets of players
-        foreach(Transform child in targetsParent.transform)
-        {
-            Destroy(child.gameObject);
         }
     }
 

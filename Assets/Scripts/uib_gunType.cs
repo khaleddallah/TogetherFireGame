@@ -23,6 +23,7 @@ public class uib_gunType : MonoBehaviour
 
 
     public void GunTypePressed(){
+        TargetAssignHelper.tah.DestroyMarkers();
         GetComponent<Image>().color = colorAfterPressed;
         sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].gunTypeObj = gunTypeObj; 
         

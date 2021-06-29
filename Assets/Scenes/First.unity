@@ -1405,7 +1405,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainScene: MainScene2
-  tempName: 
   nameField: {fileID: 653324429}
   serverField: {fileID: 2047019913}
   ErrorField: {fileID: 423180051}
@@ -1452,6 +1451,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93a74e4c51c41a8be89183740f3cc2dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridLen: 0.7
+  maxRadius: 5
   serverURL: 
   myName: 
   actionIndex: 0

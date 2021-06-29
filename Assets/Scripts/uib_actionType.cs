@@ -29,7 +29,12 @@ public class uib_actionType : MonoBehaviour
 
 
     public void ActionTypePressed(){
+        TargetAssignHelper.tah.DestroyMarkers();
         if(actionType=="move"){
+            TargetAssignHelper.tah.moveError = true;
+            if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].type=="fire"){
+                Destroy(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].targetObj);
+            }
             movePage.SetActive(true);
             firePage.SetActive(false);
             GetComponent<Image>().color = colorAfterPressed;
@@ -37,15 +42,21 @@ public class uib_actionType : MonoBehaviour
             TextMeshProUGUI xt = ActionParent.transform.GetChild(sdata.actionIndex).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
             xt.text = "move";
             xt.color = colorAfterPressed;
+
+
         }
         
         else if(actionType=="fire"){
+            if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].type=="move"){
+                Destroy(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].targetObj);
+                TargetAssignHelper.tah.moveError = true;
+            }
             movePage.SetActive(false);
             firePage.SetActive(true);
             GetComponent<Image>().color = colorAfterPressed;
             moveButton.GetComponent<Image>().color = Color.white;
-            GameObject x = sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].target;
-            Destroy(x);
+            // GameObject x = sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].target;
+            // Destroy(x);
         }
             
         sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].type = actionType;

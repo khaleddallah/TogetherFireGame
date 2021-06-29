@@ -13,17 +13,7 @@ public class TargetHover : MonoBehaviour
     public GameObject targetParent;
 
     public float bigOffset = 1.50f;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
 
     void OnMouseEnter()
@@ -38,27 +28,8 @@ public class TargetHover : MonoBehaviour
 
     void OnMouseDown()
     {
-        CreateTargetObj();
+        TargetAssignHelper.tah.InstTarget(transform.position);
     }
 
-
-    public void CreateTargetObj(){
-        GameObject x;
-        // if(Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.playerIndex].actions[Sdata.sdata.actionIndex].type=="move"){
-            x = Instantiate(moveTarget) as GameObject;
-        // }
-        // else if(Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.playerIndex].actions[Sdata.sdata.actionIndex].type=="fire"){
-            // x = Instantiate(targetObj) as GameObject;
-        // }
-        Sdata.sdata.episodes[Sdata.sdata.episodeIndex].roleplays[Sdata.sdata.playerIndex].actions[Sdata.sdata.actionIndex].target = x;
-    
-        x.transform.position = transform.position;
-        targetParent = GameObject.Find("TargetsParent");
-        x.transform.SetParent(targetParent.transform);
-
-
-        TextMeshProUGUI xt = x.transform.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-        xt.text = (Sdata.sdata.actionIndex+1).ToString("0");
-    }
 
 }

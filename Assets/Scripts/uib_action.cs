@@ -24,6 +24,8 @@ public class uib_action : MonoBehaviour
     }
 
     public void ActionPressed(){
+        TargetAssignHelper.tah.DestroyMarkers();
+        TargetAssignHelper.tah.moveError = false;
         actionSelectingUnit.SetActive(true);
         sdata.actionIndex=actionNum;
 

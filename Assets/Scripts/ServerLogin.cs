@@ -33,7 +33,7 @@ public class ServerLogin : MonoBehaviour
             string msg = "{\"name\":";
             msg += "\""+nameField.text+"\"}";
             Debug.Log("msg:"+msg);
-            StartCoroutine(postToServer(msg,"reg"));
+            StartCoroutine(RegToServer(msg,"reg"));
         }
         else{
             string error0 = "enter your name, please";

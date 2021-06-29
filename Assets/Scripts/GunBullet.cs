@@ -9,12 +9,12 @@ public class GunBullet : MonoBehaviour
     public float healthDec;
     public List<string> barriers = new List<string>();
 
-    public GameObject dest;
-    public int myparent;
+    public Vector3 dest;
 
     Coroutine coroutineFire;
     bool active;
     Sdata sdata;
+    int myparent;
 
 
     void Start()
@@ -22,10 +22,10 @@ public class GunBullet : MonoBehaviour
         sdata = Sdata.sdata;
     }
 
-    public void launch()
+    public void launch(int myparent0)
     {
         active = true;
-        coroutineFire = StartCoroutine(fire(myparent));
+        coroutineFire = StartCoroutine(fire(myparent0));
     }
 
 
@@ -45,7 +45,7 @@ public class GunBullet : MonoBehaviour
             yield return null;
         }
         else{
-            Vector3 movementDir =  (dest.transform.position-transform.position).normalized; 
+            Vector3 movementDir =  (dest-transform.position).normalized; 
             float rotz = Mathf.Atan2(movementDir.y,movementDir.x)*Mathf.Rad2Deg;    
             transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotz-90);
             while (active) {
@@ -71,7 +71,9 @@ public class GunBullet : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log(transform.name+":: Enter ::"+other.transform.name);
-
+        if(other.transform.name == "MainBase") {
+            DestroySpecial();
+        }
         // if bullet bumped into Player (character)
         if(other.gameObject.CompareTag("Player")){
             int plind= int.Parse(other.transform.name[1].ToString());
