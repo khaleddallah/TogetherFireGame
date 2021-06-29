@@ -1461,7 +1461,7 @@ MonoBehaviour:
   episodes: []
   vitalDatas: []
   participantNum: 4
-  actionsNum: 4
+  actionsNum: 3
 --- !u!4 &1736790068
 Transform:
   m_ObjectHideFlags: 0

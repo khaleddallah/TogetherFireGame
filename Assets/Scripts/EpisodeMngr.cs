@@ -160,7 +160,7 @@ public class EpisodeMngr : MonoBehaviour
         actionSelectingUnit.SetActive(false);
         GM.gm.stopSubmitCoroutine();
         GM.gm.SubmitTimeText.text = "EP "+ sdata.episodeIndex.ToString() +" : Working"; 
-        Time.timeScale = 0.3f;
+        // Time.timeScale = 0.3f;
         actionMove = 0 ;
         actionFire = 0 ;
         for(int actionT = 0 ; actionT<sdata.actionsNum ; actionT++){
@@ -200,7 +200,8 @@ public class EpisodeMngr : MonoBehaviour
             }
             actionMove = 0 ;
             actionFire = 0 ;
-            yield return null;
+            Destroy(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[actionT].targetObj);
+            yield return new WaitForSeconds(1);
         }
         ActionNumUI.text = "";
         sdata.CreateNewEpisode();
