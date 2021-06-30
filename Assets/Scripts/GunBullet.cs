@@ -76,8 +76,10 @@ public class GunBullet : MonoBehaviour
         }
         // if bullet bumped into Player (character)
         if(other.gameObject.CompareTag("Player")){
+            Debug.Log("..P..");
             int plind= int.Parse(other.transform.name[1].ToString());
             if(plind != myparent){
+                Debug.Log("000DD))");
                 sdata.vitalDatas[plind].health-=healthDec;
                 DestroySpecial();
             }

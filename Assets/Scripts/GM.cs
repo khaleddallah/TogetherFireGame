@@ -117,8 +117,9 @@ public class GM : MonoBehaviour
 
     // Get gold
     public void updataMGH(){
-        gold.text = "GOLDS : "+sdata.vitalDatas[sdata.playerIndex].golds.ToString();
-        health.text = "HEALTH : "+sdata.vitalDatas[sdata.playerIndex].health.ToString();
+        Debug.Log("LLL:"+sdata.vitalDatas[sdata.playerIndex].health);
+        gold.text = "Golds : "+sdata.vitalDatas[sdata.playerIndex].golds.ToString();
+        health.text = "Health : "+sdata.vitalDatas[sdata.playerIndex].health.ToString()+"%";
 
     }
 

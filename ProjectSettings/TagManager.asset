@@ -9,6 +9,7 @@ TagManager:
   - Gold
   - Present
   - Stone
+  - Block
   layers:
   - Default
   - TransparentFX
