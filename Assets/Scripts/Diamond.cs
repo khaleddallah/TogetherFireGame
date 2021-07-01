@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gold : MonoBehaviour
+public class Diamond : MonoBehaviour
 {
-    public GameObject goldPS;
+    public GameObject diamondPS;
     Sdata sdata;
     void Start()
     {
@@ -16,8 +16,8 @@ public class Gold : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if(other.gameObject.CompareTag("Player")){
-            GameObject gps = Instantiate(goldPS) as GameObject;
-            gps.transform.position = transform.position;
+            GameObject dps = Instantiate(diamondPS) as GameObject;
+            dps.transform.position = transform.position;
 
             Debug.Log(other.name);
             sdata.vitalDatas[(int)Char.GetNumericValue(other.gameObject.transform.name[1])].golds +=1;

@@ -204,8 +204,21 @@ public class EpisodeMngr : MonoBehaviour
             yield return new WaitForSeconds(1);
         }
         ActionNumUI.text = "";
-        sdata.CreateNewEpisode();
+        
+        int checklose  = GM.gm.checkLose();
+        if(checklose==1){
+            yield return new WaitForSeconds(2);
+            GM.gm.winLoseSignOff();
+        }
+        else if(checklose==2){
+            yield return new WaitForSeconds(1);
+            // GM.gm.winLoseSignOff();
+            GM.gm.Winner();
+            yield return new WaitForSeconds(3);
+            GM.gm.loadFirstScene();
+        }
 
+        sdata.CreateNewEpisode();
         resetEpisodeUI();
         GM.gm.startSubmitCoroutine();
     }
@@ -217,12 +230,14 @@ public class EpisodeMngr : MonoBehaviour
         Vector3 movementDir =  (dest-playerObj.transform.position).normalized;         
         float distance = Vector3.Distance(dest, playerObj.transform.position);
         float speed0 = distance/actionTime;
-        float t0 = 0f;
-        while (t0<actionTime) {
+        // float t0 = 0f;
+        while (distance>0.2f) {
+            distance = Vector3.Distance(dest, playerObj.transform.position);
             playerObj.transform.position += Time.deltaTime * movementDir * speed0;
-            t0+=Time.deltaTime;
+            // t0+=Time.deltaTime;
             yield return null;
         }
+        playerObj.transform.position = dest;
         actionMove-=1;
     }
 

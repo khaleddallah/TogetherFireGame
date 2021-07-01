@@ -168,6 +168,7 @@ public class TargetAssignHelper : MonoBehaviour
                         GameObject cr = Instantiate(circle0) as GameObject;
                         cr.transform.SetParent(lcParent.transform);
                         cr.transform.position =  currentPos+new Vector3(x, y, 0)*p*vhstep;
+                        cr.transform.position = new Vector3(cr.transform.position.x, cr.transform.position.y, -3f);
                     }
                 }
 
@@ -218,7 +219,7 @@ public class TargetAssignHelper : MonoBehaviour
             TextMeshProUGUI xt = x.transform.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
             xt.text = (sdata.actionIndex+1).ToString("0");
             sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].targetObj = x;
-            x.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, 0.5f);
+            x.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, 0.3f);
 
 
             GameObject gl = Instantiate(lrobjcet) as GameObject;

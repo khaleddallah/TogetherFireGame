@@ -5,6 +5,7 @@ using UnityEngine;
 public class GridGenerator : MonoBehaviour
 {
     public GameObject line;
+    public GameObject PlayersParent;
 
     Sdata sdata;
 
@@ -28,6 +29,13 @@ public class GridGenerator : MonoBehaviour
             x.transform.Rotate(0,0,90);
             x.transform.position = new Vector3(0f, i*sdata.gridLen, 0f);
         }
+        
+        PlayersParent.transform.GetChild(0).GetChild(0).transform.position = new Vector3(0f, -6*sdata.gridLen, 0f);
+        PlayersParent.transform.GetChild(1).GetChild(0).transform.position = new Vector3(-6*sdata.gridLen, 0f, 0f);
+        PlayersParent.transform.GetChild(2).GetChild(0).transform.position = new Vector3(0f, 6*sdata.gridLen, 0f);
+        PlayersParent.transform.GetChild(3).GetChild(0).transform.position = new Vector3(6*sdata.gridLen, 0f, 0f);
+
+    
     }
 
 }

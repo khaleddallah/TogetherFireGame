@@ -99,10 +99,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  healthDec: 10
+  healthDec: 50
   barriers:
   - Block
   dest: {x: 0, y: 0, z: 0}
+  bloodObj: {fileID: 8209141539923034503, guid: 4094d73b4729781b1a1c7809558b5b31, type: 3}
+  firePSObj: {fileID: 7276004562158544158, guid: c5f7ed50d9ea6e888a288a392d5bdf21, type: 3}
 --- !u!61 &346066025382910612
 BoxCollider2D:
   m_ObjectHideFlags: 0

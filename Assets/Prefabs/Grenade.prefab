@@ -99,10 +99,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  healthDec: 10
+  healthDec: 50
   barriers:
   - Block
   dest: {x: 0, y: 0, z: 0}
+  bloodObj: {fileID: 8209141539923034503, guid: 4094d73b4729781b1a1c7809558b5b31, type: 3}
+  firePSObj: {fileID: 7276004562158544158, guid: c5f7ed50d9ea6e888a288a392d5bdf21, type: 3}
 --- !u!61 &3505746068904520671
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -116,7 +118,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0014310479, y: 0.005008638}
+  m_Offset: {x: -0.0002567768, y: 0.008384436}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -127,7 +129,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.10837853, y: 0.15553373}
+  m_Size: {x: 0.1387608, y: 0.28718984}
   m_EdgeRadius: 0
 --- !u!50 &-2239427865893866493
 Rigidbody2D:

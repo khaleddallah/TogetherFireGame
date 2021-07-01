@@ -11,6 +11,8 @@ public class GM : MonoBehaviour
     public static GM gm;
 
     public GameObject PlayersNames;
+    public GameObject PlayersParent;
+    public GameObject winLoseSign;
     public GameObject waitingUI;
 
     public int submitTimeRef;
@@ -112,6 +114,9 @@ public class GM : MonoBehaviour
     // function of the home button ( in Participants names corner)
     public void loadFirstScene(){
         Destroy(sdata.gameObject);
+        Destroy(TargetAssignHelper.tah.gameObject);
+        Destroy(GM.gm.gameObject);
+
         SceneManager.LoadScene(firstSceneName);
     }
 
@@ -120,8 +125,65 @@ public class GM : MonoBehaviour
         Debug.Log("LLL:"+sdata.vitalDatas[sdata.playerIndex].health);
         gold.text = "Golds : "+sdata.vitalDatas[sdata.playerIndex].golds.ToString();
         health.text = "Health : "+sdata.vitalDatas[sdata.playerIndex].health.ToString()+"%";
-
     }
 
+
+    public int checkLose(){
+        int howmlose = 0;
+        winLoseSign.GetComponent<TextMeshProUGUI>().text = "";
+        for(int i = 0 ; i<sdata.participantNum ; i++){
+            Debug.Log("chLose:i:"+i);
+            Debug.Log("health:"+sdata.vitalDatas[i].health);
+            if (sdata.vitalDatas[i].health<=0){
+                howmlose+=1;
+                if(PlayersParent.transform.GetChild(i).GetChild(0).gameObject.activeSelf){
+                    string looserName = PlayersNames.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text;
+                    PlayersParent.transform.GetChild(i).GetChild(0).gameObject.SetActive(false);
+                    if(i==sdata.playerIndex){
+                        ActionsUnit.SetActive(false);
+                        winLoseSign.GetComponent<TextMeshProUGUI>().text += "YOU Lose\n";
+                    }
+                    else{
+                        winLoseSign.GetComponent<TextMeshProUGUI>().text += looserName+" Lose\n";
+                    }
+                }
+            }
+        }
+
+
+        if(howmlose==sdata.participantNum-1){
+            winLoseSign.SetActive(true);
+            return 2;
+        }
+        else if(winLoseSign.GetComponent<TextMeshProUGUI>().text.Length>0){
+            winLoseSign.SetActive(true);
+            return 1;
+        }    
+        else{
+            return 0;
+        }
+    }
+
+    public void winLoseSignOff(){
+        winLoseSign.SetActive(false);
+    }
+
+
+    public void Winner(){
+        for(int i = 0 ; i<sdata.participantNum ; i++){
+            if (sdata.vitalDatas[i].health>0){
+                winLoseSign.GetComponent<TextMeshProUGUI>().color = Color.green;
+                if(i==sdata.playerIndex){
+                    ActionsUnit.SetActive(false);
+                    winLoseSign.GetComponent<TextMeshProUGUI>().text = "You WIIIIN\n";
+                }
+                else{
+                    string winnerName = PlayersNames.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text;
+                    winLoseSign.GetComponent<TextMeshProUGUI>().text = winnerName+" WIIIIN\n";
+                }
+                break;
+            }
+        }
+    }
 
 }
