@@ -80,8 +80,9 @@ public class GM : MonoBehaviour
             ActionsUnit.SetActive(true);
 
             string[] players = data.Split('/');
-            for(int i=1; i<players.Length; i++){
-                PlayersNames.transform.GetChild(i-1).GetComponent<TextMeshProUGUI>().text = players[i];
+            for(int i=0; i<players.Length; i++){
+                PlayersNames.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text = players[i];
+                PlayersParent.transform.GetChild(i).GetChild(0).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().text = players[i];
             }
 
             startSubmitCoroutine();
@@ -142,6 +143,7 @@ public class GM : MonoBehaviour
                     if(i==sdata.playerIndex){
                         ActionsUnit.SetActive(false);
                         winLoseSign.GetComponent<TextMeshProUGUI>().text += "YOU Lose\n";
+                        StartCoroutine(sendLose());        
                     }
                     else{
                         winLoseSign.GetComponent<TextMeshProUGUI>().text += looserName+" Lose\n";
@@ -185,5 +187,26 @@ public class GM : MonoBehaviour
             }
         }
     }
+
+    IEnumerator sendLose() {
+        string route = "lose";
+        string msg = "{\"pindex\":\""+sdata.playerIndex.ToString()+"\"}";
+        byte[] jsonBinary = System.Text.Encoding.UTF8.GetBytes(msg);    
+        UploadHandlerRaw uploadHandlerRaw = new UploadHandlerRaw(jsonBinary);
+        uploadHandlerRaw.contentType = "application/json";
+        DownloadHandlerBuffer downloadHandlerBuffer = new DownloadHandlerBuffer();
+        UnityWebRequest www = new UnityWebRequest(sdata.serverURL+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
+        yield return www.SendWebRequest();
+        if (www.result != UnityWebRequest.Result.Success) {
+            Debug.Log(www.error);
+            www.Dispose();
+        }
+        else {
+            string data = www.downloadHandler.text;
+            Debug.Log("loseResponse::"+data);
+            www.Dispose();
+        }
+    }
+
 
 }

@@ -171,6 +171,9 @@ public class EpisodeMngr : MonoBehaviour
                     {
                         Debug.Log("Moveplayer:::"+player.ToString());
                         actionMove+=1;
+                        if(player==sdata.playerIndex){
+                            Destroy(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[actionT].targetObj);
+                        }
                         StartCoroutine(move(
                             playersParent.transform.GetChild(player).transform.GetChild(0).transform.gameObject,
                             sdata.episodes[sdata.episodeIndex].roleplays[player].actions[actionT].target
@@ -186,6 +189,9 @@ public class EpisodeMngr : MonoBehaviour
                     {
                         actionFire+=1;
                         Debug.Log("Fireplayer:::"+player.ToString());
+                        if(player==sdata.playerIndex){
+                            Destroy(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[actionT].targetObj);
+                        }
                         StartCoroutine(fire(
                             player,
                             playersParent.transform.GetChild(player).transform.GetChild(0).transform.gameObject,
@@ -200,7 +206,6 @@ public class EpisodeMngr : MonoBehaviour
             }
             actionMove = 0 ;
             actionFire = 0 ;
-            Destroy(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[actionT].targetObj);
             yield return new WaitForSeconds(1);
         }
         ActionNumUI.text = "";
@@ -221,6 +226,10 @@ public class EpisodeMngr : MonoBehaviour
         sdata.CreateNewEpisode();
         resetEpisodeUI();
         GM.gm.startSubmitCoroutine();
+
+        if(sdata.vitalDatas[sdata.playerIndex].health<=0){
+            submitPress();
+        }
     }
         
 
@@ -230,13 +239,20 @@ public class EpisodeMngr : MonoBehaviour
         Vector3 movementDir =  (dest-playerObj.transform.position).normalized;         
         float distance = Vector3.Distance(dest, playerObj.transform.position);
         float speed0 = distance/actionTime;
+        float lastdistance = distance+1f;
         // float t0 = 0f;
-        while (distance>0.2f) {
-            distance = Vector3.Distance(dest, playerObj.transform.position);
+        while (lastdistance>distance) {
             playerObj.transform.position += Time.deltaTime * movementDir * speed0;
+
+            // Debug.Log("l:d");
+
+            lastdistance = distance;
+
+            distance = Vector3.Distance(dest, playerObj.transform.position);
             // t0+=Time.deltaTime;
             yield return null;
         }
+        Debug.Log("stop after distance get biggger");
         playerObj.transform.position = dest;
         actionMove-=1;
     }

@@ -35,6 +35,15 @@ public class GridGenerator : MonoBehaviour
         PlayersParent.transform.GetChild(2).GetChild(0).transform.position = new Vector3(0f, 6*sdata.gridLen, 0f);
         PlayersParent.transform.GetChild(3).GetChild(0).transform.position = new Vector3(6*sdata.gridLen, 0f, 0f);
 
+        for(int i=0 ; i<sdata.participantNum ; i++){
+            if(i==sdata.playerIndex){
+                PlayersParent.transform.GetChild(i).GetChild(0).GetChild(1).gameObject.SetActive(true);
+            }
+            else{
+                PlayersParent.transform.GetChild(i).GetChild(0).GetChild(1).gameObject.SetActive(false);
+            }
+        }
+
     
     }
 

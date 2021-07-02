@@ -41,7 +41,7 @@ curPlayerCount = 0
 players = dict()
 # players = {0:"kaheh", 1:"mhd", 2:"xx", 3:"xrr"}
 
-actionsConut = 4
+actionsConut = 3
 episodeIndex = -1 
 openEp = False
 
@@ -54,14 +54,21 @@ episodeEnd = False
 
 returnSubmit = 0
 
+dead = list()
+
+
 
 def newEpisode():
+
     global episodeIndex, gameData
+    data=[{"type":"0"},{"type":"0"},{"type":"0"}]
     vitalPlayer = random.randint(0, playersConut-1)
     episodeIndex +=1
     episode = dict()
     gameData.append(episode)
-
+    for i in dead:
+        gameData[episodeIndex][i]=data
+        whoSubmit[int(i)]=1
 
 # =======================================================
 
@@ -89,17 +96,16 @@ def isStarted():
     data = request.json["index"]
     playersStarted[int(data)]=1
     while(not(len(playersStarted.keys())==playersConut)):
-        print(playersStarted)
+        # print(playersStarted)
         time.sleep(0.1)
         continue
-    res = "y/"
     keys0 = list(players.keys())
     print("keys0::"+str(keys0))
     keys0.sort()
     print("sorted_keys::"+str(keys0))
     values = [players[i] for i in keys0]
     print(values)
-    res += "/".join(values)
+    res = "/".join(values)
     print(res)
     return(res)
 
@@ -111,13 +117,16 @@ def submit():
     global whoSubmit, gameData, returnSubmit, episodeIndex
     pindex = request.json['pindex']
     data = request.json['data']
-    print(pindex)
-    print(data)
+    
+    print("ep:",episodeIndex)
+    print("pind:",pindex)
+    print("data:",data)
+
 
     gameData[episodeIndex][pindex]=data
     whoSubmit[int(pindex)]=1
     while(not(len(whoSubmit.keys())==playersConut)):
-        print(len(whoSubmit.keys()))
+        # print(len(whoSubmit.keys()))
         time.sleep(0.1)
         continue
     
@@ -167,6 +176,51 @@ def vital():
     newEpisode()  #create new episodeIndex
     res = '{"res":"ok"}'
     return jsonify(res)
+
+
+@app.route('/lose', methods=['POST'])
+def lose():
+    global vitalData
+    pindex = request.json['pindex']
+    if(not(pindex in dead)):
+        dead.append(pindex)
+        print("lose",pindex)
+    if(len(dead)>=(playersConut-1)):
+        print("winner")
+        reset()
+    res = '{"res":"ok"}'
+    return jsonify(res)
+
+
+
+def reset():
+    global gameData, vitalData, playersConut
+    global curPlayerCount, players, actionsConut
+    global episodeIndex, openEp, playersStarted
+    global whoSubmit, vitalPlayer, episodeEnd, dead
+
+    gameData = list()
+    vitalData = list()
+
+    playersConut = 4
+    curPlayerCount = 0
+    players = dict()
+
+    actionsConut = 3
+    episodeIndex = -1 
+    openEp = False
+
+    playersStarted = dict()
+    whoSubmit = dict()
+
+    vitalPlayer = 0 
+
+    episodeEnd = False
+
+    returnSubmit = 0
+
+    dead = list()
+    newEpisode()
 
 
 
