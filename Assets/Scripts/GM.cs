@@ -49,10 +49,11 @@ public class GM : MonoBehaviour
 
     void Start()
     {
+        sdata = Sdata.sdata;
+        sdata.playerIndex = LTD.ltd.playerIndex;
         submitTime = submitTimeRef;
         episodeMngr = GetComponent<EpisodeMngr>();
-        sdata = Sdata.sdata;
-        PlayersNames.transform.GetChild(sdata.playerIndex).GetComponent<TextMeshProUGUI>().text = sdata.myName;
+        PlayersNames.transform.GetChild(sdata.playerIndex).GetComponent<TextMeshProUGUI>().text = LTD.ltd.myName;
         StartCoroutine(postIsStarted());
     }
 
@@ -61,12 +62,15 @@ public class GM : MonoBehaviour
     // send ifstarted signal & get players Names and Indexes
     IEnumerator postIsStarted() {
         string route = "isstarted";
-        string msg = "{\"index\":\""+sdata.playerIndex.ToString()+"\"}";
+
+        string msg = "{\"index\":\""+sdata.playerIndex.ToString()+"\",";
+        msg += "\"howmplayerstarted\":\""+sdata.howmplayerstarted.ToString()+"\"}";
+
         byte[] jsonBinary = System.Text.Encoding.UTF8.GetBytes(msg);    
         UploadHandlerRaw uploadHandlerRaw = new UploadHandlerRaw(jsonBinary);
         uploadHandlerRaw.contentType = "application/json";
         DownloadHandlerBuffer downloadHandlerBuffer = new DownloadHandlerBuffer();
-        UnityWebRequest www = new UnityWebRequest(sdata.serverURL+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
+        UnityWebRequest www = new UnityWebRequest(LTD.ltd.serverURL+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
         yield return www.SendWebRequest();
         if (www.result != UnityWebRequest.Result.Success) {
             Debug.Log(www.error);
@@ -74,19 +78,32 @@ public class GM : MonoBehaviour
         }
         else {
             string data = www.downloadHandler.text;
-            Debug.Log("IsStartedResponse::"+data);
+            // Debug.Log("IsStartedResponse::"+data);
 
-            waitingUI.SetActive(false);
-            ActionsUnit.SetActive(true);
+
 
             string[] players = data.Split('/');
+            sdata.howmplayerstarted = players.Length;
+
             for(int i=0; i<players.Length; i++){
                 PlayersNames.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text = players[i];
                 PlayersParent.transform.GetChild(i).GetChild(0).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().text = players[i];
             }
 
-            startSubmitCoroutine();
-            www.Dispose();
+            // if all player started start            
+            if(players.Length==sdata.participantNum){
+                waitingUI.SetActive(false);
+                ActionsUnit.SetActive(true);
+                startSubmitCoroutine();
+                www.Dispose();
+            }
+            // if not all player started re-request
+            else{
+                www.Dispose();
+                StartCoroutine(postIsStarted());
+            }
+
+  
         }
     }
 
@@ -140,6 +157,10 @@ public class GM : MonoBehaviour
                 if(PlayersParent.transform.GetChild(i).GetChild(0).gameObject.activeSelf){
                     string looserName = PlayersNames.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text;
                     PlayersParent.transform.GetChild(i).GetChild(0).gameObject.SetActive(false);
+
+                    Color x = PlayersNames.transform.GetChild(i).GetComponent<TextMeshProUGUI>().color;
+                    PlayersNames.transform.GetChild(i).GetComponent<TextMeshProUGUI>().color = new Color(x.r, x.g, x.b, 0.32f);
+                    
                     if(i==sdata.playerIndex){
                         ActionsUnit.SetActive(false);
                         winLoseSign.GetComponent<TextMeshProUGUI>().text += "YOU Lose\n";
@@ -195,7 +216,7 @@ public class GM : MonoBehaviour
         UploadHandlerRaw uploadHandlerRaw = new UploadHandlerRaw(jsonBinary);
         uploadHandlerRaw.contentType = "application/json";
         DownloadHandlerBuffer downloadHandlerBuffer = new DownloadHandlerBuffer();
-        UnityWebRequest www = new UnityWebRequest(sdata.serverURL+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
+        UnityWebRequest www = new UnityWebRequest(LTD.ltd.serverURL+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
         yield return www.SendWebRequest();
         if (www.result != UnityWebRequest.Result.Success) {
             Debug.Log(www.error);

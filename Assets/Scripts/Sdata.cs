@@ -11,8 +11,6 @@ public class Sdata : MonoBehaviour
     public float gridLen;
     public float maxRadius;
 
-    public string serverURL = "";
-    public string myName = "";
 
     public int actionIndex = 0;
     public int playerIndex; // the index of the player
@@ -25,6 +23,7 @@ public class Sdata : MonoBehaviour
     public int participantNum = 4;
     public int actionsNum = 3;
 
+    public int howmplayerstarted = 0;
 
     void Awake()
     {

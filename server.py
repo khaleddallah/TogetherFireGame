@@ -59,7 +59,6 @@ dead = list()
 
 
 def newEpisode():
-
     global episodeIndex, gameData
     data=[{"type":"0"},{"type":"0"},{"type":"0"}]
     vitalPlayer = random.randint(0, playersConut-1)
@@ -75,6 +74,8 @@ def newEpisode():
 @app.route('/reg', methods=['POST'])
 def reg():
     global curPlayerCount, playersConut
+    print("cpc:",curPlayerCount)
+    print("pc:",playersConut)
     if(curPlayerCount<playersConut):
         data = request.json["name"]
         print("name:"+data)
@@ -94,11 +95,20 @@ def reg():
 def isStarted():
     global playersStarted, players
     data = request.json["index"]
-    playersStarted[int(data)]=1
-    while(not(len(playersStarted.keys())==playersConut)):
-        # print(playersStarted)
+    howm = request.json["howmplayerstarted"]
+    if(not(int(data) in playersStarted)):
+        playersStarted[int(data)]=1
+    
+    while(len(playersStarted.keys())==int(howm)):
         time.sleep(0.1)
         continue
+
+
+    # while(not(len(playersStarted.keys())==playersConut)):
+    #     # print(playersStarted)
+    #     time.sleep(0.1)
+    #     continue
+    
     keys0 = list(players.keys())
     print("keys0::"+str(keys0))
     keys0.sort()
@@ -139,7 +149,7 @@ def submit():
     res2["roleplays"]=[]
     for key in keys1:
         for i in res[key]:
-            print(i)
+            # print(i)
             if(i["type"]=="move"):
                 i["ser"]=i["target"]
                 del i["target"]

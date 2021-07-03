@@ -83,7 +83,7 @@ public class EpisodeMngr : MonoBehaviour
         DownloadHandlerBuffer downloadHandlerBuffer = new DownloadHandlerBuffer();
         UploadHandlerRaw uploadHandlerRaw = new UploadHandlerRaw(jsonBinary);
         uploadHandlerRaw.contentType = "application/json";
-        UnityWebRequest www = new UnityWebRequest(sdata.serverURL+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
+        UnityWebRequest www = new UnityWebRequest(LTD.ltd.serverURL+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
         yield return www.SendWebRequest();
         if (www.result != UnityWebRequest.Result.Success) {
             Debug.Log("@@@error@@@");

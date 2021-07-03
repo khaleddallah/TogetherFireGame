@@ -15,19 +15,21 @@ public class ServerLogin : MonoBehaviour
     public TextMeshProUGUI ErrorField;
 
     string tempName;
-    Sdata sdata;
+    LTD ltd;
 
     // Start is called before the first frame update
     void Start()
     {
-        sdata = Sdata.sdata;
+        ltd = LTD.ltd;
+        nameField.text = ltd.myName;
+        serverField.text = ltd.serverURL;
     }
 
 
 
     // reload the scene
     public void LoadMainScene(){
-        sdata.serverURL = serverField.text;
+        ltd.serverURL = serverField.text;
         if(nameField.text.Length>0){
             tempName = nameField.text;
             string msg = "{\"name\":";
@@ -47,7 +49,10 @@ public class ServerLogin : MonoBehaviour
         DownloadHandlerBuffer downloadHandlerBuffer = new DownloadHandlerBuffer();
         UploadHandlerRaw uploadHandlerRaw = new UploadHandlerRaw(jsonBinary);
         uploadHandlerRaw.contentType = "application/json";
-        UnityWebRequest www = new UnityWebRequest(sdata.serverURL+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
+        Debug.Log("ltd.serverURL+route:"+ltd.serverURL+route);
+        // UnityWebRequest www = new UnityWebRequest(ltd.serverURL+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
+        UnityWebRequest www = new UnityWebRequest(ltd.serverURL+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
+
         yield return www.SendWebRequest();
         if (www.result != UnityWebRequest.Result.Success) {
             Debug.Log("@@@error@@@");
@@ -61,8 +66,8 @@ public class ServerLogin : MonoBehaviour
             int data = int.Parse(www.downloadHandler.text);
             Debug.Log(data);
             if(data>=0){
-                sdata.playerIndex=data;
-                sdata.myName=tempName;
+                ltd.myName=tempName;
+                ltd.playerIndex = data;
                 SceneManager.LoadScene(mainScene);
             }
             else if(data==-1){

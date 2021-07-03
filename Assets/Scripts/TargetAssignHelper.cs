@@ -189,12 +189,10 @@ public class TargetAssignHelper : MonoBehaviour
 
         // if changed (move to move | fire to move | move to fire) Destroy next actions
         if(moveError){
-            for(int i = sdata.actionIndex+1 ; i<sdata.actionsNum ; i++){
-                sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[i].target = new Vector3 (-999f,-999f,-999f);
-                sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[i].type = "0";
-                Destroy(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[i].targetObj);
-                TextMeshProUGUI xt = ActionParent.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-                xt.text = "";
+            if(pos0!=sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].target){
+                for(int i = sdata.actionIndex+1 ; i<sdata.actionsNum ; i++){
+                    resetAction(i);
+                }
             }
             moveError=false;
         }
@@ -264,6 +262,17 @@ public class TargetAssignHelper : MonoBehaviour
         foreach(Transform child in lcParent.transform)
         {
             Destroy(child.gameObject);
+        }
+    }
+
+
+    public void resetAction(int ind){
+        sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[ind].type="0"; // type of the action (move | fire)
+        sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[ind].target = new Vector3 (-999f,-999f,-999f); // target of the action either move or fire
+        sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[ind].gunTypeObj = null;
+        ActionParent.transform.GetChild(ind).transform.GetChild(0).GetComponent<Image>().color = new Color(0f,0f,0f,0f);
+        if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[ind].targetObj){
+            Destroy(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[ind].targetObj);
         }
     }
 

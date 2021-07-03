@@ -28,7 +28,8 @@ public class TargetHover : MonoBehaviour
 
     void OnMouseDown()
     {
-        TargetAssignHelper.tah.InstTarget(transform.position);
+        Vector3 temp = new Vector3(transform.position.x, transform.position.y, 0f);
+        TargetAssignHelper.tah.InstTarget(temp);
     }
 
 

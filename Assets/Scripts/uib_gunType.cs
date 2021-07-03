@@ -12,13 +12,18 @@ public class uib_gunType : MonoBehaviour
 
     public GameObject gunTypeObj;
     public Color colorAfterPressed;
-
+    public Sprite fireIcon;
+ 
     Sdata sdata;
+
+    Color dgunColor;
 
     void Start()
     {
         sdata = Sdata.sdata;
-        GetComponent<Image>().color = Color.white;
+        // GetComponent<Image>().color = Color.white;
+
+        dgunColor = fireButtonS.transform.GetChild(0).GetComponent<Image>().color;
     }
 
 
@@ -29,12 +34,15 @@ public class uib_gunType : MonoBehaviour
         
         for(int i=0; i<fireButtonS.transform.childCount; i++){
             if(fireButtonS.transform.GetChild(i).GetComponent<uib_gunType>().gunTypeObj.transform.name!=gunTypeObj.transform.name){
-                fireButtonS.transform.GetChild(i).GetComponent<Image>().color = Color.white;
+                fireButtonS.transform.GetChild(i).GetComponent<Image>().color = dgunColor;
             }
         }
 
-        TextMeshProUGUI xt = ActionParent.transform.GetChild(sdata.actionIndex).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-        xt.text = gunTypeObj.transform.name;
-        xt.color = colorAfterPressed;
+        // TextMeshProUGUI xt = ActionParent.transform.GetChild(sdata.actionIndex).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        // xt.text = gunTypeObj.transform.name;
+        // xt.color = colorAfterPressed;
+        ActionParent.transform.GetChild(sdata.actionIndex).transform.GetChild(0).GetComponent<Image>().color = Color.white;
+        ActionParent.transform.GetChild(sdata.actionIndex).transform.GetChild(0).GetComponent<Image>().sprite = fireIcon;
+
     }
 }
