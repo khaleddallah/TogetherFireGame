@@ -31,7 +31,8 @@ public class GM : MonoBehaviour
     public TextMeshProUGUI gold;
     public TextMeshProUGUI health;
 
-
+    public Color loseColor;
+    public Color winColor;
 
     void Awake()
     {
@@ -148,6 +149,7 @@ public class GM : MonoBehaviour
 
     public int checkLose(){
         int howmlose = 0;
+        winLoseSign.GetComponent<TextMeshProUGUI>().color = loseColor;
         winLoseSign.GetComponent<TextMeshProUGUI>().text = "";
         for(int i = 0 ; i<sdata.participantNum ; i++){
             Debug.Log("chLose:i:"+i);
@@ -195,7 +197,7 @@ public class GM : MonoBehaviour
     public void Winner(){
         for(int i = 0 ; i<sdata.participantNum ; i++){
             if (sdata.vitalDatas[i].health>0){
-                winLoseSign.GetComponent<TextMeshProUGUI>().color = Color.green;
+                winLoseSign.GetComponent<TextMeshProUGUI>().color = winColor;
                 if(i==sdata.playerIndex){
                     ActionsUnit.SetActive(false);
                     winLoseSign.GetComponent<TextMeshProUGUI>().text = "You WIIIIN\n";

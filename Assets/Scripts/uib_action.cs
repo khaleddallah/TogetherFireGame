@@ -16,6 +16,7 @@ public class uib_action : MonoBehaviour
     [SerializeField] private GameObject ActionParent;
 
     [SerializeField] private int actionNum;
+    [SerializeField] private Color colorWhenClicked;
 
     Sdata sdata;
     Color dmoveColor;
@@ -32,6 +33,12 @@ public class uib_action : MonoBehaviour
     }
 
     public void ActionPressed(){
+        // change it color and reset others
+        resetActionColors();
+        transform.GetChild(2).GetComponent<Image>().color = colorWhenClicked;
+        transform.GetChild(3).GetComponent<Image>().color = colorWhenClicked;
+
+
         checkActions();
         TargetAssignHelper.tah.DestroyMarkers();
         TargetAssignHelper.tah.moveError = false;
@@ -125,6 +132,12 @@ public class uib_action : MonoBehaviour
         }
     }
 
-
+    public void resetActionColors(){
+        foreach(Transform child in transform.parent.transform)
+        {
+            child.GetChild(2).GetComponent<Image>().color = Color.white;
+            child.GetChild(3).GetComponent<Image>().color = Color.white;
+        }
+    }
 }
 

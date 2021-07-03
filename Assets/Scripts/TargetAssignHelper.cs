@@ -184,6 +184,9 @@ public class TargetAssignHelper : MonoBehaviour
 
 
     public void InstTarget(Vector3 pos0){
+        // reset colors of actions 
+        ActionParent.transform.GetChild(0).GetComponent<uib_action>().resetActionColors();
+
         // disactive selecting unit 
         actionSelectingUnit.SetActive(false);
 

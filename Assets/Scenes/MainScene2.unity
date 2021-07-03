@@ -1643,6 +1643,7 @@ MonoBehaviour:
   fireButtonS: {fileID: 408360146}
   ActionParent: {fileID: 0}
   actionNum: 1
+  colorWhenClicked: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &199962385
 GameObject:
   m_ObjectHideFlags: 0
@@ -6126,6 +6127,7 @@ MonoBehaviour:
   fireButtonS: {fileID: 408360146}
   ActionParent: {fileID: 625324338}
   actionNum: 2
+  colorWhenClicked: {r: 0.37966275, g: 0.6886792, b: 0.14618193, a: 1}
 --- !u!1001 &622007660
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8563,7 +8565,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &932558116
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8776,6 +8778,7 @@ MonoBehaviour:
   fireButtonS: {fileID: 408360146}
   ActionParent: {fileID: 0}
   actionNum: 2
+  colorWhenClicked: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &953258489
 GameObject:
   m_ObjectHideFlags: 0
@@ -8836,6 +8839,7 @@ MonoBehaviour:
   fireButtonS: {fileID: 408360146}
   ActionParent: {fileID: 0}
   actionNum: 0
+  colorWhenClicked: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &960768066
 GameObject:
   m_ObjectHideFlags: 0
@@ -9806,6 +9810,7 @@ MonoBehaviour:
   fireButtonS: {fileID: 408360146}
   ActionParent: {fileID: 625324338}
   actionNum: 1
+  colorWhenClicked: {r: 0.37966275, g: 0.6886792, b: 0.14618193, a: 1}
 --- !u!1 &1071711804
 GameObject:
   m_ObjectHideFlags: 0
@@ -11462,6 +11467,7 @@ GameObject:
   - component: {fileID: 1378310262}
   - component: {fileID: 1378310264}
   - component: {fileID: 1378310263}
+  - component: {fileID: 1378310265}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -11527,6 +11533,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1378310261}
   m_CullTransparentMesh: 0
+--- !u!95 &1378310265
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1378310261}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 866cf550688993c5d83225c517636843, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1407439581
 GameObject:
   m_ObjectHideFlags: 0
@@ -12352,7 +12377,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: Ep  1  starts in  3
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
@@ -12379,12 +12404,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 113.7
+  m_fontSize: 80
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 113.7
+  m_fontSizeMax: 80
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -13579,6 +13604,8 @@ MonoBehaviour:
   money: {fileID: 282438476}
   gold: {fileID: 1615004001}
   health: {fileID: 1810722729}
+  loseColor: {r: 1, g: 0, b: 0.2939663, a: 0.9137255}
+  winColor: {r: 0.6167408, g: 0.8773585, b: 0, a: 1}
 --- !u!114 &1610572438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13605,6 +13632,9 @@ MonoBehaviour:
   ActionNumUI: {fileID: 860998944}
   actionMove: 0
   actionFire: 0
+  timeBeforeEp: 3
+  winLoseSign: {fileID: 1456872701}
+  epTimerColor: {r: 0.72156864, g: 0, b: 1, a: 0.9372549}
 --- !u!82 &1610572439
 AudioSource:
   m_ObjectHideFlags: 0
@@ -16207,6 +16237,7 @@ MonoBehaviour:
   fireButtonS: {fileID: 408360146}
   ActionParent: {fileID: 0}
   actionNum: 3
+  colorWhenClicked: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &1899029981
 GameObject:
   m_ObjectHideFlags: 0
@@ -18084,6 +18115,7 @@ MonoBehaviour:
   fireButtonS: {fileID: 408360146}
   ActionParent: {fileID: 625324338}
   actionNum: 0
+  colorWhenClicked: {r: 0.37966275, g: 0.6886792, b: 0.14618193, a: 1}
 --- !u!1 &2090789837
 GameObject:
   m_ObjectHideFlags: 0

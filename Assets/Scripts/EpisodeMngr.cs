@@ -27,7 +27,11 @@ public class EpisodeMngr : MonoBehaviour
     public int actionMove = 0;
     public int actionFire = 0;
 
+    public float timeBeforeEp = 3;
 
+    public GameObject winLoseSign;
+
+    public Color epTimerColor;
     void Start()
     {
         episodeSubmitted = -1 ;
@@ -222,6 +226,18 @@ public class EpisodeMngr : MonoBehaviour
             yield return new WaitForSeconds(3);
             GM.gm.loadFirstScene();
         }
+
+
+        // down timer for the new episode
+        float timeTempEp = timeBeforeEp;
+        winLoseSign.SetActive(true);
+        winLoseSign.GetComponent<TextMeshProUGUI>().color = epTimerColor;
+        while(timeTempEp>0){
+            winLoseSign.GetComponent<TextMeshProUGUI>().text = "EP  "+(sdata.episodeIndex+1).ToString()+"  starts in  "+timeTempEp.ToString();
+            yield return new WaitForSeconds(1);
+            timeTempEp-=1;
+        }
+        winLoseSign.SetActive(false);
 
         sdata.CreateNewEpisode();
         resetEpisodeUI();
