@@ -36,6 +36,8 @@ public class GM : MonoBehaviour
 
     void Awake()
     {
+        Sdata.sdata.playerIndex = LTD.ltd.playerIndex;
+
         if(gm != null){
             GameObject.Destroy(gm);
         }
@@ -51,7 +53,6 @@ public class GM : MonoBehaviour
     void Start()
     {
         sdata = Sdata.sdata;
-        sdata.playerIndex = LTD.ltd.playerIndex;
         submitTime = submitTimeRef;
         episodeMngr = GetComponent<EpisodeMngr>();
         PlayersNames.transform.GetChild(sdata.playerIndex).GetComponent<TextMeshProUGUI>().text = LTD.ltd.myName;

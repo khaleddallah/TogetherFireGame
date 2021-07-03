@@ -13627,8 +13627,8 @@ MonoBehaviour:
   - {fileID: 8028529909031204358, guid: a9105a24aea50cc65b99c80973d189d9, type: 3}
   - {fileID: 346066025382910608, guid: 217a18fc65f04f236938d8649e40ddab, type: 3}
   - {fileID: 7882955963165368079, guid: f15ff0909bb980412ab81124ccc95df1, type: 3}
-  ActionParent: {fileID: 2140825875}
-  SubmitButton: {fileID: 250753872}
+  ActionParent: {fileID: 625324338}
+  SubmitButton: {fileID: 457116723}
   ActionNumUI: {fileID: 860998944}
   actionMove: 0
   actionFire: 0

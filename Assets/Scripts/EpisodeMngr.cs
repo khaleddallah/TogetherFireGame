@@ -46,6 +46,7 @@ public class EpisodeMngr : MonoBehaviour
         if(episodeSubmitted < sdata.episodeIndex){
             SubmitButton.interactable = false;
             episodeSubmitted = sdata.episodeIndex;
+            ActionParent.transform.GetChild(0).GetComponent<uib_action>().checkActions();
             submitCurrentPlayerRoleplay();
         }
     }
@@ -160,7 +161,10 @@ public class EpisodeMngr : MonoBehaviour
 
     // perform phase
     public IEnumerator performAllPlayers(int Findex, int participantNum){
+
         Debug.Log("Pefrom Starts");
+        ActionParent.transform.GetChild(0).GetComponent<uib_action>().resetActionColors();
+
         actionSelectingUnit.SetActive(false);
         GM.gm.stopSubmitCoroutine();
         GM.gm.SubmitTimeText.text = "EP "+ sdata.episodeIndex.ToString() +" : Working"; 
@@ -292,8 +296,7 @@ public class EpisodeMngr : MonoBehaviour
         SubmitButton.interactable = true;
         // reset ui Actions to ""
         for(int i=0; i<sdata.actionsNum ; i++){
-            TextMeshProUGUI xt = ActionParent.transform.GetChild(i).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-            xt.text = "";
+            ActionParent.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(0f,0f,0f,0f);
         }
     }
 
