@@ -20,7 +20,7 @@ public class Diamond : MonoBehaviour
             dps.transform.position = transform.position;
 
             Debug.Log(other.name);
-            sdata.vitalDatas[(int)Char.GetNumericValue(other.gameObject.transform.name[1])].golds +=1;
+            sdata.vitalDatas[(int)Char.GetNumericValue(other.gameObject.transform.name[1])].golds +=7;
             GM.gm.updataMGH();
             Destroy(gameObject);
         }
