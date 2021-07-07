@@ -18,6 +18,11 @@ public class TargetAssignHelper : MonoBehaviour
 
     public GameObject lrobjcet;
     public GameObject circle0;
+    public GameObject circleGrenade;
+
+    public GameObject circlePistol;
+
+
     public GameObject lcParent;
 
     public LayerMask layerMove;
@@ -42,6 +47,10 @@ public class TargetAssignHelper : MonoBehaviour
 
     bool markerExist;
 
+    public GameObject swordTarget;
+
+
+    public float radiousEnv;
 
     void Awake()
     {
@@ -69,6 +78,11 @@ public class TargetAssignHelper : MonoBehaviour
 
 
     public void DrawTargetLines(){
+
+
+        // Disable sword markers 
+        swordTarget.SetActive(false);
+
         // select the current pos 
         currentPos = myChrc.transform.position;
         // if prior action will move the chrc
@@ -81,30 +95,30 @@ public class TargetAssignHelper : MonoBehaviour
             }
         }
 
-        // if sword
-        if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].gunTypeObj){
-            if (sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].gunTypeObj.transform.name=="Sword"){
-                // Destroy prior objects
-                if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].targetObj){
-                    Destroy(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].targetObj);
-                }
+        // // if sword
+        // if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].gunTypeObj){
+        //     if (sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].gunTypeObj.transform.name=="Sword"){
+        //         // Destroy prior objects
+        //         if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].targetObj){
+        //             Destroy(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].targetObj);
+        //         }
                         
-                // destroy lines & circles after choose the target
-                foreach(Transform child in lcParent.transform)
-                {
-                    Destroy(child.gameObject);
-                }
+        //         // destroy lines & circles after choose the target
+        //         foreach(Transform child in lcParent.transform)
+        //         {
+        //             Destroy(child.gameObject);
+        //         }
                 
-                GameObject x = Instantiate(fireTarget) as GameObject;
-                x.transform.position = currentPos;
-                x.transform.SetParent(targetsParent.transform);
-                TextMeshProUGUI xt = x.transform.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-                xt.text = (sdata.actionIndex+1).ToString("0");  
-                sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].targetObj = x;
+        //         GameObject x = Instantiate(fireTarget) as GameObject;
+        //         x.transform.position = currentPos;
+        //         x.transform.SetParent(targetsParent.transform);
+        //         TextMeshProUGUI xt = x.transform.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
+        //         xt.text = (sdata.actionIndex+1).ToString("0");  
+        //         sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].targetObj = x;
 
-                return;
-            }
-        }
+        //         return;
+        //     }
+        // }
 
         // Draw lines & points
         for(int x=-1 ; x<=1 ; x++){
@@ -151,6 +165,7 @@ public class TargetAssignHelper : MonoBehaviour
                     float lastPoint;
                     if(x==0 || y==0){
                         lastPoint = Mathf.Floor(distance0/vhstep);
+                        
                         // Debug.Log("vhstep::"+vhstep);
                         // Debug.Log("lastPoint::"+lastPoint);
                     }
@@ -161,10 +176,16 @@ public class TargetAssignHelper : MonoBehaviour
                     }
                     last = currentPos+(new Vector3(x, y, 0)*vhstep*lastPoint);
                     lRend.SetPosition(0, currentPos);
+
                     lRend.SetPosition(1, last); 
 
                     //draw points for available targets
                     for(int p=1; p<=lastPoint; p++){
+                        Vector3 posTemp = currentPos+new Vector3(x, y, 0)*p*vhstep;
+                        bool isOutsideEnv = Vector3.Distance(Vector3.zero, posTemp)>=radiousEnv;
+                        if(isOutsideEnv){
+                            continue;
+                        }
                         GameObject cr = Instantiate(circle0) as GameObject;
                         cr.transform.SetParent(lcParent.transform);
                         cr.transform.position =  currentPos+new Vector3(x, y, 0)*p*vhstep;
@@ -175,15 +196,19 @@ public class TargetAssignHelper : MonoBehaviour
             }
         }
 
+        // if move put a point in same chrc position
+        if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].type=="move"){
+            GameObject cr = Instantiate(circle0) as GameObject;
+            cr.transform.SetParent(lcParent.transform);
+            cr.transform.position =  currentPos;
+            cr.transform.position = new Vector3(cr.transform.position.x, cr.transform.position.y, -3f);
+        }
 
     }
 
 
-
-
-
-
     public void InstTarget(Vector3 pos0){
+
         // reset colors of actions 
         ActionParent.transform.GetChild(0).GetComponent<uib_action>().resetActionColors();
 
@@ -280,4 +305,225 @@ public class TargetAssignHelper : MonoBehaviour
     }
 
 
+
+    // ============================== sword ==================================
+
+    public void MarkerSword(){
+        DestroyMarkers();
+
+        // select the current pos 
+        currentPos = myChrc.transform.position;
+        for(int i=sdata.actionIndex-1; i>=0; i--){
+            Debug.Log("select the current pos:::"+i);
+            if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[i].type=="move"){
+                currentPos = sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[i].target;
+                Debug.Log("CurrentPos:::>>"+currentPos);
+                break;
+            }
+        }
+
+        swordTarget.SetActive(true);
+        swordTarget.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
+        swordTarget.transform.position = currentPos;
+        // x.transform.SetParent(targetsParent.transform);
+        // sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].gunTypeObj = x;
+    }
+
+
+    public void MarkerSwordApply(){
+        sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].target = currentPos;
+        // GameObject x = sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].gunTypeObj;
+        TextMeshProUGUI xt = swordTarget.transform.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
+        xt.text = (sdata.actionIndex+1).ToString("0");  
+    }
+
+
+
+
+    // ============================== Grende ==================================
+
+    public void DrawGrendeMarkers(){
+        // Disable sword markers 
+        swordTarget.SetActive(false);
+
+        // select the current pos 
+        currentPos = myChrc.transform.position;
+        // if prior action will move the chrc
+        for(int i=sdata.actionIndex-1; i>=0; i--){
+            Debug.Log("select the current pos:::"+i);
+            if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[i].type=="move"){
+                currentPos = sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[i].target;
+                Debug.Log("CurrentPos:::>>"+currentPos);
+                break;
+            }
+        }
+
+        // Draw points  
+        float NumLines = Mathf.Floor(sdata.maxRadius/sdata.gridLen);
+        for (int i=-(int)NumLines ; i<NumLines; i++ ){
+            for (int j=-(int)NumLines ; j<NumLines; j++ ){
+                Vector3 posTemp = new Vector3(i*sdata.gridLen, j*sdata.gridLen, 0.0f);
+                bool isCurrentPos = i*sdata.gridLen==currentPos.x && j*sdata.gridLen==currentPos.y ; 
+                bool isOutsideEnv = Vector3.Distance(Vector3.zero, posTemp)>=radiousEnv;
+                if(isCurrentPos || isOutsideEnv){
+                    continue;
+                }
+                else{
+                    GameObject cr = Instantiate(circleGrenade) as GameObject;
+                    cr.transform.SetParent(lcParent.transform);
+                    cr.transform.position = new Vector3(i*sdata.gridLen, j*sdata.gridLen, -3.0f);
+                }
+            }
+        }
+    }
+
+    // ============================== Move ==================================
+
+    public void MoveMarkers(){
+        // Disable sword markers 
+        swordTarget.SetActive(false);
+        
+        // select the current pos 
+        currentPos = myChrc.transform.position;
+
+
+        // Draw lines & points
+        for(int x=-1 ; x<=1 ; x++){
+            for(int y=-1 ; y<=1 ; y++){
+                Vector3 dir = new Vector3(x,y,0f);
+                Debug.Log("dir::"+dir);
+                RaycastHit2D hit;
+                float distance0=0f;
+
+                
+                hit=Physics2D.Raycast(currentPos, dir, Mathf.Infinity, ~layerMove);
+                distance0 = hit.distance;
+                tempColor = moveLines;
+
+
+                if(distance0>vhstep){
+                    Debug.Log("hit::"+hit.transform.name+":::"+hit.distance);
+                    GameObject gl = Instantiate(lrobjcet) as GameObject;
+                    gl.transform.SetParent(lcParent.transform);
+
+                    LineRenderer lRend = gl.GetComponent<LineRenderer>();
+                    lRend.startColor=tempColor;
+                    lRend.endColor=tempColor;                    
+                    lRend.startWidth=0.05f;
+                    lRend.endWidth=0.05f;
+                    Vector3 last ; 
+                    float lastPoint;
+                    if(x==0 || y==0){
+                        lastPoint = Mathf.Floor(distance0/vhstep);
+                    }
+                    else{
+                        lastPoint = Mathf.Floor(distance0/slstep);
+                    }
+                    last = currentPos+(new Vector3(x, y, 0)*vhstep*lastPoint);
+                    lRend.SetPosition(0, currentPos);
+                    lRend.SetPosition(1, last); 
+
+                    //draw points for available targets
+                    for(int p=1; p<=lastPoint; p++){
+                        Vector3 posTemp = currentPos+new Vector3(x, y, 0)*p*vhstep;
+                        bool isOutsideEnv = Vector3.Distance(Vector3.zero, posTemp)>=radiousEnv;
+                        if(isOutsideEnv){
+                            continue;
+                        }
+                        GameObject cr0 = Instantiate(circle0) as GameObject;
+                        cr0.transform.SetParent(lcParent.transform);
+                        cr0.transform.position =  currentPos+new Vector3(x, y, 0)*p*vhstep;
+                        cr0.transform.position = new Vector3(cr0.transform.position.x, cr0.transform.position.y, -3f);
+                    }
+                }
+            }
+        }
+
+        GameObject cr = Instantiate(circle0) as GameObject;
+        cr.transform.SetParent(lcParent.transform);
+        cr.transform.position =  currentPos;
+        cr.transform.position = new Vector3(cr.transform.position.x, cr.transform.position.y, -3f);
+
+    }
+
+
+
+    // ============================== Piston&MachineGun ==================================
+
+
+    public void PistolMarkers(){
+        // Disable sword markers 
+        swordTarget.SetActive(false);
+
+        // select the current pos 
+        currentPos = myChrc.transform.position;
+        // if prior action will move the chrc
+        for(int i=sdata.actionIndex-1; i>=0; i--){
+            Debug.Log("select the current pos:::"+i);
+            if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[i].type=="move"){
+                currentPos = sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[i].target;
+                Debug.Log("CurrentPos:::>>"+currentPos);
+                break;
+            }
+        }
+
+
+        // Draw lines & points
+        for(int x=-1 ; x<=1 ; x++){
+            for(int y=-1 ; y<=1 ; y++){
+                Vector3 dir = new Vector3(x,y,0f);
+                Debug.Log("dir::"+dir);
+                RaycastHit2D hit;
+                float distance0=0f;
+
+                hit=Physics2D.Raycast(currentPos, dir, Mathf.Infinity, ~layerFire);
+                distance0 = hit.distance;
+                tempColor = fireLines;
+            
+
+                if(distance0>vhstep){
+                    Debug.Log("hit::"+hit.transform.name+":::"+hit.distance);
+                    GameObject gl = Instantiate(lrobjcet) as GameObject;
+                    gl.transform.SetParent(lcParent.transform);
+
+                    LineRenderer lRend = gl.GetComponent<LineRenderer>();
+                    lRend.startColor=tempColor;
+                    lRend.endColor=tempColor;                    
+                    lRend.startWidth=0.05f;
+                    lRend.endWidth=0.05f;
+                    Vector3 last ; 
+                    float lastPoint;
+                    if(x==0 || y==0){
+                        lastPoint = Mathf.Floor(distance0/vhstep);
+                        
+                        // Debug.Log("vhstep::"+vhstep);
+                        // Debug.Log("lastPoint::"+lastPoint);
+                    }
+                    else{
+                        lastPoint = Mathf.Floor(distance0/slstep);
+                        // Debug.Log("slstep::"+slstep);
+                        // Debug.Log("lastPoint::"+lastPoint);
+                    }
+
+
+                    last = currentPos+(new Vector3(x, y, 0)*vhstep);
+                    lRend.SetPosition(0, currentPos);
+                    lRend.SetPosition(1, last); 
+
+
+                    GameObject cr0 = Instantiate(circlePistol) as GameObject;
+                    cr0.transform.SetParent(lcParent.transform);
+                    
+                    Vector3 movementDir =  (last-currentPos).normalized;    
+                    float rotz = Mathf.Atan2(movementDir.y,movementDir.x)*Mathf.Rad2Deg;    
+                    cr0.transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotz);
+
+                    cr0.transform.position =  last;
+                    cr0.transform.position = new Vector3(cr0.transform.position.x, cr0.transform.position.y, -3f);
+
+                }
+
+            }
+        }
+    }
 }

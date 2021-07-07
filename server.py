@@ -41,7 +41,7 @@ curPlayerCount = 0
 players = dict()
 # players = {0:"kaheh", 1:"mhd", 2:"xx", 3:"xrr"}
 
-actionsConut = 3
+actionsConut = 2
 episodeIndex = -1 
 openEp = False
 

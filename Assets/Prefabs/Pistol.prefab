@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8028529909031204353}
   - component: {fileID: 8028529909031204352}
+  - component: {fileID: 3447873214068683526}
   - component: {fileID: 8028529909031204359}
   - component: {fileID: 8028529909031204354}
   - component: {fileID: 892206646551584258}
@@ -86,6 +87,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3447873214068683526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8028529909031204358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54ebec0233ad888a8ab9cd318665b558, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dest: {x: 0, y: 0, z: 0}
+  myparent: 0
 --- !u!114 &8028529909031204359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99,12 +114,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+  offsetSpeeding: 1
   healthDec: 50
   barriers:
   - Block
   dest: {x: 0, y: 0, z: 0}
   bloodObj: {fileID: 8209141539923034503, guid: 4094d73b4729781b1a1c7809558b5b31, type: 3}
   firePSObj: {fileID: 7276004562158544158, guid: c5f7ed50d9ea6e888a288a392d5bdf21, type: 3}
+  myparent: 0
 --- !u!61 &8028529909031204354
 BoxCollider2D:
   m_ObjectHideFlags: 0

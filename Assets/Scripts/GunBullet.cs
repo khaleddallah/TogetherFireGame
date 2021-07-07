@@ -6,6 +6,7 @@ public class GunBullet : MonoBehaviour
 {
 
     public float speed;
+    public float offsetSpeeding;
     public float healthDec;
     public List<string> barriers = new List<string>();
 
@@ -17,23 +18,23 @@ public class GunBullet : MonoBehaviour
     Coroutine coroutineFire;
     bool active;
     Sdata sdata;
-    int myparent;
-
+    public int myparent;
+    bool launched = false;
 
     void Start()
     {
         sdata = Sdata.sdata;
-    }
-
-    public void launch(int myparent0)
-    {
         active = true;
-        coroutineFire = StartCoroutine(fire(myparent0));
+        dest = GetComponent<BulletData>().dest;
+        myparent = GetComponent<BulletData>().myparent;
+
+        coroutineFire = StartCoroutine(fire());
     }
 
 
-    public IEnumerator fire(int parent){
-        myparent=parent;
+
+
+    public IEnumerator fire(){
         Debug.Log("####"+transform.name.Substring(0,5));
         if(transform.name.Substring(0,5) == "Sword"){
             float z = 0 ; 
@@ -57,10 +58,13 @@ public class GunBullet : MonoBehaviour
             firePS.transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotz);
             yield return new WaitForSeconds(0.2f);
             // yield return new WaitUntil(() => !firePS);
-
+            transform.position += movementDir * offsetSpeeding;
             while (active) {
                 transform.position += Time.deltaTime * movementDir * speed;
                 yield return null;
+                if(!launched){
+                    launched=true;
+                }
             }
             yield return null;
         }
@@ -70,6 +74,10 @@ public class GunBullet : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
+        if(!launched){
+            Debug.Log("notLaunched_exit");
+            return;
+        }
         Debug.Log(transform.name+":: Exit ::"+other.transform.name);
         if(transform.name.Substring(0,5) == "Sword") return;
         if(other.transform.name == "MainBase") {
@@ -80,6 +88,12 @@ public class GunBullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        if(!launched){
+            Debug.Log("notLaunched_enter");
+            // Vector3 movementDir =  (dest-transform.position).normalized; 
+            // transform.position += Time.deltaTime * movementDir * speed * 100;
+            return;
+        }
         Debug.Log(transform.name+":: Enter ::"+other.transform.name);
         if(other.transform.name == "MainBase") {
             DestroySpecial();
@@ -96,6 +110,10 @@ public class GunBullet : MonoBehaviour
 
                 Debug.Log("000DD))");
                 sdata.vitalDatas[plind].health-=healthDec;
+                // Disable chrc if died
+                if(sdata.vitalDatas[plind].health<=0){
+                    other.gameObject.SetActive(false);
+                }
                 GM.gm.updataMGH();
                 DestroySpecial();
             }

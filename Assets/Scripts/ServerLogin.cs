@@ -26,6 +26,14 @@ public class ServerLogin : MonoBehaviour
     }
 
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            LoadMainScene();
+        }
+    }
+
 
     // reload the scene
     public void LoadMainScene(){

@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7882955963165368078}
   - component: {fileID: 7882955963165368076}
-  - component: {fileID: -6913658600139554218}
   - component: {fileID: 5811823711674202824}
+  - component: {fileID: 6832784114329189327}
+  - component: {fileID: 189354570150745977}
   m_Layer: 0
   m_Name: Sword
   m_TagString: Untagged
@@ -60,25 +61,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.6238208, y: 6.5124397}
   m_EdgeRadius: 0
---- !u!114 &-6913658600139554218
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7882955963165368079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7096ef1c7710c39f3866f12fdee9cbe8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 200
-  healthDec: 50
-  barriers:
-  - Block
-  dest: {x: 0, y: 0, z: 0}
-  bloodObj: {fileID: 8209141539923034503, guid: 4094d73b4729781b1a1c7809558b5b31, type: 3}
-  firePSObj: {fileID: 7276004562158544158, guid: c5f7ed50d9ea6e888a288a392d5bdf21, type: 3}
 --- !u!50 &5811823711674202824
 Rigidbody2D:
   serializedVersion: 4
@@ -100,6 +82,44 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
+--- !u!114 &6832784114329189327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7882955963165368079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54ebec0233ad888a8ab9cd318665b558, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 0
+  healthDec: 0
+  barriers: []
+  dest: {x: 0, y: 0, z: 0}
+  bloodObj: {fileID: 0}
+  firePSObj: {fileID: 0}
+  myparent: 0
+--- !u!114 &189354570150745977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7882955963165368079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 050faea9e13896cbbbf64eb90cc2b206, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 300
+  healthDec: 50
+  barriers: []
+  dest: {x: 0, y: 0, z: 0}
+  bloodObj: {fileID: 8209141539923034503, guid: 4094d73b4729781b1a1c7809558b5b31, type: 3}
+  firePSObj: {fileID: 7276004562158544158, guid: c5f7ed50d9ea6e888a288a392d5bdf21, type: 3}
+  myparent: 0
 --- !u!1 &7882955963335959871
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,8 +145,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7882955963335959871}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 5.15, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 6.142, z: 0}
+  m_LocalScale: {x: 1, y: 1.305, z: 1}
   m_Children: []
   m_Father: {fileID: 7882955963165368078}
   m_RootOrder: 0

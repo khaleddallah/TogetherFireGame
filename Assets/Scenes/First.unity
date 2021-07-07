@@ -1404,7 +1404,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6db41d1738aff07d8b36bfdbfa15781, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainScene: MainScene2
+  mainScene: mofi
   nameField: {fileID: 653324429}
   serverField: {fileID: 2047019913}
   ErrorField: {fileID: 423180051}
