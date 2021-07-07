@@ -37,6 +37,7 @@ public class EpisodeMngr : MonoBehaviour
     public Wizard wizard;
 
     public float moveSpeed;
+    public float machineGunOffset;
     void Start()
     {
         episodeSubmitted = -1 ;
@@ -200,43 +201,16 @@ public class EpisodeMngr : MonoBehaviour
             for(int player=Findex; player<participantNum ; player++){
                 if(sdata.episodes[sdata.episodeIndex].roleplays[player].actions[actionT].type == "fire")
                     {
-                        actionFire+=1;
                         Debug.Log("Fireplayer:::"+player.ToString());
                         if(player==sdata.playerIndex){
                             Destroy(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[actionT].targetObj);
                         }
-
-                        //Sowrd
-                        // if(sdata.episodes[sdata.episodeIndex].roleplays[player].actions[actionT].gunTypeObj.transform.name=="Sword"){
-                        //     swordTarget.SetActive(false);
-                        //     StartCoroutine(swordlaunch(
-                        //         player,
-                        //         playersParent.transform.GetChild(player).transform.GetChild(0).transform.gameObject,
-                        //         sdata.episodes[sdata.episodeIndex].roleplays[player].actions[actionT].target,
-                        //         sdata.episodes[sdata.episodeIndex].roleplays[player].actions[actionT].gunTypeObj
-                        //     ));
-                        // }
-                        // //Grenade
-                        // if(sdata.episodes[sdata.episodeIndex].roleplays[player].actions[actionT].gunTypeObj.transform.name=="Grenade"){
-                        //     swordTarget.SetActive(false);
-                        //     StartCoroutine(grenadeLaunch(
-                        //         player,
-                        //         playersParent.transform.GetChild(player).transform.GetChild(0).transform.gameObject,
-                        //         sdata.episodes[sdata.episodeIndex].roleplays[player].actions[actionT].target,
-                        //         sdata.episodes[sdata.episodeIndex].roleplays[player].actions[actionT].gunTypeObj
-                        //     ));
-                        // }
-
-
-                        //Others
-                        // else{
-                            StartCoroutine(fire(
-                                player,
-                                playersParent.transform.GetChild(player).transform.GetChild(0).transform.gameObject,
-                                sdata.episodes[sdata.episodeIndex].roleplays[player].actions[actionT].target,
-                                sdata.episodes[sdata.episodeIndex].roleplays[player].actions[actionT].gunTypeObj
-                            ));
-                        // }
+                        StartCoroutine(fire(
+                            player,
+                            playersParent.transform.GetChild(player).transform.GetChild(0).transform.gameObject,
+                            sdata.episodes[sdata.episodeIndex].roleplays[player].actions[actionT].target,
+                            sdata.episodes[sdata.episodeIndex].roleplays[player].actions[actionT].gunTypeObj
+                        ));
                     } 
             }
             Debug.Log("waitin for FIRE");
@@ -320,11 +294,29 @@ public class EpisodeMngr : MonoBehaviour
 
     // fire bullet from playerObj to dest
     public IEnumerator fire(int parent, GameObject playerObj, Vector3 dest, GameObject bullet) {
-        GameObject x = Instantiate(bullet) as GameObject;
-        x.transform.position = playerObj.transform.position;
-        x.GetComponent<BulletData>().dest = dest;
-        x.GetComponent<BulletData>().myparent = parent;
+
+        if(bullet.transform.name=="MachineGun"){
+            actionFire+=3;
+            for(int b=-1; b<2 ;b++){                            
+                GameObject x0 = Instantiate(bullet) as GameObject;
+                x0.transform.position = playerObj.transform.position;
+                // Debug.Log(dest);
+                Debug.Log("dest.normalized:"+dest.normalized);
+                Vector3 distortion = new Vector3(dest.normalized.x*machineGunOffset*b, dest.normalized.y*machineGunOffset*b, 0f);
+                Debug.Log("dest:"+dest);
+                x0.GetComponent<BulletData>().dest = dest + distortion;
+                x0.GetComponent<BulletData>().myparent = parent;
+            }
+        }
+        else{
+            actionFire+=1;
+            GameObject x = Instantiate(bullet) as GameObject;
+            x.transform.position = playerObj.transform.position;
+            x.GetComponent<BulletData>().dest = dest;
+            x.GetComponent<BulletData>().myparent = parent;
+        }
         yield return null;
+
     }
 
 

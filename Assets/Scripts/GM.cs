@@ -230,6 +230,7 @@ public class GM : MonoBehaviour
             if (sdata.vitalDatas[i].health>0){
                 winLoseSign.GetComponent<Animator>().SetBool("waiting", false);
                 winLoseSign.GetComponent<Animator>().SetBool("epBefore", false);
+                winLoseSign.GetComponent<Animator>().enabled=false;
                 winLoseSign.GetComponent<TextMeshProUGUI>().color = winColor;
                 if(i==sdata.playerIndex){
                     ActionsUnit.SetActive(false);
@@ -240,8 +241,11 @@ public class GM : MonoBehaviour
                     winLoseSign.GetComponent<TextMeshProUGUI>().text = winnerName+" WIIIIN\n";
                 }
                 break;
+
             }
         }
+        winLoseSign.GetComponent<Animator>().enabled=false;
+
     }
 
     IEnumerator sendLose() {

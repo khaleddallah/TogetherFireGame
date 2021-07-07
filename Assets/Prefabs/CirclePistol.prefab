@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5831123572180209228}
   - component: {fileID: 825800141}
   - component: {fileID: -4109684157327700162}
-  - component: {fileID: 3070839142900838946}
+  - component: {fileID: -6962567955801197300}
   m_Layer: 5
   m_Name: CirclePistol
   m_TagString: Untagged
@@ -122,8 +122,8 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!60 &3070839142900838946
-PolygonCollider2D:
+--- !u!61 &-6962567955801197300
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -132,7 +132,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -145,39 +145,6 @@ PolygonCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -2.56, y: 2.56}
-      - {x: -2.56, y: 2.49}
-      - {x: -2.55, y: 2.44}
-      - {x: -2.51, y: 2.36}
-      - {x: -2.45, y: 2.19}
-      - {x: -2.3999999, y: 2.05}
-      - {x: -2.27, y: 1.6899999}
-      - {x: -2.21, y: 1.52}
-      - {x: -2.1599998, y: 1.38}
-      - {x: -2.03, y: 1.02}
-      - {x: -1.9699999, y: 0.84999996}
-      - {x: -1.89, y: 0.62}
-      - {x: -1.8399999, y: 0.48}
-      - {x: -1.79, y: 0.35}
-      - {x: -1.6999999, y: 0.099999994}
-      - {x: -1.67, y: -0.02}
-      - {x: -1.6999999, y: -0.099999994}
-      - {x: -1.75, y: -0.24}
-      - {x: -1.79, y: -0.35}
-      - {x: -1.9399999, y: -0.77}
-      - {x: -2.09, y: -1.18}
-      - {x: -2.18, y: -1.4399999}
-      - {x: -2.22, y: -1.55}
-      - {x: -2.33, y: -1.8499999}
-      - {x: -2.37, y: -1.9699999}
-      - {x: -2.4199998, y: -2.11}
-      - {x: -2.51, y: -2.36}
-      - {x: -2.56, y: -2.5}
-      - {x: -2.56, y: -2.56}
-      - {x: -2.53, y: -2.56}
-      - {x: 2.56, y: -0.02}
-      - {x: 2.56, y: 0.01}
-      - {x: 2.55, y: 0.03}
-      - {x: -2.53, y: 2.56}
+  serializedVersion: 2
+  m_Size: {x: 5.12, y: 5.12}
+  m_EdgeRadius: 0
