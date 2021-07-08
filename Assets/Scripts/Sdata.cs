@@ -25,6 +25,8 @@ public class Sdata : MonoBehaviour
 
     public int howmplayerstarted = 0;
 
+    public string gamePlayMode;
+
     void Awake()
     {
         if(sdata != null){

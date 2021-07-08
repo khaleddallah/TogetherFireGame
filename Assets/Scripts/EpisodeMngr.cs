@@ -22,6 +22,7 @@ public class EpisodeMngr : MonoBehaviour
 
     int episodeSubmitted = -1;
     Sdata sdata;
+    public AIPlayers ai;
 
     // used in Perform routine
     public int actionMove = 0;
@@ -53,7 +54,14 @@ public class EpisodeMngr : MonoBehaviour
             SubmitButton.interactable = false;
             episodeSubmitted = sdata.episodeIndex;
             checkActions();
-            submitCurrentPlayerRoleplay();
+            // submitCurrentPlayerRoleplay();
+            if(sdata.gamePlayMode=="ai"){
+                ai.psai();
+                StartCoroutine(performAllPlayers(0, sdata.participantNum));
+            }
+            else{
+                submitCurrentPlayerRoleplay();
+            }
         }
     }
 

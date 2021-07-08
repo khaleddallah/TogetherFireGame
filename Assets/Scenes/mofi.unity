@@ -1619,6 +1619,10 @@ MonoBehaviour:
   winLoseSign: {fileID: 1456872701}
   episodeMngr: {fileID: 1610572438}
   fireButtonS: {fileID: 1346994166}
+  GoldParent: {fileID: 0}
+  DiamondParent: {fileID: 0}
+  StoneParent: {fileID: 0}
+  PlayersParent: {fileID: 0}
 --- !u!4 &158372135
 Transform:
   m_ObjectHideFlags: 0
@@ -8299,6 +8303,7 @@ MonoBehaviour:
   participantNum: 4
   actionsNum: 2
   howmplayerstarted: 0
+  gamePlayMode: ai
 --- !u!4 &720184894
 Transform:
   m_ObjectHideFlags: 0
@@ -9958,6 +9963,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 884070462}
   m_CullTransparentMesh: 0
+--- !u!1 &895910427 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 220299120536493583, guid: ad3cb80faa0f058649802374cf864e65, type: 3}
+  m_PrefabInstance: {fileID: 622007660}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &896231480
 GameObject:
   m_ObjectHideFlags: 0
@@ -12997,6 +13007,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1235140268}
   m_CullTransparentMesh: 0
+--- !u!1 &1239951228 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3696142138187903028, guid: ad3cb80faa0f058649802374cf864e65, type: 3}
+  m_PrefabInstance: {fileID: 622007660}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1244419270
 GameObject:
   m_ObjectHideFlags: 0
@@ -16983,6 +16998,7 @@ MonoBehaviour:
   ActionParent: {fileID: 625324338}
   SubmitButton: {fileID: 457116723}
   ActionNumUI: {fileID: 860998944}
+  ai: {fileID: 1811598033}
   actionMove: 0
   actionFire: 0
   timeBeforeEp: 3
@@ -19342,6 +19358,68 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1810722727}
   m_CullTransparentMesh: 0
+--- !u!1 &1811598031
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1811598032}
+  - component: {fileID: 1811598033}
+  m_Layer: 0
+  m_Name: PlayersAI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1811598032
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1811598031}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 14
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1811598033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1811598031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 373c47a5905da865b959e10680ef5e2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GoldParent: {fileID: 1885673809}
+  StoneParent: {fileID: 1239951228}
+  DiamondParent: {fileID: 895910427}
+  PlayersParent: {fileID: 1916517903}
+  golds: []
+  stones: []
+  diamonds: []
+  players: []
+  guns:
+  - {fileID: 8028529909031204358, guid: a9105a24aea50cc65b99c80973d189d9, type: 3}
+  - {fileID: 346066025382910608, guid: 217a18fc65f04f236938d8649e40ddab, type: 3}
+  - {fileID: 3505746068904520643, guid: 6e093c73b040efd6a9f0e633307e4cc3, type: 3}
+  - {fileID: 7882955963165368079, guid: f15ff0909bb980412ab81124ccc95df1, type: 3}
+  layerMove:
+    serializedVersion: 2
+    m_Bits: 0
+  layerFire:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &1819133840
 GameObject:
   m_ObjectHideFlags: 0
@@ -19353,7 +19431,7 @@ GameObject:
   - component: {fileID: 1819133841}
   - component: {fileID: 1819133842}
   m_Layer: 0
-  m_Name: CodeGenerator
+  m_Name: GridGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19387,6 +19465,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   line: {fileID: 6091801372787796978, guid: 0d6351722154c895fb5958b8e18e5b60, type: 3}
   PlayersParent: {fileID: 1916517903}
+  gold: {fileID: 676349216899197934, guid: 55110e3971aa012d3bcc3adb840974c3, type: 3}
+  GoldParent: {fileID: 1885673809}
+  stone: {fileID: 6865145919204624713, guid: a6b7c4a09453756e1b96089e31603549, type: 3}
+  StoneParent: {fileID: 1239951228}
+  diamond: {fileID: 5887408850899285984, guid: d710ddb574c6ca5a3b36e000d15eaebb, type: 3}
+  DiamondParent: {fileID: 895910427}
 --- !u!1 &1826796426
 GameObject:
   m_ObjectHideFlags: 0
@@ -20123,6 +20207,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1859663117}
   m_CullTransparentMesh: 0
+--- !u!1 &1885673809 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3696142138942697916, guid: ad3cb80faa0f058649802374cf864e65, type: 3}
+  m_PrefabInstance: {fileID: 622007660}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1885715461
 GameObject:
   m_ObjectHideFlags: 0

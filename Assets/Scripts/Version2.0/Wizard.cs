@@ -17,6 +17,8 @@ public class Wizard : MonoBehaviour
     public EpisodeMngr episodeMngr;
     public GameObject fireButtonS;
 
+    public GameObject GoldParent, DiamondParent, StoneParent, PlayersParent;
+
     Sdata sdata;
     Color dgunColor;
     Coroutine GetUserInputRoutine;
@@ -47,6 +49,12 @@ public class Wizard : MonoBehaviour
         resetButton.SetActive(false);
 
         yield return new WaitUntil(() => !winLoseSign.activeSelf);
+
+        // for(int pai = 0 ; pai<sdata.participantNum ; pai++){
+        //     if(pai!=sdata.playerIndex){
+        //         StartCoroutine(PlayAI(pai));
+        //     }
+        // }
 
         // ==== move act ====
         Debug.Log("Move Selecting");
@@ -123,5 +131,10 @@ public class Wizard : MonoBehaviour
             fireButtonS.transform.GetChild(i).GetComponent<Image>().color = dgunColor;
         }
     }
+
+    // public IEnumerator PlayAI(int playerInd){
+        
+    // }
+
 
 }
