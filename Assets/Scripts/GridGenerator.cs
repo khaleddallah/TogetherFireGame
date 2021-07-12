@@ -37,10 +37,10 @@ public class GridGenerator : MonoBehaviour
             x.transform.position = new Vector3(0f, i*sdata.gridLen, 0f);
         }
         
-        PlayersParent.transform.GetChild(0).GetChild(0).transform.position = new Vector3(0f, -6*sdata.gridLen, 0f);
-        PlayersParent.transform.GetChild(1).GetChild(0).transform.position = new Vector3(-6*sdata.gridLen, 0f, 0f);
-        PlayersParent.transform.GetChild(2).GetChild(0).transform.position = new Vector3(0f, 6*sdata.gridLen, 0f);
-        PlayersParent.transform.GetChild(3).GetChild(0).transform.position = new Vector3(6*sdata.gridLen, 0f, 0f);
+        PlayersParent.transform.GetChild(0).GetChild(0).transform.position = new Vector3(0f, -12*sdata.gridLen, 0f);
+        PlayersParent.transform.GetChild(1).GetChild(0).transform.position = new Vector3(-12*sdata.gridLen, 0f, 0f);
+        PlayersParent.transform.GetChild(2).GetChild(0).transform.position = new Vector3(0f, 12*sdata.gridLen, 0f);
+        PlayersParent.transform.GetChild(3).GetChild(0).transform.position = new Vector3(12*sdata.gridLen, 0f, 0f);
 
         for(int i=0 ; i<sdata.participantNum ; i++){
             if(i==sdata.playerIndex){
@@ -61,7 +61,7 @@ public class GridGenerator : MonoBehaviour
     public void GoldDistributor(){
         for(int x = -4 ; x<=4 ; x+=2){
             for(int y = -4 ; y<=4 ; y+=2){
-                if(x==0 || y==0){
+                if(x==0 && y==0){
                     continue;
                 }
                 if(Mathf.Abs(x)!=Mathf.Abs(y)){
@@ -74,12 +74,12 @@ public class GridGenerator : MonoBehaviour
         }
         for(int x = -3 ; x<=3 ; x+=3){
             for(int y = -3 ; y<=3 ; y+=3){
-                if(Mathf.Abs(x)!=Mathf.Abs(y)){
+                // if(Mathf.Abs(x)!=Mathf.Abs(y)){
                     // Debug.Log("("+x+","+y+")");
                     GameObject g = Instantiate(gold) as GameObject;
                     g.transform.SetParent(GoldParent.transform);
                     g.transform.position = new Vector3(x*sdata.gridLen, y*sdata.gridLen, 0f);
-                }
+                // }
             }
         }
     }
