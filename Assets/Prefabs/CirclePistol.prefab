@@ -101,7 +101,7 @@ MonoBehaviour:
   moveTarget: {fileID: 5878772088525887277, guid: 0cd2f70e2492a40c69adb4e3a54701de, type: 3}
   fireTarget: {fileID: 6645335236289857594, guid: 4989b9c4da99870d9b66d166056cb452, type: 3}
   targetParent: {fileID: 0}
-  bigOffset: 2
+  bigOffset: 1.6
   stay: 0
 --- !u!95 &-4109684157327700162
 Animator:

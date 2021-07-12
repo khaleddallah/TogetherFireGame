@@ -27,6 +27,9 @@ public class GunBullet : MonoBehaviour
         active = true;
         dest = GetComponent<BulletData>().dest;
         myparent = GetComponent<BulletData>().myparent;
+        
+        // float rotz = sdata.playerIndex*(-90);
+        // transform.rotation = Quaternion.Euler( 0, 0, rotz);
 
         coroutineFire = StartCoroutine(fire());
     }
@@ -62,6 +65,11 @@ public class GunBullet : MonoBehaviour
             while (active) {
                 transform.position += Time.deltaTime * movementDir * speed;
                 yield return null;
+                bool isOutsideEnv = Vector3.Distance(Vector3.zero, transform.position)>=(1.3*TargetAssignHelper.tah.radiousEnv);
+                if(isOutsideEnv){
+                    Debug.Log("outside");
+                    DestroySpecial();
+                }
                 if(!launched){
                     launched=true;
                 }
@@ -78,6 +86,12 @@ public class GunBullet : MonoBehaviour
             Debug.Log("notLaunched_exit");
             return;
         }
+
+
+        if(other.gameObject.CompareTag("Gold")){  
+            DestroySpecial();
+        }
+
         Debug.Log(transform.name+":: Exit ::"+other.transform.name);
         if(transform.name.Substring(0,5) == "Sword") return;
         if(other.transform.name == "MainBase") {
@@ -98,6 +112,11 @@ public class GunBullet : MonoBehaviour
         if(other.transform.name == "MainBase") {
             DestroySpecial();
         }
+
+        if(other.gameObject.CompareTag("Gold")){  
+            DestroySpecial();
+        }
+
         // if bullet bumped into Player (character)
         if(other.gameObject.CompareTag("Player")){
 
@@ -107,6 +126,9 @@ public class GunBullet : MonoBehaviour
                 // show BLOOODD
                 GameObject blood = Instantiate(bloodObj) as GameObject;
                 blood.transform.position = other.transform.position;
+                // blood.transform.position = other.transform.rotation;
+                float rotz = sdata.playerIndex*(-90);
+                blood.transform.rotation = Quaternion.Euler( 0, 0, rotz);
 
                 Debug.Log("000DD))");
                 sdata.vitalDatas[plind].health-=healthDec;

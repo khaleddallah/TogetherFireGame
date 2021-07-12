@@ -31,6 +31,8 @@ public class GM : MonoBehaviour
     public TextMeshProUGUI gold;
     public TextMeshProUGUI health;
 
+    public GameObject GoldParent;
+
     public Color loseColor;
     public Color winColor;
     public GameObject wizard;
@@ -267,6 +269,48 @@ public class GM : MonoBehaviour
             www.Dispose();
         }
     }
+
+    public IEnumerator CheckGoldWinner(){
+        Debug.Log("g#:"+GoldParent.transform.transform.childCount);
+        if(GoldParent.transform.transform.childCount==1){
+            Debug.Log("winner");
+            int winner = -1; 
+            int maxGolds = 0; 
+            for(int i=0 ; i<sdata.participantNum; i++){
+                if(sdata.vitalDatas[i].golds>maxGolds){
+                    maxGolds = sdata.vitalDatas[i].golds;
+                    winner = i;
+                }
+            }
+            Debug.Log("winner"+winner);
+
+            winLoseSign.SetActive(true);
+            winLoseSign.GetComponent<Animator>().SetBool("waiting", false);
+            winLoseSign.GetComponent<Animator>().SetBool("epBefore", false);
+            winLoseSign.GetComponent<Animator>().enabled=false;
+            winLoseSign.GetComponent<TextMeshProUGUI>().color = winColor;
+            if(winner==sdata.playerIndex){
+                ActionsUnit.SetActive(false);
+                winLoseSign.GetComponent<TextMeshProUGUI>().text = "You WIIIIN\n";
+            }
+            else{
+                string winnerName = PlayersNames.transform.GetChild(winner).GetComponent<TextMeshProUGUI>().text;
+                winLoseSign.GetComponent<TextMeshProUGUI>().text = winnerName+" WIIIIN\n";
+            }
+            yield return new WaitForSeconds(3);
+            winLoseSign.SetActive(false);
+            loadFirstScene();
+
+        }
+        else{
+            yield return null;
+        }
+    }
+
+    public void StartCheckGoldWinner(){
+        StartCoroutine(CheckGoldWinner());
+    }
+
 
 
 }

@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/mofi.unity
     guid: a9f774702e2bff735baecc0c8c8c872e
+  - enabled: 1
+    path: Assets/Scenes/ploto.unity
+    guid: 9c7865b1a822180bda8c42d8ab82662a
   m_configObjects: {}

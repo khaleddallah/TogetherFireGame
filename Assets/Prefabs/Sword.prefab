@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 7882955963165368079}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.11684, y: 0.11684, z: 0.11684}
+  m_LocalScale: {x: 0.08, y: 0.08, z: 0.11684}
   m_Children:
   - {fileID: 7882955963335959870}
   m_Father: {fileID: 0}
@@ -94,12 +94,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54ebec0233ad888a8ab9cd318665b558, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0
-  healthDec: 0
-  barriers: []
   dest: {x: 0, y: 0, z: 0}
-  bloodObj: {fileID: 0}
-  firePSObj: {fileID: 0}
   myparent: 0
 --- !u!114 &189354570150745977
 MonoBehaviour:
@@ -145,7 +140,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7882955963335959871}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 6.142, z: 0}
+  m_LocalPosition: {x: 0, y: 4, z: 0}
   m_LocalScale: {x: 1, y: 1.305, z: 1}
   m_Children: []
   m_Father: {fileID: 7882955963165368078}

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GridGenerator : MonoBehaviour
 {
+    public Camera cam;
     public GameObject line;
     public GameObject PlayersParent;
     public GameObject gold;
@@ -14,6 +15,8 @@ public class GridGenerator : MonoBehaviour
 
     public GameObject diamond;
     public GameObject DiamondParent;
+    public float offsetCamShift;
+    public float offsetCamRot;
     Sdata sdata;
 
     void Start()
@@ -54,6 +57,7 @@ public class GridGenerator : MonoBehaviour
         GoldDistributor();
         StoneDistributor();
         DiamondDistributor();
+        Camera_Players_Adjusting();
     }
 
 
@@ -107,4 +111,28 @@ public class GridGenerator : MonoBehaviour
         g.transform.position = new Vector3(x*sdata.gridLen, y*sdata.gridLen, 0f);
     }
 
+
+    public void Camera_Players_Adjusting(){
+        float x = Mathf.Cos((-90*(sdata.playerIndex+1))*Mathf.Deg2Rad) * offsetCamShift;
+        float y = Mathf.Sin((-90*(sdata.playerIndex+1))*Mathf.Deg2Rad) * offsetCamShift;
+        
+        float rotx = Mathf.Cos((-90*(sdata.playerIndex+2))*Mathf.Deg2Rad) * offsetCamRot;
+        float roty = Mathf.Sin((-90*(sdata.playerIndex+2))*Mathf.Deg2Rad) * offsetCamRot;     
+        float rotz = sdata.playerIndex*(-90);
+
+
+        Debug.Log("yangle:"+(-90*(sdata.playerIndex+1)));
+        Debug.Log("ysin"+Mathf.Sin((-90*(sdata.playerIndex+1))*Mathf.Deg2Rad));
+        Debug.Log("x:"+x+"  y:"+y);
+        Debug.Log("rotxyz"+rotx+","+roty+","+rotz);
+
+        cam.transform.position = new Vector3(x,y,-10f);
+        cam.transform.rotation = Quaternion.Euler( rotx, roty, rotz);
+
+        
+        for(int i=0; i<sdata.participantNum; i++){
+            PlayersParent.transform.GetChild(i).GetChild(0).transform.rotation = Quaternion.Euler( 0, 0, rotz);
+        }
+    
+    }
 }

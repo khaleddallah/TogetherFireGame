@@ -240,6 +240,7 @@ public class EpisodeMngr : MonoBehaviour
             yield return new WaitForSeconds(1);
             // GM.gm.winLoseSignOff();
             GM.gm.Winner();
+
             yield return new WaitForSeconds(3);
             GM.gm.loadFirstScene();
 
@@ -309,10 +310,32 @@ public class EpisodeMngr : MonoBehaviour
                 GameObject x0 = Instantiate(bullet) as GameObject;
                 x0.transform.position = playerObj.transform.position;
                 // Debug.Log(dest);
-                Debug.Log("dest.normalized:"+dest.normalized);
-                Vector3 distortion = new Vector3(dest.normalized.x*machineGunOffset*b, dest.normalized.y*machineGunOffset*b, 0f);
-                Debug.Log("dest:"+dest);
-                x0.GetComponent<BulletData>().dest = dest + distortion;
+                // Debug.Log("dest.normalized:"+dest.normalized);
+                
+                float m = 0 ;
+                float xdistortion = 0 ;
+                float ydistortion = 0 ;
+
+                if(dest.y==playerObj.transform.position.y){
+                    m=9999999f;
+                    xdistortion = dest.x;
+                    ydistortion = b*machineGunOffset+dest.y;
+                }
+                else{
+                    m = -(dest.x-playerObj.transform.position.x)/(dest.y-playerObj.transform.position.y);
+                    xdistortion = (b*machineGunOffset)/(Mathf.Sqrt(Mathf.Pow(m,2)+1)) + dest.x;
+                    ydistortion = m*(xdistortion-dest.x)+dest.y;
+                }
+
+                Vector3 distortion = new Vector3(xdistortion, ydistortion, 0f);
+                if(parent==sdata.playerIndex){
+                    Debug.Log("mc:m:"+m+"  mc:d:"+distortion);
+                }
+
+
+                // Vector3 distortion = new Vector3(dest.normalized.x*machineGunOffset*b, dest.normalized.y*machineGunOffset*b, 0f);
+                // Debug.Log("mc:dest:"+dest);
+                x0.GetComponent<BulletData>().dest = distortion;
                 x0.GetComponent<BulletData>().myparent = parent;
             }
         }

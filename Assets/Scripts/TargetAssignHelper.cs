@@ -267,6 +267,10 @@ public class TargetAssignHelper : MonoBehaviour
             sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].target = pos0;
             GameObject x = Instantiate(fireTarget) as GameObject;
             x.transform.position = pos0;
+            
+            float rotz = sdata.playerIndex*(-90);
+            x.transform.rotation = Quaternion.Euler( 0, 0, rotz);
+
             x.transform.SetParent(targetsParent.transform);
             TextMeshProUGUI xt = x.transform.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
             xt.text = (sdata.actionIndex+1).ToString("0");           
@@ -325,6 +329,8 @@ public class TargetAssignHelper : MonoBehaviour
         swordTarget.SetActive(true);
         swordTarget.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
         swordTarget.transform.position = currentPos;
+        float rotz = sdata.playerIndex*(-90);
+        swordTarget.transform.rotation = Quaternion.Euler( 0, 0, rotz);
         // x.transform.SetParent(targetsParent.transform);
         // sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].gunTypeObj = x;
     }
@@ -371,7 +377,7 @@ public class TargetAssignHelper : MonoBehaviour
                 else{
                     GameObject cr = Instantiate(circleGrenade) as GameObject;
                     cr.transform.SetParent(lcParent.transform);
-                    cr.transform.position = new Vector3(i*sdata.gridLen, j*sdata.gridLen, -3.0f);
+                    cr.transform.position = new Vector3(i*sdata.gridLen, j*sdata.gridLen, -0.03f);
                 }
             }
         }
@@ -400,6 +406,12 @@ public class TargetAssignHelper : MonoBehaviour
                 distance0 = hit.distance;
                 tempColor = moveLines;
 
+                if(hit.distance > 0){
+                    Debug.Log(hit.transform.gameObject.tag);
+                    if(hit.collider.gameObject.CompareTag("Gold")){
+                        distance0+=vhstep;
+                    }
+                }
 
                 if(distance0>vhstep){
                     Debug.Log("hit::"+hit.transform.name+":::"+hit.distance);
@@ -428,12 +440,14 @@ public class TargetAssignHelper : MonoBehaviour
                         Vector3 posTemp = currentPos+new Vector3(x, y, 0)*p*vhstep;
                         bool isOutsideEnv = Vector3.Distance(Vector3.zero, posTemp)>=radiousEnv;
                         if(isOutsideEnv){
+                            posTemp = currentPos+new Vector3(x, y, 0)*(p-1)*vhstep;
+                            lRend.SetPosition(1, posTemp); 
                             continue;
                         }
                         GameObject cr0 = Instantiate(circle0) as GameObject;
                         cr0.transform.SetParent(lcParent.transform);
                         cr0.transform.position =  currentPos+new Vector3(x, y, 0)*p*vhstep;
-                        cr0.transform.position = new Vector3(cr0.transform.position.x, cr0.transform.position.y, -3f);
+                        cr0.transform.position = new Vector3(cr0.transform.position.x, cr0.transform.position.y, -0.03f);
                     }
                 }
             }
@@ -442,7 +456,7 @@ public class TargetAssignHelper : MonoBehaviour
         GameObject cr = Instantiate(circle0) as GameObject;
         cr.transform.SetParent(lcParent.transform);
         cr.transform.position =  currentPos;
-        cr.transform.position = new Vector3(cr.transform.position.x, cr.transform.position.y, -3f);
+        cr.transform.position = new Vector3(cr.transform.position.x, cr.transform.position.y, -0.03f);
 
     }
 
@@ -519,7 +533,7 @@ public class TargetAssignHelper : MonoBehaviour
                     cr0.transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotz);
 
                     cr0.transform.position =  last;
-                    cr0.transform.position = new Vector3(cr0.transform.position.x, cr0.transform.position.y, -3f);
+                    cr0.transform.position = new Vector3(cr0.transform.position.x, cr0.transform.position.y, -0.03f);
 
                 }
 
