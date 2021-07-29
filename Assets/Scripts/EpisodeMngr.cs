@@ -181,6 +181,7 @@ public class EpisodeMngr : MonoBehaviour
 
         actionSelectingUnit.SetActive(false);
         GM.gm.stopSubmitCoroutine();
+        GM.gm.updataMGH();
         // GM.gm.SubmitTimeText.text = "EP "+ sdata.episodeIndex.ToString() +" : Working"; 
         // Time.timeScale = 0.3f;
         actionMove = 0 ;

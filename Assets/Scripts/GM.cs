@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -114,6 +114,7 @@ public class GM : MonoBehaviour
                 PlayersNames.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text = players[i];
                 PlayersParent.transform.GetChild(i).GetChild(0).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().text = players[i];
                 PlayersParent.transform.GetChild(i).GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
+                PlayersParent.transform.GetChild(i).GetChild(0).GetChild(0).GetChild(2).gameObject.SetActive(true);
             }
 
             // if all player started start            
@@ -173,7 +174,10 @@ public class GM : MonoBehaviour
     public void updataMGH(){
         Debug.Log("LLL:"+sdata.vitalDatas[sdata.playerIndex].health);
         gold.text = ""+sdata.vitalDatas[sdata.playerIndex].golds.ToString();
-        health.text = "Health : "+sdata.vitalDatas[sdata.playerIndex].health.ToString()+"%";
+        health.text = ""+sdata.vitalDatas[sdata.playerIndex].health.ToString()+"%";
+        for(int i=0; i<sdata.participantNum; i++){
+            PlayersParent.transform.GetChild(i).GetChild(0).GetChild(0).GetChild(2).GetComponent<Slider>().value=sdata.vitalDatas[i].health/100;
+        }
     }
 
 
@@ -187,21 +191,31 @@ public class GM : MonoBehaviour
             if (sdata.vitalDatas[i].health<=0){
                 howmlose+=1;
                 if(!deadfuneral.Contains(i)){
-                    winLoseSign.GetComponent<Animator>().SetBool("waiting", false);
-                    winLoseSign.GetComponent<Animator>().SetBool("epBefore", false);
-
-                    string looserName = PlayersNames.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text;
-                    deadfuneral.Add(i);
-
-                    Color x = PlayersNames.transform.GetChild(i).GetComponent<TextMeshProUGUI>().color;
-                    PlayersNames.transform.GetChild(i).GetComponent<TextMeshProUGUI>().color = new Color(x.r, x.g, x.b, 0.32f);
-                    
                     if(i==sdata.playerIndex){
+                        // buyHealthWindow.SetActive(true);
+                        
+                        winLoseSign.GetComponent<Animator>().SetBool("waiting", false);
+                        winLoseSign.GetComponent<Animator>().SetBool("epBefore", false);
+
+                        string looserName = PlayersNames.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text;
+                        deadfuneral.Add(i);
+
+                        Color x = PlayersNames.transform.GetChild(i).GetComponent<TextMeshProUGUI>().color;
+                        PlayersNames.transform.GetChild(i).GetComponent<TextMeshProUGUI>().color = new Color(x.r, x.g, x.b, 0.32f);     
+                        
                         ActionsUnit.SetActive(false);
                         winLoseSign.GetComponent<TextMeshProUGUI>().text += "YOU Lose\n";
                         StartCoroutine(sendLose());        
                     }
                     else{
+                        winLoseSign.GetComponent<Animator>().SetBool("waiting", false);
+                        winLoseSign.GetComponent<Animator>().SetBool("epBefore", false);
+
+                        string looserName = PlayersNames.transform.GetChild(i).GetComponent<TextMeshProUGUI>().text;
+                        deadfuneral.Add(i);
+
+                        Color x = PlayersNames.transform.GetChild(i).GetComponent<TextMeshProUGUI>().color;
+                        PlayersNames.transform.GetChild(i).GetComponent<TextMeshProUGUI>().color = new Color(x.r, x.g, x.b, 0.32f);
                         winLoseSign.GetComponent<TextMeshProUGUI>().text += looserName+" Lose\n";
                     }
                 }

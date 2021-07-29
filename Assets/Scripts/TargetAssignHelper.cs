@@ -240,8 +240,8 @@ public class TargetAssignHelper : MonoBehaviour
             Destroy(x.GetComponent<PlayerReaction>());
             Destroy(x.GetComponent<BoxCollider2D>());
             Destroy(x.GetComponent<Rigidbody2D>());
+            Destroy(x.transform.GetChild(0).gameObject);
             Destroy(x.transform.GetChild(1).gameObject);
-            Destroy(x.transform.GetChild(0).GetChild(1).gameObject);
             x.transform.position = pos0;
             x.transform.SetParent(targetsParent.transform);
             TextMeshProUGUI xt = x.transform.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
