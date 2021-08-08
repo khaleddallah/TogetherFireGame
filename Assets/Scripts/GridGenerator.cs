@@ -4,65 +4,63 @@ using UnityEngine;
 
 public class GridGenerator : MonoBehaviour
 {
-    public Camera cam;
-    public GameObject line;
-    public GameObject PlayersParent;
-    public GameObject gold;
-    public GameObject GoldParent;
-
-    public GameObject stone;
-    public GameObject StoneParent;
-
-    public GameObject diamond;
-    public GameObject DiamondParent;
-    public float offsetCamShift;
-    public float offsetCamRot;
+    [SerializeField] private Camera camera;
+    [SerializeField] private GameObject lineObject;
+    [SerializeField] private GameObject playersParent;
+    [SerializeField] private GameObject goldObject;
+    [SerializeField] private GameObject goldParent;
+    [SerializeField] private GameObject stoneObject;
+    [SerializeField] private GameObject stoneParent;
+    [SerializeField] private GameObject diamondObject;
+    [SerializeField] private GameObject diamoneParent;
+    [SerializeField] private float offsetCameraShift;
+    [SerializeField] private float offsetCameraRotation;
     Sdata sdata;
 
     void Start()
     {
         sdata = Sdata.sdata;
-        generateGrid();
-    }
-
-
-    public void generateGrid(){
-        float NumLines = Mathf.Floor(sdata.maxRadius/sdata.gridLen);
-        for (int i=-(int)NumLines ; i<NumLines; i++ ){
-            GameObject x = Instantiate(line) as GameObject;
-            x.transform.SetParent(gameObject.transform);
-            x.transform.position = new Vector3(i*sdata.gridLen, 0f, 0f);
-        }
-        for (int i=-(int)NumLines ; i<NumLines; i++ ){
-            GameObject x = Instantiate(line) as GameObject;
-            x.transform.SetParent(gameObject.transform);
-            x.transform.Rotate(0,0,90);
-            x.transform.position = new Vector3(0f, i*sdata.gridLen, 0f);
-        }
-        
-        PlayersParent.transform.GetChild(0).GetChild(0).transform.position = new Vector3(0f, -12*sdata.gridLen, 0f);
-        PlayersParent.transform.GetChild(1).GetChild(0).transform.position = new Vector3(-12*sdata.gridLen, 0f, 0f);
-        PlayersParent.transform.GetChild(2).GetChild(0).transform.position = new Vector3(0f, 12*sdata.gridLen, 0f);
-        PlayersParent.transform.GetChild(3).GetChild(0).transform.position = new Vector3(12*sdata.gridLen, 0f, 0f);
-
-        for(int i=0 ; i<sdata.participantNum ; i++){
-            if(i==sdata.playerIndex){
-                PlayersParent.transform.GetChild(i).GetChild(0).GetChild(1).gameObject.SetActive(true);
-            }
-            else{
-                PlayersParent.transform.GetChild(i).GetChild(0).GetChild(1).gameObject.SetActive(false);
-            }
-        }
-
+        GenerateGrid();
+        AdjustPlayersPositions();
+        Camera_Players_Adjusting();
         GoldDistributor();
         StoneDistributor();
         DiamondDistributor();
-        Camera_Players_Adjusting();
     }
 
 
+    private void GenerateGrid(){
+        float NumLines = Mathf.Floor(sdata.maxRadius/sdata.gridCellSize);
+        for (int i=-(int)NumLines ; i<NumLines; i++ ){
+            GameObject x = Instantiate(lineObject) as GameObject;
+            x.transform.SetParent(gameObject.transform);
+            x.transform.position = new Vector3(i*sdata.gridCellSize, 0f, 0f);
+        }
+        for (int i=-(int)NumLines ; i<NumLines; i++ ){
+            GameObject x = Instantiate(lineObject) as GameObject;
+            x.transform.SetParent(gameObject.transform);
+            x.transform.Rotate(0,0,90);
+            x.transform.position = new Vector3(0f, i*sdata.gridCellSize, 0f);
+        }
+    }
 
-    public void GoldDistributor(){
+    private void AdjustPlayersPositions(){
+        playersParent.transform.GetChild(0).GetChild(0).transform.position = new Vector3(0f, -12*sdata.gridCellSize, 0f);
+        playersParent.transform.GetChild(1).GetChild(0).transform.position = new Vector3(-12*sdata.gridCellSize, 0f, 0f);
+        playersParent.transform.GetChild(2).GetChild(0).transform.position = new Vector3(0f, 12*sdata.gridCellSize, 0f);
+        playersParent.transform.GetChild(3).GetChild(0).transform.position = new Vector3(12*sdata.gridCellSize, 0f, 0f);
+
+        for(int i=0 ; i<sdata.participantNum ; i++){
+            if(i==sdata.playerIndex){
+                playersParent.transform.GetChild(i).GetChild(0).GetChild(1).gameObject.SetActive(true);
+            }
+            else{
+                playersParent.transform.GetChild(i).GetChild(0).GetChild(1).gameObject.SetActive(false);
+            }
+        }
+    }
+
+    private void GoldDistributor(){
         for(int x = -4 ; x<=4 ; x+=2){
             for(int y = -4 ; y<=4 ; y+=2){
                 if(x==0 && y==0){
@@ -70,9 +68,9 @@ public class GridGenerator : MonoBehaviour
                 }
                 if(Mathf.Abs(x)!=Mathf.Abs(y)){
                     Debug.Log("("+x+","+y+")");
-                    GameObject g = Instantiate(gold) as GameObject;
-                    g.transform.SetParent(GoldParent.transform);
-                    g.transform.position = new Vector3(x*sdata.gridLen, y*sdata.gridLen, 0f);
+                    GameObject g = Instantiate(goldObject) as GameObject;
+                    g.transform.SetParent(goldParent.transform);
+                    g.transform.position = new Vector3(x*sdata.gridCellSize, y*sdata.gridCellSize, 0f);
                 }
             }
         }
@@ -80,44 +78,41 @@ public class GridGenerator : MonoBehaviour
             for(int y = -3 ; y<=3 ; y+=3){
                 // if(Mathf.Abs(x)!=Mathf.Abs(y)){
                     // Debug.Log("("+x+","+y+")");
-                    GameObject g = Instantiate(gold) as GameObject;
-                    g.transform.SetParent(GoldParent.transform);
-                    g.transform.position = new Vector3(x*sdata.gridLen, y*sdata.gridLen, 0f);
+                    GameObject g = Instantiate(goldObject) as GameObject;
+                    g.transform.SetParent(goldParent.transform);
+                    g.transform.position = new Vector3(x*sdata.gridCellSize, y*sdata.gridCellSize, 0f);
                 // }
             }
         }
     }
 
-
-    public void StoneDistributor(){
+    private void StoneDistributor(){
         for(int x = -2 ; x<=2 ; x+=2){
             for(int y = -2 ; y<=2 ; y+=2){
                 if(Mathf.Abs(x)!=Mathf.Abs(y)){
                     // Debug.Log("("+x+","+y+")");
-                    GameObject g = Instantiate(stone) as GameObject;
-                    g.transform.SetParent(StoneParent.transform);
-                    g.transform.position = new Vector3(x*sdata.gridLen, y*sdata.gridLen, 0f);
+                    GameObject g = Instantiate(stoneObject) as GameObject;
+                    g.transform.SetParent(stoneParent.transform);
+                    g.transform.position = new Vector3(x*sdata.gridCellSize, y*sdata.gridCellSize, 0f);
                 }
             }
         }
     }
 
-
-    public void DiamondDistributor(){
+    private void DiamondDistributor(){
         int x = 0;
         int y = 0;
-        GameObject g = Instantiate(diamond) as GameObject;
-        g.transform.SetParent(DiamondParent.transform);
-        g.transform.position = new Vector3(x*sdata.gridLen, y*sdata.gridLen, 0f);
+        GameObject g = Instantiate(diamondObject) as GameObject;
+        g.transform.SetParent(diamoneParent.transform);
+        g.transform.position = new Vector3(x*sdata.gridCellSize, y*sdata.gridCellSize, 0f);
     }
 
-
-    public void Camera_Players_Adjusting(){
-        float x = Mathf.Cos((-90*(sdata.playerIndex+1))*Mathf.Deg2Rad) * offsetCamShift;
-        float y = Mathf.Sin((-90*(sdata.playerIndex+1))*Mathf.Deg2Rad) * offsetCamShift;
+    private void Camera_Players_Adjusting(){
+        float x = Mathf.Cos((-90*(sdata.playerIndex+1))*Mathf.Deg2Rad) * offsetCameraShift;
+        float y = Mathf.Sin((-90*(sdata.playerIndex+1))*Mathf.Deg2Rad) * offsetCameraShift;
         
-        float rotx = Mathf.Cos((-90*(sdata.playerIndex+2))*Mathf.Deg2Rad) * offsetCamRot;
-        float roty = Mathf.Sin((-90*(sdata.playerIndex+2))*Mathf.Deg2Rad) * offsetCamRot;     
+        float rotx = Mathf.Cos((-90*(sdata.playerIndex+2))*Mathf.Deg2Rad) * offsetCameraRotation;
+        float roty = Mathf.Sin((-90*(sdata.playerIndex+2))*Mathf.Deg2Rad) * offsetCameraRotation;     
         float rotz = sdata.playerIndex*(-90);
 
 
@@ -126,13 +121,14 @@ public class GridGenerator : MonoBehaviour
         Debug.Log("x:"+x+"  y:"+y);
         Debug.Log("rotxyz"+rotx+","+roty+","+rotz);
 
-        cam.transform.position = new Vector3(x,y,-10f);
-        cam.transform.rotation = Quaternion.Euler( rotx, roty, rotz);
+        camera.transform.position = new Vector3(x,y,-10f);
+        camera.transform.rotation = Quaternion.Euler( rotx, roty, rotz);
 
         
         for(int i=0; i<sdata.participantNum; i++){
-            PlayersParent.transform.GetChild(i).GetChild(0).transform.rotation = Quaternion.Euler( 0, 0, rotz);
+            playersParent.transform.GetChild(i).GetChild(0).transform.rotation = Quaternion.Euler( 0, 0, rotz);
         }
     
     }
+
 }

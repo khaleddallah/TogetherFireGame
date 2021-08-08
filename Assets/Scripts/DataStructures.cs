@@ -5,13 +5,12 @@ using System;
 
 
 
-
-
 // the vidal data of single character
 [Serializable]
 public class VitalData{
     public float health;
     public int golds;
+    public string name;
 }
 
 
@@ -32,10 +31,9 @@ public class Roleplay{
 // The single action data
 [Serializable]
 public class Action{
-    public string type="0"; // type of the action (move | fire)
-    public GameObject gunTypeObj; // type of the gun 
-    public Vector3 target = new Vector3 (-999f,-999f,-999f); // target of the action either move or fire
-    public GameObject targetObj;
+    public string type="0"; // (move | fire)
+    public GameObject gunTypeObj; 
+    public Vector3 target = new Vector3 (-999f,-999f,-999f);     public GameObject targetObj;
     public string ser; // Serialization of previous data
 }
 

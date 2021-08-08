@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LTD : MonoBehaviour
+public class LongTermData : MonoBehaviour
 {
 
-    public static LTD ltd;
+    public static LongTermData ltd;
     public string serverURL = "";
     public string myName = "";
     public int playerIndex;

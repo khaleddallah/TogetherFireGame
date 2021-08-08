@@ -8,21 +8,20 @@ using TMPro;
 
 public class ServerLogin : MonoBehaviour
 {
-    public string mainScene;
-
-    public TMP_InputField nameField;
-    public TMP_InputField serverField;
-    public TextMeshProUGUI ErrorField;
+    [SerializeField] private string mainScene;
+    [SerializeField] private TMP_InputField nameInputField;
+    [SerializeField] private TMP_InputField serverInputField;
+    [SerializeField] private TextMeshProUGUI ErrorText;
 
     string tempName;
-    LTD ltd;
+    LongTermData longTermData;
 
     // Start is called before the first frame update
     void Start()
     {
-        ltd = LTD.ltd;
-        nameField.text = ltd.myName;
-        serverField.text = ltd.serverURL;
+        longTermData = LongTermData.longTermData;
+        nameInputField.text = longTermData.myName;
+        serverInputField.text = longTermData.serverURL;
     }
 
 
@@ -35,59 +34,59 @@ public class ServerLogin : MonoBehaviour
     }
 
 
-    // reload the scene
     public void LoadMainScene(){
-        ltd.serverURL = serverField.text;
-        if(nameField.text.Length>0){
-            tempName = nameField.text;
-            string msg = "{\"name\":";
-            msg += "\""+nameField.text+"\"}";
-            Debug.Log("msg:"+msg);
-            StartCoroutine(RegToServer(msg,"reg"));
+        longTermData.serverURL = serverInputField.text;
+        if(CheckNameValid()){
+            StartCoroutine(PostReg_LoadMainScene());
         }
         else{
-            string error0 = "enter your name, please";
-            ErrorField.text = error0;
+            ShowError("enter your name, please");
         }
     }
 
+    private bool CheckNameValid(){
+        return nameInputField.text.Length>0;
+    }
 
-    IEnumerator RegToServer(string msg, string route) {
+    private void ShowError(string e){
+        ErrorText.text = e;
+    }
+
+    IEnumerator PostReg_LoadMainScene() {
+        string route = "reg";
+        string msg = "{\"name\":\""+nameInputField.text+"\"}";
+        UnityWebRequest www = PostRequest(msg, route);
+        yield return www.SendWebRequest();
+        if (www.result != UnityWebRequest.Result.Success) {
+            Debug.Log(www.error);
+            ShowError("ServerError:" + www.error);
+            www.Dispose();
+        }
+        else {
+            int data = int.Parse(www.downloadHandler.text);
+            Debug.Log("res:reg:",data);
+            if(data>=0){
+                longTermData.myName=nameInputField.text;
+                longTermData.playerIndex = data;
+                SceneManager.LoadScene(mainScene);
+            }
+            else if(data==-1){
+                ShowError("Error:full");
+            }
+            else if(data==-2){
+                ShowError("Error:NameAlreadyExists");
+            }
+            www.Dispose();
+        }
+    }
+
+    private UnityWebRequest PostRequest(string msg, string route){
         byte[] jsonBinary = System.Text.Encoding.UTF8.GetBytes(msg);    
         DownloadHandlerBuffer downloadHandlerBuffer = new DownloadHandlerBuffer();
         UploadHandlerRaw uploadHandlerRaw = new UploadHandlerRaw(jsonBinary);
         uploadHandlerRaw.contentType = "application/json";
-        Debug.Log("ltd.serverURL+route:"+ltd.serverURL+route);
-        // UnityWebRequest www = new UnityWebRequest(ltd.serverURL+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
-        UnityWebRequest www = new UnityWebRequest(ltd.serverURL+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
-
-        yield return www.SendWebRequest();
-        if (www.result != UnityWebRequest.Result.Success) {
-            Debug.Log("@@@error@@@");
-            Debug.Log(www.error);
-            string error0 = "ServerError:" + www.error;
-            ErrorField.text = error0;
-            www.Dispose();
-        }
-        else {
-            Debug.Log("@@@RESPONSE###");
-            int data = int.Parse(www.downloadHandler.text);
-            Debug.Log(data);
-            if(data>=0){
-                ltd.myName=tempName;
-                ltd.playerIndex = data;
-                SceneManager.LoadScene(mainScene);
-            }
-            else if(data==-1){
-                string error0 = "Error:full";
-                ErrorField.text = error0;
-            }
-            else if(data==-2){
-                string error1 = "Error:NameAlreadyExists";
-                ErrorField.text = error1;
-            }
-            www.Dispose();
-        }
+        UnityWebRequest www = new UnityWebRequest(longTermData.serverURL+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
+        return www;
     }
 
 }

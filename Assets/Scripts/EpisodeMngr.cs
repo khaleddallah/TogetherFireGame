@@ -8,37 +8,26 @@ using TMPro;
 
 public class EpisodeMngr : MonoBehaviour
 {
+    [SerializeField] private GameObject playersParent;
+    [SerializeField] private List<GameObject> gunTypesObjects; // list of the gunType used in (getObjByName)
+    [SerializeField] private AIPlayers ai;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private Wizard wizard;
+    [SerializeField] private float machineGunShiftOffset;
+    [SerializeField] private Color epTimerColor;
+    [SerializeField] private float timeBeforeEpisode = 3;
+    [SerializeField] private GameObject middleSign;
 
-    [SerializeField] private GameObject actionSelectingUnit;
-    [SerializeField] private GameObject targetsParent; //used to create other players targets & then Destroy them
 
-    public float actionTime = 3.0f; // How much action will take
-    public GameObject playersParent; // The parents of players // used to perform (move & fire)
-
-    public List<GameObject> gunTypesObjs = new List<GameObject>(); // list of the gunType used in (getObjByName)
-    public GameObject ActionParent; // used to reset actions text after perform ends
-    public Button SubmitButton;
-    public TextMeshProUGUI ActionNumUI;
-
-    int episodeSubmitted = -1;
-    Sdata sdata;
-    public AIPlayers ai;
-
-    // used in Perform routine
     public int actionMove = 0;
     public int actionFire = 0;
 
-    public float timeBeforeEp = 3;
 
-    public GameObject winLoseSign;
-    public Color epTimerColor;
 
-    public GameObject swordTarget;
+    int episodeSubmitted ;
+    Sdata sdata;
 
-    public Wizard wizard;
 
-    public float moveSpeed;
-    public float machineGunOffset;
     void Start()
     {
         episodeSubmitted = -1 ;
@@ -47,27 +36,44 @@ public class EpisodeMngr : MonoBehaviour
 
 
 
-    // when Submit pressed
     public void submitPress(){
-        // assure that the episode is not performed before
-        if(episodeSubmitted < sdata.episodeIndex){
-            SubmitButton.interactable = false;
+        if(CheckNotSubmittedBefore()){
             episodeSubmitted = sdata.episodeIndex;
-            checkActions();
-            // submitCurrentPlayerRoleplay();
+
             if(sdata.gamePlayMode=="ai"){
                 ai.psai();
                 StartCoroutine(performAllPlayers(0, sdata.participantNum));
             }
+
             else{
-                submitCurrentPlayerRoleplay();
+                StartCoroutine(PostSubmit_FillData_PerformAll());
             }
         }
     }
 
+    private bool CheckNotSubmittedBefore(){
+        return episodeSubmitted < sdata.episodeIndex;
+    }
 
-    // post the data of the current player
-    public void submitCurrentPlayerRoleplay() {
+    IEnumerator PostSubmit_FillData_PerformAll() {
+        msg = BuildPlayerDataMsg();
+        route = "submit";
+        UnityWebRequest www = PostRequest(msg, route);
+        yield return www.SendWebRequest();
+        if (www.result != UnityWebRequest.Result.Success) {
+            Debug.Log(www.error);
+            www.Dispose();
+        }
+        else {
+            string data = (www.downloadHandler.text);
+            Debug.Log(data);
+            fillEpisode(data);
+            www.Dispose();
+            StartCoroutine(performAllPlayers(0, sdata.participantNum));
+        }
+    }
+
+    private void BuildPlayerDataMsg() {
         string msg = "{";
         msg+= "\"pindex\":";
         msg+= "\""+sdata.playerIndex.ToString()+"\"" ;
@@ -92,35 +98,18 @@ public class EpisodeMngr : MonoBehaviour
         msg = msg.Substring(0,msg.Length-1);
         msg+="]}";
         Debug.Log(msg);
-        StartCoroutine(submitpostToServer(msg,"submit"));
+        return msg;
     }
 
-
-    // post the data of the current player
-    IEnumerator submitpostToServer(string msg, string route) {
+    private UnityWebRequest PostRequest(string msg, string route){
         byte[] jsonBinary = System.Text.Encoding.UTF8.GetBytes(msg);    
         DownloadHandlerBuffer downloadHandlerBuffer = new DownloadHandlerBuffer();
         UploadHandlerRaw uploadHandlerRaw = new UploadHandlerRaw(jsonBinary);
         uploadHandlerRaw.contentType = "application/json";
-        UnityWebRequest www = new UnityWebRequest(LTD.ltd.serverURL+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
-        yield return www.SendWebRequest();
-        if (www.result != UnityWebRequest.Result.Success) {
-            Debug.Log("@@@error@@@");
-            Debug.Log(www.error);
-            www.Dispose();
-        }
-        else {
-            string data = (www.downloadHandler.text);
-            Debug.Log(data);
-            Debug.Log("@@@RESPONSE###");
-            fillEpisode(data);
-            www.Dispose();
-            StartCoroutine(performAllPlayers(0, sdata.participantNum));
-        }
+        UnityWebRequest www = new UnityWebRequest(longTermData.serverURL+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
+        return www;
     }
 
-
-    // file actions of OTHER players
     void fillEpisode(string x){
         int playerInd = 0; 
         int actionInd = 0; 
@@ -133,7 +122,7 @@ public class EpisodeMngr : MonoBehaviour
 
                     string[] data = a.ser.Split(char.Parse("/"));
                     if(a.type=="fire"){
-                        sdata.episodes[sdata.episodeIndex].roleplays[playerInd].actions[actionInd].gunTypeObj = getGameObjByName(gunTypesObjs,data[0]);
+                        sdata.episodes[sdata.episodeIndex].roleplays[playerInd].actions[actionInd].gunTypeObj = getGameObjByName(gunTypesObjects,data[0]);
                         if(data[0]!="Sword"){
                             Vector3 targetTemp = new Vector3(
                                 float.Parse(data[1]),
@@ -157,9 +146,7 @@ public class EpisodeMngr : MonoBehaviour
         }
     }
 
-
-    // get object by string from list of objects
-    GameObject getGameObjByName(List<GameObject> list0, string x){
+    private GameObject getGameObjByName(List<GameObject> list0, string x){
         foreach (GameObject gob in list0){
             if(x==gob.transform.name){
                 return(gob);
@@ -172,23 +159,17 @@ public class EpisodeMngr : MonoBehaviour
         return(new GameObject());
     }
     
-
-    // perform phase
-    public IEnumerator performAllPlayers(int Findex, int participantNum){
-
+    private IEnumerator performAllPlayers(int Findex, int participantNum){
         Debug.Log("Pefrom Starts");
-        ActionParent.transform.GetChild(0).GetComponent<uib_action>().resetActionColors();
-
-        actionSelectingUnit.SetActive(false);
         GM.gm.stopSubmitCoroutine();
-        GM.gm.updataMGH();
-        // GM.gm.SubmitTimeText.text = "EP "+ sdata.episodeIndex.ToString() +" : Working"; 
-        // Time.timeScale = 0.3f;
         actionMove = 0 ;
         actionFire = 0 ;
+
+        // Extract performBasic routine
         for(int actionT = 0 ; actionT<sdata.actionsNum ; actionT++){
-            ActionNumUI.text = actionT.ToString();
             Debug.Log("actionT :: "+actionT.ToString());
+            actionMove = 0 ;
+            actionFire = 0 ;
             for(int player=Findex; player<participantNum ; player++){
                 if(sdata.episodes[sdata.episodeIndex].roleplays[player].actions[actionT].type == "move")
                     {
@@ -226,47 +207,41 @@ public class EpisodeMngr : MonoBehaviour
             while(actionFire>0){
                 yield return null;
             }
-            actionMove = 0 ;
-            actionFire = 0 ;
             yield return new WaitForSeconds(1);
         }
-        ActionNumUI.text = "";
         
+        // Extract LoseWinChecker routine
+        GM.gm.updataMGH();
         int checklose  = GM.gm.checkLose();
         if(checklose==1){
             yield return new WaitForSeconds(2);
-            GM.gm.winLoseSignOff();
+            GM.gm.middleSignOff();
         }
         else if(checklose==2){
             yield return new WaitForSeconds(1);
-            // GM.gm.winLoseSignOff();
             GM.gm.Winner();
-
             yield return new WaitForSeconds(3);
             GM.gm.loadFirstScene();
-
-            winLoseSign.transform.parent.gameObject.SetActive(false);
+            middleSign.transform.parent.gameObject.SetActive(false);
         }
 
 
         // down timer for the new episode
-        float timeTempEp = timeBeforeEp;
-        winLoseSign.SetActive(true);
-        winLoseSign.GetComponent<Animator>().SetBool("waiting", false);
-        winLoseSign.GetComponent<Animator>().SetBool("epBefore", true);
-
-        winLoseSign.GetComponent<TextMeshProUGUI>().color = epTimerColor;
+        float timeTempEp = timeBeforeEpisode;
+        middleSign.SetActive(true);
+        middleSign.GetComponent<Animator>().SetBool("waiting", false);
+        middleSign.GetComponent<Animator>().SetBool("epBefore", true);
+        middleSign.GetComponent<TextMeshProUGUI>().color = epTimerColor;
         while(timeTempEp>0){
-            winLoseSign.GetComponent<TextMeshProUGUI>().text = "Round "+(sdata.episodeIndex+1).ToString()+" starts in "+timeTempEp.ToString();
+            middleSign.GetComponent<TextMeshProUGUI>().text = "Round "+(sdata.episodeIndex+1).ToString()+" starts in "+timeTempEp.ToString();
             yield return new WaitForSeconds(1);
             timeTempEp-=1;
         }
-        winLoseSign.SetActive(false);
+        middleSign.SetActive(false);
 
+        // New Episode
         sdata.CreateNewEpisode();
-        resetEpisodeUI();
         GM.gm.startSubmitCoroutine();
-
         if(sdata.vitalDatas[sdata.playerIndex].health<=0){
             submitPress();
         }
@@ -276,146 +251,61 @@ public class EpisodeMngr : MonoBehaviour
     }
         
 
-
-    // move object to distination
     public IEnumerator move(GameObject playerObj, Vector3 dest) {
         Vector3 movementDir =  (dest-playerObj.transform.position).normalized;         
         float distance = Vector3.Distance(dest, playerObj.transform.position);
-        // float speed0 = distance/actionTime;
         float lastdistance = distance+1f;
-        // float t0 = 0f;
-        // float lastdistance = 9999999.0f;
+
         while (lastdistance>distance) {
             playerObj.transform.position += Time.deltaTime * movementDir * moveSpeed;
-
-            // Debug.Log("l:d");
-
             lastdistance = distance;
-
             distance = Vector3.Distance(dest, playerObj.transform.position);
-            // t0+=Time.deltaTime;
             yield return null;
         }
-        Debug.Log("stop after distance get biggger");
         playerObj.transform.position = dest;
         actionMove-=1;
     }
 
 
-    // fire bullet from playerObj to dest
     public IEnumerator fire(int parent, GameObject playerObj, Vector3 dest, GameObject bullet) {
-
         if(bullet.transform.name=="MachineGun"){
-            actionFire+=3;
             for(int b=-1; b<2 ;b++){                            
-                GameObject x0 = Instantiate(bullet) as GameObject;
-                x0.transform.position = playerObj.transform.position;
-                // Debug.Log(dest);
-                // Debug.Log("dest.normalized:"+dest.normalized);
-                
-                float m = 0 ;
-                float xdistortion = 0 ;
-                float ydistortion = 0 ;
-
-                if(dest.y==playerObj.transform.position.y){
-                    m=9999999f;
-                    xdistortion = dest.x;
-                    ydistortion = b*machineGunOffset+dest.y;
-                }
-                else{
-                    m = -(dest.x-playerObj.transform.position.x)/(dest.y-playerObj.transform.position.y);
-                    xdistortion = (b*machineGunOffset)/(Mathf.Sqrt(Mathf.Pow(m,2)+1)) + dest.x;
-                    ydistortion = m*(xdistortion-dest.x)+dest.y;
-                }
-
-                Vector3 distortion = new Vector3(xdistortion, ydistortion, 0f);
-                if(parent==sdata.playerIndex){
-                    Debug.Log("mc:m:"+m+"  mc:d:"+distortion);
-                }
-
-
-                // Vector3 distortion = new Vector3(dest.normalized.x*machineGunOffset*b, dest.normalized.y*machineGunOffset*b, 0f);
-                // Debug.Log("mc:dest:"+dest);
-                x0.GetComponent<BulletData>().dest = distortion;
-                x0.GetComponent<BulletData>().myparent = parent;
+                Vector3 distortion = GetMachineGunDistoredDestination(playerObj, dest, b);
+                CreateBullet(playerObj, distortion, parent);
             }
         }
         else{
-            actionFire+=1;
-            GameObject x = Instantiate(bullet) as GameObject;
-            x.transform.position = playerObj.transform.position;
-            x.GetComponent<BulletData>().dest = dest;
-            x.GetComponent<BulletData>().myparent = parent;
+            CreateBullet(playerObj, dest, parent);
         }
         yield return null;
-
     }
 
+    private void CreateBullet(GameObject parent, Vector3 dest, int parentIndex){
+        actionFire+=1;
+        GameObject x = Instantiate(bullet) as GameObject;
+        x.transform.position = parent.transform.position;
+        x.GetComponent<BulletData>().dest = dest;
+        x.GetComponent<BulletData>().myparent = parentIndex;
+    }
 
-    // public IEnumerator swordLaunch(int parent, GameObject playerObj, Vector3 dest, GameObject bullet) {
-    //     Debug.Log("parent:sword:"+parent);
-    //     GameObject x = Instantiate(bullet) as GameObject;
-    //     x.transform.position = playerObj.transform.position;
-    //     x.GetComponent<SwordBehaviour>().launch(parent);
-    //     yield return null;
-    // }
+    private Vector3 GetMachineGunDistoredDestination(GameObject playerObj, Vector3 dest, int b){
+        float m = 0 ;
+        float xdistortion = 0 ;
+        float ydistortion = 0 ;
 
-    // public IEnumerator grenadeLaunch(int parent, GameObject playerObj, Vector3 dest, GameObject bullet) {
-    //     Debug.Log("parent:grenade:"+parent);
-    //     GameObject x = Instantiate(bullet) as GameObject;
-    //     x.transform.position = playerObj.transform.position;
-    //     x.GetComponent<GrenadeBehaviour>().launch(parent);
-    //     yield return null;
-    // }
-
-
-    // reset UI
-    public void resetEpisodeUI(){
-        TargetAssignHelper.tah.moveError = false;
-        actionSelectingUnit.SetActive(false);
-        SubmitButton.interactable = true;
-        // reset ui Actions to ""
-        for(int i=0; i<sdata.actionsNum ; i++){
-            ActionParent.transform.GetChild(i).transform.GetChild(0).GetComponent<Image>().color = new Color(0f,0f,0f,0f);
+        if(dest.y==playerObj.transform.position.y){
+            m=9999999f;
+            xdistortion = dest.x;
+            ydistortion = b*machineGunShiftOffset+dest.y;
         }
-    }
-
-
-    public void checkActions(){
-        for(int i=0; i<sdata.actionsNum; i++){
-            string type0 = sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[i].type;
-            Vector3 target0 = sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[i].target;
-            GameObject gunTypeObj0 = sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[i].gunTypeObj;
-            if(type0=="move"){
-                if(target0==new Vector3(-999f,-999f,-999f)){
-                    Debug.Log("moveERRR:"+i);
-                    resetAction(i);
-                }
-            }
-            else if(type0=="fire"){
-                if(!gunTypeObj0){
-                    Debug.Log("FireERRR1:"+i);
-                    resetAction(i);
-                }
-                else if(gunTypeObj0.transform.name!="Sword"){
-                    if(target0==new Vector3(-999f,-999f,-999f)){
-                        Debug.Log("FireERRR2:"+i);
-                        resetAction(i);
-                    }
-                }
-            }
+        else{
+            m = -(dest.x-playerObj.transform.position.x)/(dest.y-playerObj.transform.position.y);
+            xdistortion = (b*machineGunShiftOffset)/(Mathf.Sqrt(Mathf.Pow(m,2)+1)) + dest.x;
+            ydistortion = m*(xdistortion-dest.x)+dest.y;
         }
-    }
 
-    public void resetAction(int ind){
-        sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[ind].type="0"; // type of the action (move | fire)
-        sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[ind].target = new Vector3 (-999f,-999f,-999f); // target of the action either move or fire
-        sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[ind].gunTypeObj = null;
-        // ActionParent.transform.GetChild(ind).transform.GetChild(0).GetComponent<Image>().color = new Color(0f,0f,0f,0f);
-        if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[ind].targetObj){
-            Destroy(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[ind].targetObj);
-        }
+        Vector3 distortion = new Vector3(xdistortion, ydistortion, 0f);
+        return distortion;
     }
-
 
 }

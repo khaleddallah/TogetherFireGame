@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BulletData : MonoBehaviour
 {
-    public Vector3 dest;
+    public Vector3 destination;
 
     public int myparent;
 

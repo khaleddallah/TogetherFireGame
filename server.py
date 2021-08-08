@@ -95,7 +95,7 @@ def reg():
 def isStarted():
     global playersStarted, players
     data = request.json["index"]
-    howm = request.json["howmplayerstarted"]
+    howm = request.json["howMuchPlayersStarted"]
     if(not(int(data) in playersStarted)):
         playersStarted[int(data)]=1
     

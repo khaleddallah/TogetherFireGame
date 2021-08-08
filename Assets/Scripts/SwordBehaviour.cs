@@ -5,39 +5,37 @@ using UnityEngine;
 public class SwordBehaviour : MonoBehaviour
 {
 
-    public float speed;
-    public float healthDec;
-    public List<string> barriers = new List<string>();
+    [SerializeField] private float speed;
+    [SerializeField] private float healthDecreaseValue;
+    [SerializeField] private List<string> barriers;
+    [SerializeField] private GameObject bloodParticleSystemObject;
+    [SerializeField] private float MinSwordAngle;
+    [SerializeField] private float MaxSwordAngle;
 
-    public Vector3 dest;
-
-    public GameObject bloodObj;
-
-    public GameObject firePSObj;
+    Vector3 destination;
     Coroutine coroutineFire;
     bool active;
     Sdata sdata;
-    public int myparent;
+    int myparent;
 
+    
 
     void Start()
     {
         sdata = Sdata.sdata;
         active = true;
-        dest = GetComponent<BulletData>().dest;
+        destination = GetComponent<BulletData>().destination;
         myparent = GetComponent<BulletData>().myparent;
-
-
+        barriers = new List<string>()
         coroutineFire = StartCoroutine(fire());
     }
 
 
     public IEnumerator fire(){
         Debug.Log("####"+transform.name.Substring(0,5));
-        if(transform.name.Substring(0,5) == "Sword"){
-            float z = 0 ; 
-            Debug.Log("Sword");
-            while(z<=359 && active)
+        if(AssertSword()){
+            float z=MinSwordAngle; 
+            while(z<=MaxSwordAngle && active)
             {
                 z+=1*speed*Time.deltaTime;
                 transform.rotation = Quaternion.Euler(0.0f, 0.0f, z);
@@ -48,26 +46,20 @@ public class SwordBehaviour : MonoBehaviour
         }
     }
 
+    private bool AssertSword(){
+        return transform.name.Substring(0,5)=="Sword";
 
-
-
+    }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log(transform.name+":: Enter ::"+other.transform.name);
 
-        // if bullet bumped into Player (character)
         if(other.gameObject.CompareTag("Player")){
-
-            Debug.Log("..P..");
             int plind= int.Parse(other.transform.name[1].ToString());
             if(plind != myparent){
-                // show BLOOODD
-                GameObject blood = Instantiate(bloodObj) as GameObject;
-                blood.transform.position = other.transform.position;
-
-                Debug.Log("000DD))");
-                sdata.vitalDatas[plind].health-=healthDec;
+                ShowBlood();
+                sdata.vitalDatas[plind].health-=healthDecreaseValue;
                 // Disable chrc if died
                 if(sdata.vitalDatas[plind].health<=0){
                     other.gameObject.SetActive(false);
@@ -86,15 +78,20 @@ public class SwordBehaviour : MonoBehaviour
         }
     }
 
+    private void ShowBlood(){
+        GameObject blood = Instantiate(bloodParticleSystemObject) as GameObject;
+        blood.transform.position = other.transform.position;
+
+    }
 
     void DestroySpecial()
     {
         if(gameObject && active){
             active=false; // stop the movement of the bullet
-            Debug.Log("!! Destroy :: "+gameObject.transform.name);
+            Debug.Log("!! destinationroy :: "+gameObject.transform.name);
             StopCoroutine(coroutineFire); 
             GM.gm.transform.gameObject.GetComponent<EpisodeMngr>().actionFire-=1; // complete to the other action
-            Destroy(gameObject);
+            destinationroy(gameObject);
         }
     }
 

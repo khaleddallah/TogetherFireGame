@@ -7,50 +7,34 @@ using TMPro;
 public class TargetAssignHelper : MonoBehaviour
 {
 
-    public static TargetAssignHelper tah;
-
     [SerializeField] private GameObject targetsParent;
-    public GameObject actionSelectingUnit;
-    public GameObject ActionParent;
+    [SerializeField] private GameObject fireTarget;
+    [SerializeField] private GameObject charactersParent;
+    [SerializeField] private GameObject lineRendererObject;
+    [SerializeField] private GameObject circleMarker;
+    [SerializeField] private GameObject circleGrenadeMarker;
+    [SerializeField] private GameObject circlePistolMarker;
+    [SerializeField] private GameObject markersParent;
+    [SerializeField] private LayerMask moveLayersFiltered;
+    [SerializeField] private LayerMask fireLayersFiltered;
+    [SerializeField] private Color fireLinesTempMarkerColor;
+    [SerializeField] private Color fireLineFinalMarkerColor;
+    [SerializeField] private Color moveLinesTempMarkerColor;
+    [SerializeField] private Color moveLineFinalMarkerColor;
+    [SerializeField] private GameObject swordTargetMarker;
+    [SerializeField] private float circleMarkerZoffset = -0.03f;
 
-    public GameObject fireTarget;
-    public GameObject chrcParent;
-
-    public GameObject lrobjcet;
-    public GameObject circle0;
-    public GameObject circleGrenade;
-
-    public GameObject circlePistol;
-
-
-    public GameObject lcParent;
-
-    public LayerMask layerMove;
-    public LayerMask layerFire;
-
-    public Vector3 currentPos;
-
-    public Color fireLines;
-    public Color fireLineFinal;
     
-    public Color moveLines;
-    public Color moveLineFinal;
-
-    public bool moveError = false;
-
-    Sdata sdata;
-    GameObject myChrc;
-    float vhstep;
-    float slstep;
-    
-    Color tempColor;
-
-    bool markerExist;
-
-    public GameObject swordTarget;
-
-
+    public static TargetAssignHelper tah;
     public float radiousEnv;
+
+    private const int MOVE_ACTION_INDEX = 0;
+    private Sdata sdata;
+    private Vector3 currentPosition;
+    private GameObject myCharacter;
+    private float vhStep;
+    private float slStep;
+
 
     void Awake()
     {
@@ -63,481 +47,254 @@ public class TargetAssignHelper : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
-
-
     void Start()
     {
-        tempColor = Color.white;
-        moveError = false;
         sdata = Sdata.sdata;
-        myChrc = chrcParent.transform.GetChild(sdata.playerIndex).transform.GetChild(0).gameObject;
-        vhstep = sdata.gridLen;
-        slstep = Mathf.Sqrt(2*Mathf.Pow(vhstep,2));
+        myCharacter = charactersParent.transform.GetChild(sdata.playerIndex).transform.GetChild(0).gameObject;
+        vhStep = sdata.gridCellSize;
+        slStep = Mathf.Sqrt(2*Mathf.Pow(vhStep,2));
     }
 
 
+    // ======= sword =========
 
-    // public void DrawTargetLines(){
-
-
-    //     // Disable sword markers 
-    //     swordTarget.SetActive(false);
-
-    //     // select the current pos 
-    //     currentPos = myChrc.transform.position;
-    //     // if prior action will move the chrc
-    //     for(int i=sdata.actionIndex-1; i>=0; i--){
-    //         Debug.Log("select the current pos:::"+i);
-    //         if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[i].type=="move"){
-    //             currentPos = sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[i].target;
-    //             Debug.Log("CurrentPos:::>>"+currentPos);
-    //             break;
-    //         }
-    //     }
-
-    //     // // if sword
-    //     // if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].gunTypeObj){
-    //     //     if (sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].gunTypeObj.transform.name=="Sword"){
-    //     //         // Destroy prior objects
-    //     //         if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].targetObj){
-    //     //             Destroy(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].targetObj);
-    //     //         }
-                        
-    //     //         // destroy lines & circles after choose the target
-    //     //         foreach(Transform child in lcParent.transform)
-    //     //         {
-    //     //             Destroy(child.gameObject);
-    //     //         }
-                
-    //     //         GameObject x = Instantiate(fireTarget) as GameObject;
-    //     //         x.transform.position = currentPos;
-    //     //         x.transform.SetParent(targetsParent.transform);
-    //     //         TextMeshProUGUI xt = x.transform.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-    //     //         xt.text = (sdata.actionIndex+1).ToString("0");  
-    //     //         sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].targetObj = x;
-
-    //     //         return;
-    //     //     }
-    //     // }
-
-    //     // Draw lines & points
-    //     for(int x=-1 ; x<=1 ; x++){
-    //         for(int y=-1 ; y<=1 ; y++){
-    //             Vector3 dir = new Vector3(x,y,0f);
-    //             Debug.Log("dir::"+dir);
-    //             RaycastHit2D hit;
-    //             // int hitN;
-    //             // bool ishit;
-    //             float distance0=0f;
-    //             // RaycastHit2D[] results = new RaycastHit2D[10];
-    //             // ContactFilter2D contactFilter = new ContactFilter2D();
-    //             hit=Physics2D.Raycast(currentPos, dir, Mathf.Infinity, ~layerMove);
-    //                 // hitN=Physics2D.Raycast(currentPos, dir, contactFilter, results);
-                
-    //             if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].type=="move"){
-    //                 hit=Physics2D.Raycast(currentPos, dir, Mathf.Infinity, ~layerMove);
-    //                 // hitN=Physics2D.Raycast(currentPos, dir, contactFilter, results);
-    //                 // Debug.Log("hit:::::"+hit.distance);
-    //                 distance0 = hit.distance;
-    //                 tempColor = moveLines;
-    //             }
-    //             else if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].type=="fire"){
-    //                 hit=Physics2D.Raycast(currentPos, dir, Mathf.Infinity, ~layerFire);
-    //                 // hitN=Physics2D.Raycast(currentPos, dir, contactFilter, results);
-    //                 // Debug.Log("hit:::::"+hit.distance);
-    //                 distance0 = hit.distance;
-    //                 tempColor = fireLines;
-    //             }
-
-    //             if(distance0>vhstep){
-    //             // if(ishit){
-    //                 Debug.Log("hit::"+hit.transform.name+":::"+hit.distance);
-    //                 // draw line for available directions
-    //                 GameObject gl = Instantiate(lrobjcet) as GameObject;
-    //                 gl.transform.SetParent(lcParent.transform);
-
-    //                 LineRenderer lRend = gl.GetComponent<LineRenderer>();
-    //                 lRend.startColor=tempColor;
-    //                 lRend.endColor=tempColor;                    
-    //                 lRend.startWidth=0.05f;
-    //                 lRend.endWidth=0.05f;
-    //                 Vector3 last ; 
-    //                 float lastPoint;
-    //                 if(x==0 || y==0){
-    //                     lastPoint = Mathf.Floor(distance0/vhstep);
-                        
-    //                     // Debug.Log("vhstep::"+vhstep);
-    //                     // Debug.Log("lastPoint::"+lastPoint);
-    //                 }
-    //                 else{
-    //                     lastPoint = Mathf.Floor(distance0/slstep);
-    //                     // Debug.Log("slstep::"+slstep);
-    //                     // Debug.Log("lastPoint::"+lastPoint);
-    //                 }
-    //                 last = currentPos+(new Vector3(x, y, 0)*vhstep*lastPoint);
-    //                 lRend.SetPosition(0, currentPos);
-
-    //                 lRend.SetPosition(1, last); 
-
-    //                 //draw points for available targets
-    //                 for(int p=1; p<=lastPoint; p++){
-    //                     Vector3 posTemp = currentPos+new Vector3(x, y, 0)*p*vhstep;
-    //                     bool isOutsideEnv = Vector3.Distance(Vector3.zero, posTemp)>=radiousEnv;
-    //                     if(isOutsideEnv){
-    //                         continue;
-    //                     }
-    //                     GameObject cr = Instantiate(circle0) as GameObject;
-    //                     cr.transform.SetParent(lcParent.transform);
-    //                     cr.transform.position =  currentPos+new Vector3(x, y, 0)*p*vhstep;
-    //                     cr.transform.position = new Vector3(cr.transform.position.x, cr.transform.position.y, -3f);
-    //                 }
-    //             }
-
-    //         }
-    //     }
-
-    //     // if move put a point in same chrc position
-    //     if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].type=="move"){
-    //         GameObject cr = Instantiate(circle0) as GameObject;
-    //         cr.transform.SetParent(lcParent.transform);
-    //         cr.transform.position =  currentPos;
-    //         cr.transform.position = new Vector3(cr.transform.position.x, cr.transform.position.y, -3f);
-    //     }
-
-    // }
-
-
-    public void InstTarget(Vector3 pos0){
-
-        // reset colors of actions 
-        ActionParent.transform.GetChild(0).GetComponent<uib_action>().resetActionColors();
-
-        // disactive selecting unit 
-        actionSelectingUnit.SetActive(false);
-
-        // if changed (move to move | fire to move | move to fire) Destroy next actions
-        if(moveError){
-            if(pos0!=sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].target){
-                for(int i = sdata.actionIndex+1 ; i<sdata.actionsNum ; i++){
-                    resetAction(i);
-                }
-            }
-            moveError=false;
-        }
-
-        // Destroy prior objects
-        if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].targetObj){
-            Destroy(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].targetObj);
-        }
-
-        // destroy lines & circles after choose the target
+    public void MarkerSword(){
         DestroyMarkers();
+        SetCurrentPositionAfterMove();
+        swordTargetMarker.SetActive(true);
+        swordTargetMarker.transform.position = currentPosition;
+        float rotz = sdata.playerIndex*(-90);
+        swordTargetMarker.transform.rotation = Quaternion.Euler( 0, 0, rotz);
+    }
 
-        // if Move
-        if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].type=="move"){
-            sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].target = pos0;
-            GameObject x = Instantiate(myChrc) as GameObject;
-            Destroy(x.GetComponent<PlayerReaction>());
-            Destroy(x.GetComponent<BoxCollider2D>());
-            Destroy(x.GetComponent<Rigidbody2D>());
-            Destroy(x.transform.GetChild(0).gameObject);
-            Destroy(x.transform.GetChild(1).gameObject);
-            x.transform.position = pos0;
-            x.transform.SetParent(targetsParent.transform);
-            TextMeshProUGUI xt = x.transform.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            xt.text = (sdata.actionIndex+1).ToString("0");
-            sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].targetObj = x;
-            x.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, 0.3f);
+    public void MarkerSwordApply(){
+        sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].target = currentPosition;
+    }
 
-
-            GameObject gl = Instantiate(lrobjcet) as GameObject;
-            gl.transform.SetParent(x.transform);
-            LineRenderer lRend = gl.GetComponent<LineRenderer>();
-            lRend.startColor=moveLineFinal;
-            lRend.endColor=moveLineFinal;                    
-            lRend.startWidth=0.1f;
-            lRend.endWidth=0.1f;
-            lRend.SetPosition(0, currentPos);
-            lRend.SetPosition(1, pos0); 
-
-
-        }
-        // if Fire && not "Sword"
-        else if (sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].gunTypeObj.transform.name!="Sword"){
-            sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].target = pos0;
-            GameObject x = Instantiate(fireTarget) as GameObject;
-            x.transform.position = pos0;
-            
-            float rotz = sdata.playerIndex*(-90);
-            x.transform.rotation = Quaternion.Euler( 0, 0, rotz);
-
-            x.transform.SetParent(targetsParent.transform);
-            TextMeshProUGUI xt = x.transform.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            xt.text = (sdata.actionIndex+1).ToString("0");           
-            sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].targetObj = x;
-        
-            GameObject gl = Instantiate(lrobjcet) as GameObject;
-            gl.transform.SetParent(x.transform);
-            LineRenderer lRend = gl.GetComponent<LineRenderer>();
-            lRend.startColor=fireLineFinal;
-            lRend.endColor=fireLineFinal;                    
-            lRend.startWidth=0.1f;
-            lRend.endWidth=0.1f;
-            lRend.SetPosition(0, currentPos);
-            lRend.SetPosition(1, pos0); 
-        }
-
+    private void SetCurrentPositionAfterMove(){
+        currentPosition = sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[MOVE_ACTION_INDEX].target;
     }
 
     public void DestroyMarkers(){
-        // destroy lines & circles after choose the target
-        foreach(Transform child in lcParent.transform)
+        swordTargetMarker.SetActive(false);
+        foreach(Transform child in markersParent.transform)
         {
             Destroy(child.gameObject);
         }
     }
 
 
-    public void resetAction(int ind){
-        sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[ind].type="0"; // type of the action (move | fire)
-        sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[ind].target = new Vector3 (-999f,-999f,-999f); // target of the action either move or fire
-        sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[ind].gunTypeObj = null;
-        ActionParent.transform.GetChild(ind).transform.GetChild(0).GetComponent<Image>().color = new Color(0f,0f,0f,0f);
-        if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[ind].targetObj){
-            Destroy(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[ind].targetObj);
-        }
-    }
 
 
-
-    // ============================== sword ==================================
-
-    public void MarkerSword(){
-        DestroyMarkers();
-
-        // select the current pos 
-        currentPos = myChrc.transform.position;
-        for(int i=sdata.actionIndex-1; i>=0; i--){
-            Debug.Log("select the current pos:::"+i);
-            if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[i].type=="move"){
-                currentPos = sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[i].target;
-                Debug.Log("CurrentPos:::>>"+currentPos);
-                break;
-            }
-        }
-
-        swordTarget.SetActive(true);
-        swordTarget.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
-        swordTarget.transform.position = currentPos;
-        float rotz = sdata.playerIndex*(-90);
-        swordTarget.transform.rotation = Quaternion.Euler( 0, 0, rotz);
-        // x.transform.SetParent(targetsParent.transform);
-        // sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].gunTypeObj = x;
-    }
-
-
-    public void MarkerSwordApply(){
-        sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].target = currentPos;
-        // GameObject x = sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].gunTypeObj;
-        TextMeshProUGUI xt = swordTarget.transform.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-        xt.text = (sdata.actionIndex+1).ToString("0");  
-    }
-
-
-
-
-    // ============================== Grende ==================================
-
+    // ======= Grenade =========
     public void DrawGrendeMarkers(){
-        // Disable sword markers 
-        swordTarget.SetActive(false);
+        DestroyMarkers();
+        SetCurrentPositionAfterMove();
+        DrawPointsOnAllGrid();
+    }
 
-        // select the current pos 
-        currentPos = myChrc.transform.position;
-        // if prior action will move the chrc
-        for(int i=sdata.actionIndex-1; i>=0; i--){
-            Debug.Log("select the current pos:::"+i);
-            if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[i].type=="move"){
-                currentPos = sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[i].target;
-                Debug.Log("CurrentPos:::>>"+currentPos);
-                break;
-            }
-        }
-
-        // Draw points  
-        float NumLines = Mathf.Floor(sdata.maxRadius/sdata.gridLen);
+    private void DrawPointsOnAllGrid(){
+        float NumLines = Mathf.Floor(sdata.maxRadius/sdata.gridCellSize);
         for (int i=-(int)NumLines ; i<NumLines; i++ ){
             for (int j=-(int)NumLines ; j<NumLines; j++ ){
-                Vector3 posTemp = new Vector3(i*sdata.gridLen, j*sdata.gridLen, 0.0f);
-                bool isCurrentPos = i*sdata.gridLen==currentPos.x && j*sdata.gridLen==currentPos.y ; 
+                Vector3 posTemp = new Vector3(i*sdata.gridCellSize, j*sdata.gridCellSize, 0.0f);
+                bool iscurrentPosition = i*sdata.gridCellSize==currentPosition.x && j*sdata.gridCellSize==currentPosition.y ; 
                 bool isOutsideEnv = Vector3.Distance(Vector3.zero, posTemp)>=radiousEnv;
-                if(isCurrentPos || isOutsideEnv){
+                if(iscurrentPosition || isOutsideEnv){
                     continue;
                 }
                 else{
-                    GameObject cr = Instantiate(circleGrenade) as GameObject;
-                    cr.transform.SetParent(lcParent.transform);
-                    cr.transform.position = new Vector3(i*sdata.gridLen, j*sdata.gridLen, -0.03f);
+                    GameObject cr = Instantiate(circleGrenadeMarker) as GameObject;
+                    cr.transform.SetParent(markersParent.transform);
+                    cr.transform.position = new Vector3(i*sdata.gridCellSize, j*sdata.gridCellSize, -0.03f);
                 }
             }
         }
     }
 
-    // ============================== Move ==================================
-
-    public void MoveMarkers(){
-        // Disable sword markers 
-        swordTarget.SetActive(false);
-        
-        // select the current pos 
-        currentPos = myChrc.transform.position;
 
 
-        // Draw lines & points
-        for(int x=-1 ; x<=1 ; x++){
-            for(int y=-1 ; y<=1 ; y++){
-                Vector3 dir = new Vector3(x,y,0f);
-                Debug.Log("dir::"+dir);
-                RaycastHit2D hit;
-                float distance0=0f;
-
-                
-                hit=Physics2D.Raycast(currentPos, dir, Mathf.Infinity, ~layerMove);
-                distance0 = hit.distance;
-                tempColor = moveLines;
-
-                if(hit.distance > 0){
-                    Debug.Log(hit.transform.gameObject.tag);
-                    if(hit.collider.gameObject.CompareTag("Gold")){
-                        distance0+=vhstep;
-                    }
-                }
-
-                if(distance0>vhstep){
-                    Debug.Log("hit::"+hit.transform.name+":::"+hit.distance);
-                    GameObject gl = Instantiate(lrobjcet) as GameObject;
-                    gl.transform.SetParent(lcParent.transform);
-
-                    LineRenderer lRend = gl.GetComponent<LineRenderer>();
-                    lRend.startColor=tempColor;
-                    lRend.endColor=tempColor;                    
-                    lRend.startWidth=0.05f;
-                    lRend.endWidth=0.05f;
-                    Vector3 last ; 
-                    float lastPoint;
-                    if(x==0 || y==0){
-                        lastPoint = Mathf.Floor(distance0/vhstep);
-                    }
-                    else{
-                        lastPoint = Mathf.Floor(distance0/slstep);
-                    }
-                    last = currentPos+(new Vector3(x, y, 0)*vhstep*lastPoint);
-                    lRend.SetPosition(0, currentPos);
-                    lRend.SetPosition(1, last); 
-
-                    //draw points for available targets
-                    for(int p=1; p<=lastPoint; p++){
-                        Vector3 posTemp = currentPos+new Vector3(x, y, 0)*p*vhstep;
-                        bool isOutsideEnv = Vector3.Distance(Vector3.zero, posTemp)>=radiousEnv;
-                        if(isOutsideEnv){
-                            posTemp = currentPos+new Vector3(x, y, 0)*(p-1)*vhstep;
-                            lRend.SetPosition(1, posTemp); 
-                            continue;
-                        }
-                        GameObject cr0 = Instantiate(circle0) as GameObject;
-                        cr0.transform.SetParent(lcParent.transform);
-                        cr0.transform.position =  currentPos+new Vector3(x, y, 0)*p*vhstep;
-                        cr0.transform.position = new Vector3(cr0.transform.position.x, cr0.transform.position.y, -0.03f);
-                    }
-                }
-            }
-        }
-
-        GameObject cr = Instantiate(circle0) as GameObject;
-        cr.transform.SetParent(lcParent.transform);
-        cr.transform.position =  currentPos;
-        cr.transform.position = new Vector3(cr.transform.position.x, cr.transform.position.y, -0.03f);
-
+    // ======= Pistol =========
+    public void DrawPistolMarkers(){
+        DestroyMarkers();
+        SetCurrentPositionAfterMove();
+        DrawPistolLinesPointsMarkers();
     }
 
-
-
-    // ============================== Piston&MachineGun ==================================
-
-
-    public void PistolMarkers(){
-        // Disable sword markers 
-        swordTarget.SetActive(false);
-
-        // select the current pos 
-        currentPos = myChrc.transform.position;
-        // if prior action will move the chrc
-        for(int i=sdata.actionIndex-1; i>=0; i--){
-            Debug.Log("select the current pos:::"+i);
-            if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[i].type=="move"){
-                currentPos = sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[i].target;
-                Debug.Log("CurrentPos:::>>"+currentPos);
-                break;
-            }
-        }
-
-
+    private void DrawPistolLinesPointsMarkers(){
         // Draw lines & points
         for(int x=-1 ; x<=1 ; x++){
             for(int y=-1 ; y<=1 ; y++){
-                Vector3 dir = new Vector3(x,y,0f);
-                Debug.Log("dir::"+dir);
-                RaycastHit2D hit;
-                float distance0=0f;
-
-                hit=Physics2D.Raycast(currentPos, dir, Mathf.Infinity, ~layerFire);
-                distance0 = hit.distance;
-                tempColor = fireLines;
-            
-
-                if(distance0>vhstep){
-                    Debug.Log("hit::"+hit.transform.name+":::"+hit.distance);
-                    GameObject gl = Instantiate(lrobjcet) as GameObject;
-                    gl.transform.SetParent(lcParent.transform);
-
-                    LineRenderer lRend = gl.GetComponent<LineRenderer>();
-                    lRend.startColor=tempColor;
-                    lRend.endColor=tempColor;                    
-                    lRend.startWidth=0.05f;
-                    lRend.endWidth=0.05f;
-                    Vector3 last ; 
-                    float lastPoint;
-                    if(x==0 || y==0){
-                        lastPoint = Mathf.Floor(distance0/vhstep);
-                        
-                        // Debug.Log("vhstep::"+vhstep);
-                        // Debug.Log("lastPoint::"+lastPoint);
-                    }
-                    else{
-                        lastPoint = Mathf.Floor(distance0/slstep);
-                        // Debug.Log("slstep::"+slstep);
-                        // Debug.Log("lastPoint::"+lastPoint);
-                    }
-
-
-                    last = currentPos+(new Vector3(x, y, 0)*vhstep);
-                    lRend.SetPosition(0, currentPos);
-                    lRend.SetPosition(1, last); 
-
-
-                    GameObject cr0 = Instantiate(circlePistol) as GameObject;
-                    cr0.transform.SetParent(lcParent.transform);
+                distance = RaycastToDirection(x, y, fireLayersFiltered);
+                if(distance>vhStep){
+                    Vector3 lastPoint = currentPosition+(new Vector3(x, y, 0)*vhStep);
+                    CreateLineRenderer(fireLinesTempMarkerColor, 0.05f, lastPoint, markersParent);
+                    CreateArrowMarker(x, y, lastPoint);
                     
-                    Vector3 movementDir =  (last-currentPos).normalized;    
-                    float rotz = Mathf.Atan2(movementDir.y,movementDir.x)*Mathf.Rad2Deg;    
-                    cr0.transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotz);
-
-                    cr0.transform.position =  last;
-                    cr0.transform.position = new Vector3(cr0.transform.position.x, cr0.transform.position.y, -0.03f);
-
                 }
-
             }
         }
     }
+
+    private void CreateArrowMarker(int x, int y, Vector3 lastPoint){
+        GameObject cr0 = Instantiate(circlePistolMarker) as GameObject;
+        cr0.transform.SetParent(markersParent.transform);
+        Vector3 movementDir =  (lastPoint-currentPosition).normalized;    
+        float rotz = Mathf.Atan2(movementDir.y,movementDir.x)*Mathf.Rad2Deg;    
+        cr0.transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotz);
+        cr0.transform.position =  lastPoint;
+        cr0.transform.position = new Vector3(cr0.transform.position.x, cr0.transform.position.y, circleMarkerZoffset);
+    }
+
+
+
+
+    // ===== move =====
+    public void DrawMoveMarkers(){
+        DestroyMarkers();
+        currentPosition = myCharacter.transform.position;
+        MoveLinesPointsMarkers();
+    }
+
+    private void DrawMoveLinesPointsMarkers(){
+        CreateCircleMarker(currentPosition, circleMarker);
+        for(int x=-1 ; x<=1 ; x++){
+            for(int y=-1 ; y<=1 ; y++){
+                PutMoveMarkersOnDirection(x,y);
+            }
+        }
+    }
+
+    private void PutMoveMarkersOnDirection(int x, int y){
+        float distance = RaycastToDirection(x, y, moveLayersFiltered);
+        distance += isHitGold() ? vhStep : 0.0f; 
+        if(distance>vhStep){
+            float NumOfPoints = GetNumOfPoints(distance, x, y);
+            Vecotr3 lastPoint = currentPosition+new Vector3(x, y, 0)*(NumOfPoints-1)*vhStep;
+            CreateLineRenderer(moveLinesTempMarkerColor, 0.05f, lastPoint, markersParent);
+
+            for(int p=1; p<=NumOfPoints; p++){
+                Vector3 posTemp = currentPosition+new Vector3(x, y, 0)*p*vhStep;
+                CreateCircleMarker(posTemp, circleMarker);
+            }
+        }
+    }
+
+    private float RaycastToDirection(int x, int y, LayerMask LayersFiltered){
+        Vector3 dir = new Vector3(x,y,0f);
+        RaycastHit2D hit;
+        hit=Physics2D.Raycast(currentPosition, dir, Mathf.Infinity, ~LayersFiltered);
+        return hit.distance;
+    }
+
+    private int GetNumOfPoints(float distance, int x, int y){
+        int NumOfPoints=0;
+        if(x==0 || y==0){
+            NumOfPoints = Mathf.Floor(distance/vhStep);
+        }
+        else{
+            NumOfPoints = Mathf.Floor(distance/slStep);
+        }
+        Vector3 initialLastPoint = currentPosition+(new Vector3(x, y, 0)*vhStep*NumOfPoints);
+        NumOfPoints = isOutOfCircle(initialLastPoint) ? NumOfPoints-1 : NumOfPoints;
+        return NumOfPoints;
+    }
+
+    private bool isHitGold(){
+        return hit.distance>0 && hit.collider.gameObject.CompareTag("Gold");
+    }
+
+    private bool isOutOfCircle(Vector3 posTemp){
+        return Vector3.Distance(Vector3.zero, posTemp)>=radiousEnv;
+    }
+
+    private void CreateLineRenderer(Color color, float width, Vector3 lastPoint, GameObject Parent){
+        GameObject gl = Instantiate(lineRendererObject) as GameObject;
+        gl.transform.SetParent(Parent.transform);
+        LineRenderer lRend = gl.GetComponent<LineRenderer>();
+        lRend.startColor = color;
+        lRend.endColor = color;                    
+        lRend.startWidth = width;
+        lRend.endWidth = width;
+        lRend.SetPosition(0, currentPosition);
+        lRend.SetPosition(1, lastPoint); 
+    }
+
+    private void CreateCircleMarker(Vector3 posTemp, GameObject TempCircleMarker){
+        GameObject cr0 = Instantiate(TempCircleMarker) as GameObject;
+        cr0.transform.SetParent(markersParent.transform);
+        cr0.transform.position =  posTemp;
+        cr0.transform.position = new Vector3(cr0.transform.position.x, cr0.transform.position.y, circleMarkerZoffset);
+    }
+
+
+
+    // ============================================================================
+    public void InstTarget(Vector3 pos0){
+        DestroyPriorTargetObject();
+        DestroyMarkers();
+
+        if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].type=="move"){
+            SetFinalMoveMarker(pos0);
+        }
+
+        else if (CheckIfFireAndNotSword()){
+            SetFinalFireTarget(pos0);
+        }
+
+    }
+
+    private void DestroyPriorTargetObject(){
+        if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].targetObj){
+            Destroy(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].targetObj);
+        }
+    }
+
+    private void SetFinalMoveMarker(Vector3 pos0){
+        GameObject x = CopyMyCharacterSprite(pos0);
+        CreateLineRenderer(moveLineFinalMarkerColor, 0.1f, pos0, x)
+        sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].target = pos0;
+        sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].targetObj = x;
+    }
+
+    private void SetFinalFireTarget(Vector3 pos0){
+        GameObject x = CreateFireTarget(pos0);
+        CreateLineRenderer(fireLineFinalMarkerColor, 0.1f, pos0, x);
+        sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].targetObj = x;
+        sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].target = pos0;
+    }
+    private GameObject CopyMyCharacterSprite(Vector3 pos0){
+        GameObject x = Instantiate(myCharacter) as GameObject;
+        Destroy(x.GetComponent<PlayerReaction>());
+        Destroy(x.GetComponent<BoxCollider2D>());
+        Destroy(x.GetComponent<Rigidbody2D>());
+        DestoyMyChilds(x);
+        x.transform.position = pos0;
+        float rotz = sdata.playerIndex*(-90);
+        x.transform.rotation = Quaternion.Euler( 0, 0, rotz);
+
+        x.transform.SetParent(targetsParent.transform);
+        x.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, 0.3f);
+        return x;
+    }
+
+    private void DestoyMyChilds(GameObject x){
+        foreach(Transform child in x.transform)
+        {
+            Destroy(child.gameObject);
+        }   
+    }
+
+    private GameObect CreateFireTarget(Vector3 pos){
+        GameObject x = Instantiate(fireTarget) as GameObject;
+        x.transform.position = pos0;
+        return x;
+    }
+
+    private bool CheckFireExceptSword(){
+        isFire = sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].type=="fire";
+        isSword = sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].gunTypeObj.transform.name=="Sword"
+        return isFire && !isSword;
+    }
+
 }

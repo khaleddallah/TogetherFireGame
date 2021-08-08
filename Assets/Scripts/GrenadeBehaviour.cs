@@ -4,67 +4,66 @@ using UnityEngine;
 
 public class GrenadeBehaviour : MonoBehaviour
 {
+    [SerializeField] private float grenadeSpeed;
+    [SerializeField] private float healthDecreaseValue;
+    [SerializeField] private List<string> barriers;
+    [SerializeField] private GameObject bloodObject;
+    [SerializeField] private float radiousExplosion;
+    [SerializeField] private GameObject GrenadeEffect;
+    [SerializeField] private LayerMask playersLayer;
 
-    public float grenadeSpeed;
-    public float healthDec;
-    public List<string> barriers = new List<string>();
 
-    public Vector3 dest;
-
-    public GameObject bloodObj;
-
-    public GameObject firePSObj;
+    Vector3 destination;
     Coroutine coroutineFire;
     bool active;
     Sdata sdata;
-    public int myparent;
+    int myparent;
 
-    public float radiousExplosion;
-    public LayerMask chrcLayer;
 
-    public GameObject GrenadeEffect;
 
 
     void Start()
     {
         sdata = Sdata.sdata;
         active = true;
-
-        dest = GetComponent<BulletData>().dest;
+        destination = GetComponent<BulletData>().destination;
         myparent = GetComponent<BulletData>().myparent;
-
+        barriers = new List<string>()
         coroutineFire = StartCoroutine(fire());
     }
 
 
-  public IEnumerator fire(){
-
-
-        Vector3 movementDir =  (dest-transform.position).normalized;    
-
+    public IEnumerator fire(){
+        Vector3 movementDir =  (destination-transform.position).normalized;    
         float rotz = Mathf.Atan2(movementDir.y,movementDir.x)*Mathf.Rad2Deg;    
         transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotz-90);
 
-        float distance = Vector3.Distance(dest, transform.position);
+        float distance = Vector3.Distance(destination, transform.position);
         float lastdistance = distance+1f;
 
         while (lastdistance>distance) {
             transform.position += Time.deltaTime * movementDir * grenadeSpeed;
             lastdistance = distance;
-            distance = Vector3.Distance(dest, transform.position);
+            distance = Vector3.Distance(destination, transform.position);
             yield return null;
         }
-        Debug.Log("stop after distance get biggger Grende");
-        transform.position = dest;
+        transform.position = destination;
+        CreateGrendeEffect();
+        CircleRaycastEffectPlayers();
 
-        // effect eplosion
+        GM.gm.transform.gameObject.GetComponent<EpisodeMngr>().actionFire-=1;
+        DestroySpecial();
+        yield return null;
+
+    }
+
+    private void CreateGrendeEffect(){
         GameObject firePS = Instantiate(GrenadeEffect) as GameObject;
         firePS.transform.position = transform.position;
-        // yield return new WaitForSeconds(0.2f);
+    }
 
-
-        // circle raycast        
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, radiousExplosion, chrcLayer);
+    private void CircleRaycastEffectPlayers(){
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, radiousExplosion, playersLayer);
         foreach(Collider2D hit in hits){
             if(hit.gameObject.CompareTag("Player")){
 
@@ -73,43 +72,32 @@ public class GrenadeBehaviour : MonoBehaviour
                 float dis0 = Vector3.Distance(hit.transform.position,transform.position);
                 
                 // show BLOOODD
-                GameObject blood = Instantiate(bloodObj) as GameObject;
+                GameObject blood = Instantiate(bloodObject) as GameObject;
                 blood.transform.position = hit.transform.position;
 
                 if (dis0<0.8f*radiousExplosion){                
-                    sdata.vitalDatas[plind].health-= healthDec;
+                    sdata.vitalDatas[plind].health-= healthDecreaseValue;
                 }
                 else{
-                    sdata.vitalDatas[plind].health-= healthDec*0.5f;
+                    sdata.vitalDatas[plind].health-= healthDecreaseValue*0.5f;
                 }
-                    // Disable chrc if died
+
                 if(sdata.vitalDatas[plind].health<=0){
                     hit.gameObject.SetActive(false);
                 }
                 GM.gm.updataMGH();
             }
         }
-
-
-        // tell episodeMngr Im done
-        GM.gm.transform.gameObject.GetComponent<EpisodeMngr>().actionFire-=1;
-        DestroySpecial();
-        yield return null;
-
     }
-
-
-
-
 
     void DestroySpecial()
     {
         if(gameObject && active){
             active=false; // stop the movement of the bullet
-            Debug.Log("!! Destroy :: "+gameObject.transform.name);
+            Debug.Log("!! destinationroy :: "+gameObject.transform.name);
             StopCoroutine(coroutineFire); 
             GM.gm.transform.gameObject.GetComponent<EpisodeMngr>().actionFire-=1; // complete to the other action
-            Destroy(gameObject);
+            destinationroy(gameObject);
         }
     }
 

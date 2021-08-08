@@ -3,28 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// stored data
 public class Sdata : MonoBehaviour
 {
     public static Sdata sdata;
 
     // main data
-    public float gridLen;
+    public float gridCellSize;
     public float maxRadius;
-
-
     public int actionIndex = 0;
-    public int playerIndex; // the index of the player
+    public int playerIndex;
     public int episodeIndex = -1;
-
-    public List<Episode> episodes = new List<Episode>(); // The episodes data
-    public List<VitalData> vitalDatas = new List<VitalData>(); // the vital data of all players 
-
-    // STATIC
+    public List<Episode> episodes = new List<Episode>(); 
+    public List<VitalData> vitalDatas = new List<VitalData>(); 
     public int participantNum = 4;
     public int actionsNum = 3;
-
-    public int howmplayerstarted = 0;
-
+    public int howMuchPlayersStarted = 0;
     public string gamePlayMode;
 
     void Awake()
@@ -36,6 +30,11 @@ public class Sdata : MonoBehaviour
             sdata = this;
         }
 
+        SetSomeInitialValues();
+        DontDestroyOnLoad(this);
+    }
+
+    private void SetSomeInitialValues(){
         // have to get this from the server
         sdata.playerIndex=0;
 
@@ -48,7 +47,6 @@ public class Sdata : MonoBehaviour
         }
 
         CreateNewEpisode();
-        DontDestroyOnLoad(this);
     }
 
     public void CreateNewEpisode(){

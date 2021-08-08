@@ -7,42 +7,29 @@ using TMPro;
 
 public class uib_gunType : MonoBehaviour
 {
-    [SerializeField] private GameObject fireButtonS;
-    [SerializeField] private GameObject ActionParent;
-
-    public GameObject gunTypeObj;
-    public Color colorAfterPressed;
-    public Sprite fireIcon;
- 
+    [SerializeField] private GameObject gunTypeButtonsParent;
+    [SerializeField] private GameObject gunTypeObj;
+    [SerializeField] private Color colorAfterPressed;
+    Color defaultGunColor;
     Sdata sdata;
-
-    Color dgunColor;
 
     void Start()
     {
         sdata = Sdata.sdata;
-        // GetComponent<Image>().color = Color.white;
-
-        dgunColor = fireButtonS.transform.GetChild(0).GetComponent<Image>().color;
+        defaultGunColor = gunTypeButtonsParent.transform.GetChild(0).GetComponent<Image>().color;
     }
 
 
     public void GunTypePressed(){
-        TargetAssignHelper.tah.DestroyMarkers();
+        ResetGunTypeButtonsColors();
         GetComponent<Image>().color = colorAfterPressed;
         sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].gunTypeObj = gunTypeObj; 
-        
-        for(int i=0; i<fireButtonS.transform.childCount; i++){
-            if(fireButtonS.transform.GetChild(i).GetComponent<uib_gunType>().gunTypeObj.transform.name!=gunTypeObj.transform.name){
-                fireButtonS.transform.GetChild(i).GetComponent<Image>().color = dgunColor;
-            }
-        }
-
-        // TextMeshProUGUI xt = ActionParent.transform.GetChild(sdata.actionIndex).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-        // xt.text = gunTypeObj.transform.name;
-        // xt.color = colorAfterPressed;
-        ActionParent.transform.GetChild(sdata.actionIndex).transform.GetChild(0).GetComponent<Image>().color = Color.white;
-        ActionParent.transform.GetChild(sdata.actionIndex).transform.GetChild(0).GetComponent<Image>().sprite = fireIcon;
-
     }
+
+    void ResetGunTypeButtonsColors(){
+        for(int i=0; i<gunTypeButtonsParent.transform.childCount; i++){
+            gunTypeButtonsParent.transform.GetChild(i).GetComponent<Image>().color = defaultGunColor;
+        }
+    }
+
 }

@@ -6,26 +6,26 @@ public class AIPlayers : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    public GameObject GoldParent;
-    public GameObject StoneParent;
-    public GameObject DiamondParent;
-    public GameObject PlayersParent;
-
-    public List<Vector3> golds, stones, diamonds, players;
-    public List<GameObject> guns;
-
-    public LayerMask layerMove;
-    public LayerMask layerFire;
+    [SerializeField] private GameObject GoldParent, StoneParent, DiamondParent;
+    [SerializeField] private GameObject PlayersParent;
+    [SerializeField] private List<GameObject> gunsTypesObjects;
+    
+    List<Vector3> golds, stones, diamonds, players;
+    LayerMask layerMove;
+    LayerMask layerFire;
     float vhstep, slstep, radiousEnv;    
     Sdata sdata;
+
     void Start()
     {    
         sdata = Sdata.sdata;
-        vhstep = sdata.gridLen;
+        vhstep = sdata.gridCellSize;
         slstep = Mathf.Sqrt(2*Mathf.Pow(vhstep,2));
+        
         layerFire = TargetAssignHelper.tah.layerFire;
         layerMove = TargetAssignHelper.tah.layerMove;
         radiousEnv = TargetAssignHelper.tah.radiousEnv;
+       
         golds = new List<Vector3>();
         stones = new List<Vector3>();
         diamonds = new List<Vector3>();
@@ -39,15 +39,8 @@ public class AIPlayers : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
 
-
-    // ============================== Move ==================================
     public List<Vector3> MoveMarkers(int playerInd){
         List<Vector3> res = new List<Vector3>();
         Vector3 currentPos = PlayersParent.transform.GetChild(playerInd).GetChild(0).position;
@@ -90,18 +83,14 @@ public class AIPlayers : MonoBehaviour
         return res;
     }
 
-
-
-
-    // ============================== Grende ==================================
-    public List<Vector3> DrawGrendeMarkers(int playerInd){
+    public List<Vector3> GrendeMarkers(int playerInd){
         List<Vector3> res = new List<Vector3>();
         Vector3 currentPos = sdata.episodes[sdata.episodeIndex].roleplays[playerInd].actions[0].target;
-        float NumLines = Mathf.Floor(sdata.maxRadius/sdata.gridLen);
+        float NumLines = Mathf.Floor(sdata.maxRadius/sdata.gridCellSize);
         for (int i=-(int)NumLines ; i<NumLines; i++ ){
             for (int j=-(int)NumLines ; j<NumLines; j++ ){
-                Vector3 posTemp = new Vector3(i*sdata.gridLen, j*sdata.gridLen, 0.0f);
-                bool isCurrentPos = i*sdata.gridLen==currentPos.x && j*sdata.gridLen==currentPos.y ; 
+                Vector3 posTemp = new Vector3(i*sdata.gridCellSize, j*sdata.gridCellSize, 0.0f);
+                bool isCurrentPos = i*sdata.gridCellSize==currentPos.x && j*sdata.gridCellSize==currentPos.y ; 
                 bool isOutsideEnv = Vector3.Distance(Vector3.zero, posTemp)>=radiousEnv;
                 if(isCurrentPos || isOutsideEnv){
                     continue;
@@ -114,8 +103,6 @@ public class AIPlayers : MonoBehaviour
         return res;
     }
 
-
-    // ============================== Piston&MachineGun ==================================
     public List<Vector3> PistolMarkers(int playerInd){
         List<Vector3> res = new List<Vector3>();
         Vector3 currentPos = sdata.episodes[sdata.episodeIndex].roleplays[playerInd].actions[0].target;
@@ -151,8 +138,6 @@ public class AIPlayers : MonoBehaviour
         }
         return res;
     }
-
-    // ========================================================================
 
     public void UpdateGeneralData(){
         // resources
@@ -193,14 +178,14 @@ public class AIPlayers : MonoBehaviour
         sdata.episodes[sdata.episodeIndex].roleplays[playerInd].actions[1].type = "fire";
 
         // select a gun
-        GameObject gun = guns[Random.Range(0, guns.Count)];
+        GameObject gun = gunsTypesObjects[Random.Range(0, gunsTypesObjects.Count)];
         sdata.episodes[sdata.episodeIndex].roleplays[playerInd].actions[1].gunTypeObj = gun;
 
         // select fire target
         string gunName = gun.transform.name;
         List<Vector3> possibleTargets = new List<Vector3>();
         if(gunName=="Grenade"){
-            possibleTargets = DrawGrendeMarkers(playerInd);
+            possibleTargets = GrendeMarkers(playerInd);
             sdata.episodes[sdata.episodeIndex].roleplays[playerInd].actions[1].target = possibleTargets[Random.Range(0, possibleTargets.Count)];
         }
         else if(gunName=="Pistol"||gunName=="MachineGun"){
@@ -210,10 +195,8 @@ public class AIPlayers : MonoBehaviour
     }
 
     public void psai(){
-        // collect data (players, golds, diamonds, stones)
         UpdateGeneralData();
-        // PlayerAI(1);
-        // select the players move
+
         for(int p = 0 ; p<sdata.participantNum ; p++)
         {
             if(sdata.vitalDatas[p].health>0 && p!=sdata.playerIndex){

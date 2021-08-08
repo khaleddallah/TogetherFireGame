@@ -5,13 +5,19 @@ using UnityEngine;
 
 public class Gold : MonoBehaviour
 {
-    public GameObject goldPS;
+    [SerializeField] private GameObject goldPS;
     Sdata sdata;
+
     void Start()
     {
         sdata = Sdata.sdata;
+        AdjustGoldObjectRotation();
+    }
+
+    
+    private void AdjustGoldObjectRotation(){
         float rotz = sdata.playerIndex*(-90);
-        transform.rotation = Quaternion.Euler( 0, 0, rotz);
+        transform.rotation = Quaternion.Euler( 0, 0, rotz);  
     }
 
 
@@ -33,4 +39,5 @@ public class Gold : MonoBehaviour
         }
 
     }
+
 }
