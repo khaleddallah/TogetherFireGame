@@ -14,13 +14,13 @@ public class EpisodeMngr : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private Wizard wizard;
     [SerializeField] private float machineGunShiftOffset;
-    [SerializeField] private Color epTimerColor;
-    [SerializeField] private float timeBeforeEpisode = 3;
     [SerializeField] private GameObject middleSign;
 
 
     public int actionMove = 0;
     public int actionFire = 0;
+    public Color epTimerColor;
+    public float timeBeforeEpisode = 3;
 
 
 
@@ -56,8 +56,8 @@ public class EpisodeMngr : MonoBehaviour
     }
 
     IEnumerator PostSubmit_FillData_PerformAll() {
-        msg = BuildPlayerDataMsg();
-        route = "submit";
+        string msg = BuildPlayerDataMsg();
+        string route = "submit";
         UnityWebRequest www = PostRequest(msg, route);
         yield return www.SendWebRequest();
         if (www.result != UnityWebRequest.Result.Success) {
@@ -73,7 +73,7 @@ public class EpisodeMngr : MonoBehaviour
         }
     }
 
-    private void BuildPlayerDataMsg() {
+    private string BuildPlayerDataMsg() {
         string msg = "{";
         msg+= "\"pindex\":";
         msg+= "\""+sdata.playerIndex.ToString()+"\"" ;
@@ -106,7 +106,7 @@ public class EpisodeMngr : MonoBehaviour
         DownloadHandlerBuffer downloadHandlerBuffer = new DownloadHandlerBuffer();
         UploadHandlerRaw uploadHandlerRaw = new UploadHandlerRaw(jsonBinary);
         uploadHandlerRaw.contentType = "application/json";
-        UnityWebRequest www = new UnityWebRequest(longTermData.serverURL+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
+        UnityWebRequest www = new UnityWebRequest(LongTermData.longTermData.serverURL+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
         return www;
     }
 
@@ -215,7 +215,7 @@ public class EpisodeMngr : MonoBehaviour
         int checklose  = GM.gm.checkLose();
         if(checklose==1){
             yield return new WaitForSeconds(2);
-            GM.gm.middleSignOff();
+            middleSignOff();
         }
         else if(checklose==2){
             yield return new WaitForSeconds(1);
@@ -251,6 +251,10 @@ public class EpisodeMngr : MonoBehaviour
     }
         
 
+    private void middleSignOff(){
+        middleSign.SetActive(false);
+    }
+
     public IEnumerator move(GameObject playerObj, Vector3 dest) {
         Vector3 movementDir =  (dest-playerObj.transform.position).normalized;         
         float distance = Vector3.Distance(dest, playerObj.transform.position);
@@ -266,26 +270,25 @@ public class EpisodeMngr : MonoBehaviour
         actionMove-=1;
     }
 
-
     public IEnumerator fire(int parent, GameObject playerObj, Vector3 dest, GameObject bullet) {
         if(bullet.transform.name=="MachineGun"){
             for(int b=-1; b<2 ;b++){                            
                 Vector3 distortion = GetMachineGunDistoredDestination(playerObj, dest, b);
-                CreateBullet(playerObj, distortion, parent);
+                CreateBullet(playerObj, distortion, parent, bullet);
             }
         }
         else{
-            CreateBullet(playerObj, dest, parent);
+            CreateBullet(playerObj, dest, parent, bullet);
         }
         yield return null;
     }
 
-    private void CreateBullet(GameObject parent, Vector3 dest, int parentIndex){
+    private void CreateBullet(GameObject parent, Vector3 dest, int parentIndex, GameObject bullet){
         actionFire+=1;
         GameObject x = Instantiate(bullet) as GameObject;
         x.transform.position = parent.transform.position;
-        x.GetComponent<BulletData>().dest = dest;
-        x.GetComponent<BulletData>().myparent = parentIndex;
+        x.GetComponent<BulletData>().destination = dest;
+        x.GetComponent<BulletData>().myParent = parentIndex;
     }
 
     private Vector3 GetMachineGunDistoredDestination(GameObject playerObj, Vector3 dest, int b){

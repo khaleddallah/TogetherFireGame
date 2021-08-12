@@ -395,7 +395,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 2
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 1050850345}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -497,7 +497,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 2
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 1050850345}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -1001,14 +1001,14 @@ MonoBehaviour:
   gunWindow: {fileID: 826613395}
   submitButton: {fileID: 1152128184}
   resetButton: {fileID: 477457472}
-  helpText: {fileID: 1123887805}
-  winLoseSign: {fileID: 1456872701}
+  middleSign: {fileID: 1456872701}
   episodeMngr: {fileID: 1610572438}
-  fireButtonS: {fileID: 1346994166}
-  GoldParent: {fileID: 0}
-  DiamondParent: {fileID: 0}
-  StoneParent: {fileID: 0}
-  PlayersParent: {fileID: 0}
+  fireButtonsParent: {fileID: 1346994166}
+  GoldParent: {fileID: 1885673809}
+  DiamondParent: {fileID: 895910427}
+  StoneParent: {fileID: 622007661}
+  PlayersParent: {fileID: 1916517903}
+  helpText: {fileID: 1123887805}
 --- !u!4 &158372135
 Transform:
   m_ObjectHideFlags: 0
@@ -1397,29 +1397,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetsParent: {fileID: 416000188}
-  actionSelectingUnit: {fileID: 0}
-  ActionParent: {fileID: 0}
   fireTarget: {fileID: 6645335236289857594, guid: 4989b9c4da99870d9b66d166056cb452, type: 3}
-  chrcParent: {fileID: 1916517903}
-  lrobjcet: {fileID: 7467348286798453960, guid: 325afec7442fffb3b9a8c9d85f38be11, type: 3}
-  circle0: {fileID: 5831123572180209229, guid: c87ce4bef650e1a4d9411353cc1b4615, type: 3}
-  circleGrenade: {fileID: 5831123572180209229, guid: c87ce4bef650e1a4d9411353cc1b4615, type: 3}
-  circlePistol: {fileID: 5831123572180209229, guid: cee144249dbb0a5a0b576de72d4828c7, type: 3}
-  lcParent: {fileID: 964956009}
-  layerMove:
-    serializedVersion: 2
-    m_Bits: 44
-  layerFire:
-    serializedVersion: 2
-    m_Bits: 108
-  currentPos: {x: 0, y: 0, z: 0}
-  fireLines: {r: 0.745283, g: 0.14571258, b: 0, a: 0.6862745}
-  fireLineFinal: {r: 1, g: 0.0956518, b: 0, a: 0.44705883}
-  moveLines: {r: 0.34394217, g: 0, b: 1, a: 0.8235294}
-  moveLineFinal: {r: 0, g: 0.6768575, b: 1, a: 0.46666667}
-  moveError: 0
-  swordTarget: {fileID: 595415285}
+  charactersParent: {fileID: 1916517903}
+  lineRendererObject: {fileID: 7467348286798453960, guid: 325afec7442fffb3b9a8c9d85f38be11, type: 3}
+  circleMarker: {fileID: 5831123572180209229, guid: 0595332ba2ccf2efc9f36135a5fd8678, type: 3}
+  circleGrenadeMarker: {fileID: 5831123572180209229, guid: c87ce4bef650e1a4d9411353cc1b4615, type: 3}
+  circlePistolMarker: {fileID: 5831123572180209229, guid: cee144249dbb0a5a0b576de72d4828c7, type: 3}
+  markersParent: {fileID: 964956009}
+  fireLinesTempMarkerColor: {r: 0, g: 0.8867924, b: 0.018383224, a: 1}
+  fireLineFinalMarkerColor: {r: 0.6226415, g: 0.1321645, b: 0.1321645, a: 0.5803922}
+  moveLinesTempMarkerColor: {r: 0, g: 0.8396226, b: 0.53115356, a: 1}
+  moveLineFinalMarkerColor: {r: 0.687191, g: 0.59527415, b: 0.8584906, a: 0.56078434}
+  swordTargetMarker: {fileID: 595415285}
+  circleMarkerZoffset: -0.03
   radiousEnv: 4.3
+  moveLayersFiltered:
+    serializedVersion: 2
+    m_Bits: 8
+  fireLayersFiltered:
+    serializedVersion: 2
+    m_Bits: 72
 --- !u!4 &248834412
 Transform:
   m_ObjectHideFlags: 0
@@ -1432,7 +1429,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &260410696
 GameObject:
@@ -2488,7 +2485,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 158372134}
         m_TargetAssemblyTypeName: Wizard, Assembly-CSharp
-        m_MethodName: resetActionS
+        m_MethodName: ResetActions
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3591,7 +3588,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3696142139761442168, guid: ad3cb80faa0f058649802374cf864e65, type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 3696142139761442168, guid: ad3cb80faa0f058649802374cf864e65, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3637,6 +3634,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ENV
       objectReference: {fileID: 0}
+    - target: {fileID: 3696142139761442169, guid: ad3cb80faa0f058649802374cf864e65, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6656642413333279650, guid: ad3cb80faa0f058649802374cf864e65, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
@@ -3655,6 +3656,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad3cb80faa0f058649802374cf864e65, type: 3}
+--- !u!1 &622007661 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3696142139410853006, guid: ad3cb80faa0f058649802374cf864e65, type: 3}
+  m_PrefabInstance: {fileID: 622007660}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &650610052
 GameObject:
   m_ObjectHideFlags: 0
@@ -3818,11 +3824,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f16aacb0982203b6b956920ebd990854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireButtonS: {fileID: 1346994166}
-  ActionParent: {fileID: 0}
+  gunTypeButtonsParent: {fileID: 1346994166}
   gunTypeObj: {fileID: 3505746068904520643, guid: 6e093c73b040efd6a9f0e633307e4cc3, type: 3}
   colorAfterPressed: {r: 1, g: 0.7090996, b: 0, a: 1}
-  fireIcon: {fileID: 21300000, guid: ea2f7551a04592a44a2c6a30c138e803, type: 3}
 --- !u!114 &697058297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4236,7 +4240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93a74e4c51c41a8be89183740f3cc2dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridLen: 0.35
+  gridCellSize: 0.7
   maxRadius: 7
   actionIndex: 0
   playerIndex: 3
@@ -4245,7 +4249,7 @@ MonoBehaviour:
   vitalDatas: []
   participantNum: 4
   actionsNum: 2
-  howmplayerstarted: 0
+  howMuchPlayersStarted: 0
   gamePlayMode: ai
 --- !u!4 &720184894
 Transform:
@@ -4424,11 +4428,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f16aacb0982203b6b956920ebd990854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireButtonS: {fileID: 1346994166}
-  ActionParent: {fileID: 0}
+  gunTypeButtonsParent: {fileID: 1346994166}
   gunTypeObj: {fileID: 7882955963165368079, guid: f15ff0909bb980412ab81124ccc95df1, type: 3}
   colorAfterPressed: {r: 1, g: 0.7090996, b: 0, a: 1}
-  fireIcon: {fileID: 21300000, guid: d8bc1d651b9bd3fb6ac5cd4a1e278950, type: 3}
 --- !u!114 &752194697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6347,7 +6349,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 28
+  field of view: 32
   orthographic: 0
   orthographic size: 3.5
   m_Depth: -1
@@ -6433,11 +6435,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f16aacb0982203b6b956920ebd990854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireButtonS: {fileID: 1346994166}
-  ActionParent: {fileID: 0}
+  gunTypeButtonsParent: {fileID: 1346994166}
   gunTypeObj: {fileID: 346066025382910608, guid: 217a18fc65f04f236938d8649e40ddab, type: 3}
   colorAfterPressed: {r: 1, g: 0.7090996, b: 0, a: 1}
-  fireIcon: {fileID: 21300000, guid: 134ea574a6b9e07a8a66bc050e3ab047, type: 3}
 --- !u!114 &1064946808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6496,7 +6496,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 248834411}
         m_TargetAssemblyTypeName: TargetAssignHelper, Assembly-CSharp
-        m_MethodName: PistolMarkers
+        m_MethodName: DrawPistolMarkers
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6894,10 +6894,10 @@ RectTransform:
   m_Father: {fileID: 1014280991}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 238.13881, y: -195.96466}
-  m_SizeDelta: {x: 404.4524, y: 86.0707}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -202.22, y: 57.16}
+  m_SizeDelta: {x: 404.4524, y: 86.07071}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1123887805
 MonoBehaviour:
@@ -7365,7 +7365,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 2
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 1050850345}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -7814,12 +7814,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1249326746}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60ec286849349d2739d4fdc3a6759c75, type: 3}
+  m_Script: {fileID: 11500000, guid: 5eb097ffde6b5cfb49960ab58688f570, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   serverURL: http://0.0.0.0:5000/
   myName: khaled
-  playerIndex: 1
+  playerIndex: 0
 --- !u!4 &1249326748
 Transform:
   m_ObjectHideFlags: 0
@@ -9074,7 +9074,7 @@ GameObject:
   - component: {fileID: 1456872703}
   - component: {fileID: 1456872705}
   m_Layer: 5
-  m_Name: Notification Wide Text
+  m_Name: Middle Sign
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10795,22 +10795,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1acf3d456e2f52b69af8bc20485822e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayersNames: {fileID: 0}
   PlayersParent: {fileID: 1916517903}
-  winLoseSign: {fileID: 1456872701}
-  waitingUI: {fileID: 0}
-  submitTimeRef: 10000
-  submitTime: 0
-  SubmitTimeText: {fileID: 1495579428}
-  ActionsUnit: {fileID: 0}
-  firstSceneName: First
-  money: {fileID: 0}
-  gold: {fileID: 1615004001}
-  health: {fileID: 0}
+  middleSign: {fileID: 1456872701}
   GoldParent: {fileID: 1885673809}
+  wizard: {fileID: 158372133}
+  SubmitTimeText: {fileID: 1495579428}
+  goldText: {fileID: 1615004001}
   loseColor: {r: 1, g: 0, b: 0.2939663, a: 0.9137255}
   winColor: {r: 0.6167408, g: 0.8773585, b: 0, a: 1}
-  wizard: {fileID: 158372133}
+  firstSceneName: First
+  submitTimeRef: 10000
 --- !u!114 &1610572438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10823,28 +10817,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b182061c24143ff4a5ec345d8b15cec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionSelectingUnit: {fileID: 0}
-  targetsParent: {fileID: 416000188}
-  actionTime: 1
   playersParent: {fileID: 1916517903}
-  gunTypesObjs:
-  - {fileID: 3505746068904520643, guid: 6e093c73b040efd6a9f0e633307e4cc3, type: 3}
-  - {fileID: 8028529909031204358, guid: a9105a24aea50cc65b99c80973d189d9, type: 3}
-  - {fileID: 346066025382910608, guid: 217a18fc65f04f236938d8649e40ddab, type: 3}
-  - {fileID: 7882955963165368079, guid: f15ff0909bb980412ab81124ccc95df1, type: 3}
-  ActionParent: {fileID: 0}
-  SubmitButton: {fileID: 0}
-  ActionNumUI: {fileID: 860998944}
+  gunTypesObjects: []
   ai: {fileID: 1811598033}
+  moveSpeed: 4
+  wizard: {fileID: 158372134}
+  machineGunShiftOffset: 1
+  middleSign: {fileID: 1456872701}
   actionMove: 0
   actionFire: 0
-  timeBeforeEp: 3
-  winLoseSign: {fileID: 1456872701}
   epTimerColor: {r: 0.72156864, g: 0, b: 1, a: 0.9372549}
-  swordTarget: {fileID: 595415285}
-  wizard: {fileID: 158372134}
-  moveSpeed: 4
-  machineGunOffset: 0.15
+  timeBeforeEpisode: 3
 --- !u!82 &1610572439
 AudioSource:
   m_ObjectHideFlags: 0
@@ -12483,11 +12466,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f16aacb0982203b6b956920ebd990854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireButtonS: {fileID: 1346994166}
-  ActionParent: {fileID: 0}
+  gunTypeButtonsParent: {fileID: 1346994166}
   gunTypeObj: {fileID: 8028529909031204358, guid: a9105a24aea50cc65b99c80973d189d9, type: 3}
   colorAfterPressed: {r: 1, g: 0.7090996, b: 0, a: 1}
-  fireIcon: {fileID: 21300000, guid: 1b8c61ffb8dddc132b9c98706daed4c5, type: 3}
 --- !u!114 &1779366753
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12546,7 +12527,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 248834411}
         m_TargetAssemblyTypeName: TargetAssignHelper, Assembly-CSharp
-        m_MethodName: PistolMarkers
+        m_MethodName: DrawPistolMarkers
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12823,21 +12804,11 @@ MonoBehaviour:
   StoneParent: {fileID: 1239951228}
   DiamondParent: {fileID: 895910427}
   PlayersParent: {fileID: 1916517903}
-  golds: []
-  stones: []
-  diamonds: []
-  players: []
-  guns:
+  gunsTypesObjects:
   - {fileID: 8028529909031204358, guid: a9105a24aea50cc65b99c80973d189d9, type: 3}
   - {fileID: 346066025382910608, guid: 217a18fc65f04f236938d8649e40ddab, type: 3}
   - {fileID: 3505746068904520643, guid: 6e093c73b040efd6a9f0e633307e4cc3, type: 3}
   - {fileID: 7882955963165368079, guid: f15ff0909bb980412ab81124ccc95df1, type: 3}
-  layerMove:
-    serializedVersion: 2
-    m_Bits: 0
-  layerFire:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!1 &1819133840
 GameObject:
   m_ObjectHideFlags: 0
@@ -12867,7 +12838,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1819133842
 MonoBehaviour:
@@ -12882,16 +12853,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 1050850345}
-  line: {fileID: 6091801372787796978, guid: 0d6351722154c895fb5958b8e18e5b60, type: 3}
-  PlayersParent: {fileID: 1916517903}
-  gold: {fileID: 676349216899197934, guid: 55110e3971aa012d3bcc3adb840974c3, type: 3}
-  GoldParent: {fileID: 1885673809}
-  stone: {fileID: 6865145919204624713, guid: a6b7c4a09453756e1b96089e31603549, type: 3}
-  StoneParent: {fileID: 1239951228}
-  diamond: {fileID: 5887408850899285984, guid: d710ddb574c6ca5a3b36e000d15eaebb, type: 3}
-  DiamondParent: {fileID: 895910427}
-  offsetCamShift: 10.2
-  offsetCamRot: 43
+  lineObject: {fileID: 6091801372787796978, guid: 0d6351722154c895fb5958b8e18e5b60, type: 3}
+  playersParent: {fileID: 1916517903}
+  goldObject: {fileID: 676349216899197934, guid: 55110e3971aa012d3bcc3adb840974c3, type: 3}
+  goldParent: {fileID: 1885673809}
+  stoneObject: {fileID: 6865145919204624713, guid: a6b7c4a09453756e1b96089e31603549, type: 3}
+  stoneParent: {fileID: 622007661}
+  diamondObject: {fileID: 5887408850899285984, guid: d710ddb574c6ca5a3b36e000d15eaebb, type: 3}
+  diamoneParent: {fileID: 895910427}
+  offsetCameraShift: 9.2
+  offsetCameraRotation: 40
+  playerPositionOffset: 6
 --- !u!1 &1833233433
 GameObject:
   m_ObjectHideFlags: 0
@@ -13249,7 +13221,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 2
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 1050850345}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -13590,7 +13562,7 @@ Transform:
   - {fileID: 1598706070}
   - {fileID: 523795386}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1921903755
 GameObject:

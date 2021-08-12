@@ -15,8 +15,6 @@ public class TargetAssignHelper : MonoBehaviour
     [SerializeField] private GameObject circleGrenadeMarker;
     [SerializeField] private GameObject circlePistolMarker;
     [SerializeField] private GameObject markersParent;
-    [SerializeField] private LayerMask moveLayersFiltered;
-    [SerializeField] private LayerMask fireLayersFiltered;
     [SerializeField] private Color fireLinesTempMarkerColor;
     [SerializeField] private Color fireLineFinalMarkerColor;
     [SerializeField] private Color moveLinesTempMarkerColor;
@@ -27,6 +25,9 @@ public class TargetAssignHelper : MonoBehaviour
     
     public static TargetAssignHelper tah;
     public float radiousEnv;
+    public LayerMask moveLayersFiltered;
+    public LayerMask fireLayersFiltered;
+
 
     private const int MOVE_ACTION_INDEX = 0;
     private Sdata sdata;
@@ -51,6 +52,7 @@ public class TargetAssignHelper : MonoBehaviour
     {
         sdata = Sdata.sdata;
         myCharacter = charactersParent.transform.GetChild(sdata.playerIndex).transform.GetChild(0).gameObject;
+        Debug.Log("myCharacter:"+myCharacter.transform.position);
         vhStep = sdata.gridCellSize;
         slStep = Mathf.Sqrt(2*Mathf.Pow(vhStep,2));
     }
@@ -82,8 +84,6 @@ public class TargetAssignHelper : MonoBehaviour
             Destroy(child.gameObject);
         }
     }
-
-
 
 
     // ======= Grenade =========
@@ -125,7 +125,8 @@ public class TargetAssignHelper : MonoBehaviour
         // Draw lines & points
         for(int x=-1 ; x<=1 ; x++){
             for(int y=-1 ; y<=1 ; y++){
-                distance = RaycastToDirection(x, y, fireLayersFiltered);
+                RaycastHit2D hit = RaycastToDirection(x, y, fireLayersFiltered);
+                float distance = hit.distance;
                 if(distance>vhStep){
                     Vector3 lastPoint = currentPosition+(new Vector3(x, y, 0)*vhStep);
                     CreateLineRenderer(fireLinesTempMarkerColor, 0.05f, lastPoint, markersParent);
@@ -152,8 +153,13 @@ public class TargetAssignHelper : MonoBehaviour
     // ===== move =====
     public void DrawMoveMarkers(){
         DestroyMarkers();
+        SetCurrentPosition();
+        DrawMoveLinesPointsMarkers();
+    }
+
+    private void SetCurrentPosition(){
+        myCharacter = charactersParent.transform.GetChild(sdata.playerIndex).transform.GetChild(0).gameObject;
         currentPosition = myCharacter.transform.position;
-        MoveLinesPointsMarkers();
     }
 
     private void DrawMoveLinesPointsMarkers(){
@@ -166,11 +172,14 @@ public class TargetAssignHelper : MonoBehaviour
     }
 
     private void PutMoveMarkersOnDirection(int x, int y){
-        float distance = RaycastToDirection(x, y, moveLayersFiltered);
-        distance += isHitGold() ? vhStep : 0.0f; 
-        if(distance>vhStep){
+        RaycastHit2D hit = RaycastToDirection(x, y, moveLayersFiltered);
+        float distance = hit.distance;
+        Debug.Log("distance("+x+","+y+"):"+distance);
+        distance += CheckHitGold(hit) ? vhStep : 0.0f;
+        Debug.Log("distance*"+distance);
+        if(distance>=vhStep){
             float NumOfPoints = GetNumOfPoints(distance, x, y);
-            Vecotr3 lastPoint = currentPosition+new Vector3(x, y, 0)*(NumOfPoints-1)*vhStep;
+            Vector3 lastPoint = currentPosition+new Vector3(x, y, 0)*(NumOfPoints)*vhStep;
             CreateLineRenderer(moveLinesTempMarkerColor, 0.05f, lastPoint, markersParent);
 
             for(int p=1; p<=NumOfPoints; p++){
@@ -180,31 +189,32 @@ public class TargetAssignHelper : MonoBehaviour
         }
     }
 
-    private float RaycastToDirection(int x, int y, LayerMask LayersFiltered){
+    private RaycastHit2D RaycastToDirection(int x, int y, LayerMask LayersFiltered){
         Vector3 dir = new Vector3(x,y,0f);
         RaycastHit2D hit;
         hit=Physics2D.Raycast(currentPosition, dir, Mathf.Infinity, ~LayersFiltered);
-        return hit.distance;
+        return hit;
     }
 
     private int GetNumOfPoints(float distance, int x, int y){
         int NumOfPoints=0;
         if(x==0 || y==0){
-            NumOfPoints = Mathf.Floor(distance/vhStep);
+            NumOfPoints = Mathf.FloorToInt(distance/vhStep);
         }
         else{
-            NumOfPoints = Mathf.Floor(distance/slStep);
+            NumOfPoints = Mathf.FloorToInt(distance/slStep);
         }
         Vector3 initialLastPoint = currentPosition+(new Vector3(x, y, 0)*vhStep*NumOfPoints);
-        NumOfPoints = isOutOfCircle(initialLastPoint) ? NumOfPoints-1 : NumOfPoints;
+        
+        NumOfPoints = CheckOutOfCircle(initialLastPoint) ? NumOfPoints-1 : NumOfPoints;
         return NumOfPoints;
     }
 
-    private bool isHitGold(){
+    private bool CheckHitGold(RaycastHit2D hit){
         return hit.distance>0 && hit.collider.gameObject.CompareTag("Gold");
     }
 
-    private bool isOutOfCircle(Vector3 posTemp){
+    private bool CheckOutOfCircle(Vector3 posTemp){
         return Vector3.Distance(Vector3.zero, posTemp)>=radiousEnv;
     }
 
@@ -238,7 +248,7 @@ public class TargetAssignHelper : MonoBehaviour
             SetFinalMoveMarker(pos0);
         }
 
-        else if (CheckIfFireAndNotSword()){
+        else if (CheckFireExceptSword()){
             SetFinalFireTarget(pos0);
         }
 
@@ -252,7 +262,7 @@ public class TargetAssignHelper : MonoBehaviour
 
     private void SetFinalMoveMarker(Vector3 pos0){
         GameObject x = CopyMyCharacterSprite(pos0);
-        CreateLineRenderer(moveLineFinalMarkerColor, 0.1f, pos0, x)
+        CreateLineRenderer(moveLineFinalMarkerColor, 0.1f, pos0, x);
         sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].target = pos0;
         sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].targetObj = x;
     }
@@ -265,7 +275,6 @@ public class TargetAssignHelper : MonoBehaviour
     }
     private GameObject CopyMyCharacterSprite(Vector3 pos0){
         GameObject x = Instantiate(myCharacter) as GameObject;
-        Destroy(x.GetComponent<PlayerReaction>());
         Destroy(x.GetComponent<BoxCollider2D>());
         Destroy(x.GetComponent<Rigidbody2D>());
         DestoyMyChilds(x);
@@ -285,15 +294,15 @@ public class TargetAssignHelper : MonoBehaviour
         }   
     }
 
-    private GameObect CreateFireTarget(Vector3 pos){
+    private GameObject CreateFireTarget(Vector3 pos){
         GameObject x = Instantiate(fireTarget) as GameObject;
-        x.transform.position = pos0;
+        x.transform.position = pos;
         return x;
     }
 
     private bool CheckFireExceptSword(){
-        isFire = sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].type=="fire";
-        isSword = sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].gunTypeObj.transform.name=="Sword"
+        bool isFire = sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].type=="fire";
+        bool isSword = sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].gunTypeObj.transform.name=="Sword";
         return isFire && !isSword;
     }
 

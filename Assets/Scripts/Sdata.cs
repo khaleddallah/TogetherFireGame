@@ -14,8 +14,8 @@ public class Sdata : MonoBehaviour
     public int actionIndex = 0;
     public int playerIndex;
     public int episodeIndex = -1;
-    public List<Episode> episodes = new List<Episode>(); 
-    public List<VitalData> vitalDatas = new List<VitalData>(); 
+    public List<Episode> episodes; 
+    public List<VitalData> vitalDatas; 
     public int participantNum = 4;
     public int actionsNum = 3;
     public int howMuchPlayersStarted = 0;
@@ -30,12 +30,16 @@ public class Sdata : MonoBehaviour
             sdata = this;
         }
 
-        SetSomeInitialValues();
         DontDestroyOnLoad(this);
     }
 
+    void Start(){
+        SetSomeInitialValues();
+    }
+
     private void SetSomeInitialValues(){
-        // have to get this from the server
+        episodes = new List<Episode>(); 
+        vitalDatas = new List<VitalData>();
         sdata.playerIndex=0;
 
         // set players health & golds

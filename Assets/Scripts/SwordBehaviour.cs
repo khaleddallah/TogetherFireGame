@@ -16,7 +16,7 @@ public class SwordBehaviour : MonoBehaviour
     Coroutine coroutineFire;
     bool active;
     Sdata sdata;
-    int myparent;
+    int myParent;
 
     
 
@@ -25,8 +25,8 @@ public class SwordBehaviour : MonoBehaviour
         sdata = Sdata.sdata;
         active = true;
         destination = GetComponent<BulletData>().destination;
-        myparent = GetComponent<BulletData>().myparent;
-        barriers = new List<string>()
+        myParent = GetComponent<BulletData>().myParent;
+        barriers = new List<string>();
         coroutineFire = StartCoroutine(fire());
     }
 
@@ -57,8 +57,8 @@ public class SwordBehaviour : MonoBehaviour
 
         if(other.gameObject.CompareTag("Player")){
             int plind= int.Parse(other.transform.name[1].ToString());
-            if(plind != myparent){
-                ShowBlood();
+            if(plind != myParent){
+                ShowBlood(other.gameObject);
                 sdata.vitalDatas[plind].health-=healthDecreaseValue;
                 // Disable chrc if died
                 if(sdata.vitalDatas[plind].health<=0){
@@ -78,7 +78,7 @@ public class SwordBehaviour : MonoBehaviour
         }
     }
 
-    private void ShowBlood(){
+    private void ShowBlood(GameObject other){
         GameObject blood = Instantiate(bloodParticleSystemObject) as GameObject;
         blood.transform.position = other.transform.position;
 
@@ -91,7 +91,7 @@ public class SwordBehaviour : MonoBehaviour
             Debug.Log("!! destinationroy :: "+gameObject.transform.name);
             StopCoroutine(coroutineFire); 
             GM.gm.transform.gameObject.GetComponent<EpisodeMngr>().actionFire-=1; // complete to the other action
-            destinationroy(gameObject);
+            Destroy(gameObject);
         }
     }
 

@@ -12,7 +12,7 @@ public class GunBullet : MonoBehaviour
     [SerializeField] private GameObject bloodObject;
     [SerializeField] private GameObject fireParticleSystemObject;
     [SerializeField] private float fireParticleSystemWaitTime;
-
+    [SerializeField] private float fireParticleSystemAngleOffset;
 
     private Vector3 destination;
     private int myParent;
@@ -22,6 +22,8 @@ public class GunBullet : MonoBehaviour
     private bool isLaunched;
     private float SwordMaxAngle;
     private Vector3 movementDirection;
+    private SpriteRenderer spriteRenderer;
+
 
     void Start()
     {
@@ -31,14 +33,17 @@ public class GunBullet : MonoBehaviour
         destination = GetComponent<BulletData>().destination;
         myParent = GetComponent<BulletData>().myParent;
         coroutineFire = StartCoroutine(Fire());
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.enabled = false;
     }
 
 
     public IEnumerator Fire(){
-        RotateBullet();
-        InstantiateFireParticleSystem();
+        float rotz = RotateBullet();
+        InstantiateFireParticleSystem(rotz);
         yield return new WaitForSeconds(fireParticleSystemWaitTime);
 
+        spriteRenderer.enabled = true;
         transform.position += movementDirection * launchSpeed;
         while (isActive) {
             transform.position += Time.deltaTime * movementDirection * speed;
@@ -59,10 +64,10 @@ public class GunBullet : MonoBehaviour
         return (isActive && angle<=SwordMaxAngle); 
     }
 
-    void InstantiateFireParticleSystem(){
+    void InstantiateFireParticleSystem(float rotz){
         GameObject fireParticleSystem = Instantiate(fireParticleSystemObject) as GameObject;
         fireParticleSystem.transform.position = transform.position;
-        fireParticleSystem.transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotz);
+        fireParticleSystem.transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotz-fireParticleSystemAngleOffset);
     }
 
 
@@ -77,10 +82,11 @@ public class GunBullet : MonoBehaviour
         }
     }
     
-    void RotateBullet(){
+    float RotateBullet(){
         movementDirection =  (destination-transform.position).normalized;
         float rotz = Mathf.Atan2(movementDirection.y,movementDirection.x)*Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0.0f, 0.0f, rotz-90);
+        return rotz;
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -134,7 +140,7 @@ public class GunBullet : MonoBehaviour
                 sdata.vitalDatas[plind].health-=healthDecreaseValue;
                 // Disable chrc if died
                 if(sdata.vitalDatas[plind].health<=0){
-                    other.gameObject.SetisActive(false);
+                    other.gameObject.SetActive(false);
                 }
                 GM.gm.updataMGH();
                 DestroySpecial();

@@ -22,7 +22,7 @@ public class GM : MonoBehaviour
     [SerializeField] private string firstSceneName;
     [SerializeField] private int submitTimeRef;
 
-    private const string[] MIDDLE_SIGN_ANIMATIONS = {"waiting","epBefore"};
+    private readonly string[] MIDDLE_SIGN_ANIMATIONS = {"waiting","epBefore"};
     int submitTime;
     Coroutine submitTimerRoutine;
     Sdata sdata;
@@ -55,7 +55,7 @@ public class GM : MonoBehaviour
         sdata.vitalDatas[sdata.playerIndex].name = LongTermData.longTermData.myName;
 
         SetMiddleSignAnimation("waiting");
-        StartCoroutine(postIsStarted());
+        StartCoroutine(PostIsStarted_GetPlayers());
     }
 
 
@@ -125,7 +125,7 @@ public class GM : MonoBehaviour
         DownloadHandlerBuffer downloadHandlerBuffer = new DownloadHandlerBuffer();
         UploadHandlerRaw uploadHandlerRaw = new UploadHandlerRaw(jsonBinary);
         uploadHandlerRaw.contentType = "application/json";
-        UnityWebRequest www = new UnityWebRequest(longTermData.serverURL+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
+        UnityWebRequest www = new UnityWebRequest(LongTermData.longTermData.serverURL+route, "POST", downloadHandlerBuffer, uploadHandlerRaw);
         return www;
     }
 
@@ -277,7 +277,7 @@ public class GM : MonoBehaviour
     }
 
     public void StartCheckGoldWinner(){
-        StartCoroutine(CheckGoldWinner());
+        StartCoroutine(CheckGoldWinner_LoadFirstScene());
     }
 
 }

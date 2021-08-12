@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GridGenerator : MonoBehaviour
 {
-    [SerializeField] private Camera camera;
+    [SerializeField] private Camera cam;
     [SerializeField] private GameObject lineObject;
     [SerializeField] private GameObject playersParent;
     [SerializeField] private GameObject goldObject;
@@ -15,6 +15,8 @@ public class GridGenerator : MonoBehaviour
     [SerializeField] private GameObject diamoneParent;
     [SerializeField] private float offsetCameraShift;
     [SerializeField] private float offsetCameraRotation;
+    [SerializeField] private float playerPositionOffset;
+
     Sdata sdata;
 
     void Start()
@@ -45,10 +47,10 @@ public class GridGenerator : MonoBehaviour
     }
 
     private void AdjustPlayersPositions(){
-        playersParent.transform.GetChild(0).GetChild(0).transform.position = new Vector3(0f, -12*sdata.gridCellSize, 0f);
-        playersParent.transform.GetChild(1).GetChild(0).transform.position = new Vector3(-12*sdata.gridCellSize, 0f, 0f);
-        playersParent.transform.GetChild(2).GetChild(0).transform.position = new Vector3(0f, 12*sdata.gridCellSize, 0f);
-        playersParent.transform.GetChild(3).GetChild(0).transform.position = new Vector3(12*sdata.gridCellSize, 0f, 0f);
+        playersParent.transform.GetChild(0).GetChild(0).transform.position = new Vector3(0f, -1*playerPositionOffset*sdata.gridCellSize, 0f);
+        playersParent.transform.GetChild(1).GetChild(0).transform.position = new Vector3(-1*playerPositionOffset*sdata.gridCellSize, 0f, 0f);
+        playersParent.transform.GetChild(2).GetChild(0).transform.position = new Vector3(0f, playerPositionOffset*sdata.gridCellSize, 0f);
+        playersParent.transform.GetChild(3).GetChild(0).transform.position = new Vector3(playerPositionOffset*sdata.gridCellSize, 0f, 0f);
 
         for(int i=0 ; i<sdata.participantNum ; i++){
             if(i==sdata.playerIndex){
@@ -116,13 +118,13 @@ public class GridGenerator : MonoBehaviour
         float rotz = sdata.playerIndex*(-90);
 
 
-        Debug.Log("yangle:"+(-90*(sdata.playerIndex+1)));
-        Debug.Log("ysin"+Mathf.Sin((-90*(sdata.playerIndex+1))*Mathf.Deg2Rad));
-        Debug.Log("x:"+x+"  y:"+y);
-        Debug.Log("rotxyz"+rotx+","+roty+","+rotz);
+        // Debug.Log("yangle:"+(-90*(sdata.playerIndex+1)));
+        // Debug.Log("ysin"+Mathf.Sin((-90*(sdata.playerIndex+1))*Mathf.Deg2Rad));
+        // Debug.Log("x:"+x+"  y:"+y);
+        // Debug.Log("rotxyz"+rotx+","+roty+","+rotz);
 
-        camera.transform.position = new Vector3(x,y,-10f);
-        camera.transform.rotation = Quaternion.Euler( rotx, roty, rotz);
+        cam.transform.position = new Vector3(x,y,-10f);
+        cam.transform.rotation = Quaternion.Euler( rotx, roty, rotz);
 
         
         for(int i=0; i<sdata.participantNum; i++){

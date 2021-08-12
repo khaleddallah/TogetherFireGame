@@ -46,7 +46,6 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -99,8 +98,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54ebec0233ad888a8ab9cd318665b558, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dest: {x: 0, y: 0, z: 0}
-  myparent: 0
+  destination: {x: 0, y: 0, z: 0}
+  myParent: 0
 --- !u!114 &346066025382910613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,14 +113,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 7
-  offsetSpeeding: 1
-  healthDec: 50
+  launchSpeed: 1
+  healthDecreaseValue: 25
   barriers:
   - Block
-  dest: {x: 0, y: 0, z: 0}
-  bloodObj: {fileID: 8209141539923034503, guid: 4094d73b4729781b1a1c7809558b5b31, type: 3}
-  firePSObj: {fileID: 7276004562158544158, guid: c5f7ed50d9ea6e888a288a392d5bdf21, type: 3}
-  myparent: 0
+  bloodObject: {fileID: 8209141539923034503, guid: 4094d73b4729781b1a1c7809558b5b31, type: 3}
+  fireParticleSystemObject: {fileID: 7276004562158544158, guid: c5f7ed50d9ea6e888a288a392d5bdf21, type: 3}
+  fireParticleSystemWaitTime: 0.5
+  fireParticleSystemAngleOffset: 10
 --- !u!61 &346066025382910612
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -6,7 +6,7 @@ public class BulletData : MonoBehaviour
 {
     public Vector3 destination;
 
-    public int myparent;
+    public int myParent;
 
 
 

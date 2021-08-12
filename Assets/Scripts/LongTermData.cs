@@ -5,18 +5,18 @@ using UnityEngine;
 public class LongTermData : MonoBehaviour
 {
 
-    public static LongTermData ltd;
+    public static LongTermData longTermData;
     public string serverURL = "";
     public string myName = "";
     public int playerIndex;
 
     void Awake()
     {
-        if(ltd != null){
-            GameObject.Destroy(ltd.gameObject);
+        if(longTermData != null){
+            GameObject.Destroy(longTermData.gameObject);
         }
         else{
-            ltd = this;
+            longTermData = this;
         }
 
         DontDestroyOnLoad(this);

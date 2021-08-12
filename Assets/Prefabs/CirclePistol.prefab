@@ -45,7 +45,6 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -95,14 +94,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5831123572180209229}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d58df377e4bd0f0178a34cdc96a02797, type: 3}
+  m_Script: {fileID: 11500000, guid: 12b86f7f4c1769f49b533a567de0d7bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveTarget: {fileID: 5878772088525887277, guid: 0cd2f70e2492a40c69adb4e3a54701de, type: 3}
-  fireTarget: {fileID: 6645335236289857594, guid: 4989b9c4da99870d9b66d166056cb452, type: 3}
-  targetParent: {fileID: 0}
-  bigOffset: 1.6
-  stay: 0
+  zoomOffset: 1.5
 --- !u!95 &-4109684157327700162
 Animator:
   serializedVersion: 3

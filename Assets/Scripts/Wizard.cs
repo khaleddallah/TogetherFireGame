@@ -20,6 +20,7 @@ public class Wizard : MonoBehaviour
     Color defaultGunColor;
     Coroutine GetUserInputRoutine;
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -96,7 +97,7 @@ public class Wizard : MonoBehaviour
         middleSign.GetComponent<Animator>().SetBool("epBefore", true);
         middleSign.GetComponent<TextMeshProUGUI>().color = episodeMngr.epTimerColor;
 
-        float timeTempEp = episodeMngr.timeBeforeEp;
+        float timeTempEp = episodeMngr.timeBeforeEpisode;
         while(timeTempEp>0){
             middleSign.GetComponent<TextMeshProUGUI>().text = "Round "+(sdata.episodeIndex+1).ToString()+" starts in "+timeTempEp.ToString();
             yield return new WaitForSeconds(1);

@@ -17,7 +17,7 @@ public class GrenadeBehaviour : MonoBehaviour
     Coroutine coroutineFire;
     bool active;
     Sdata sdata;
-    int myparent;
+    int myParent;
 
 
 
@@ -27,8 +27,8 @@ public class GrenadeBehaviour : MonoBehaviour
         sdata = Sdata.sdata;
         active = true;
         destination = GetComponent<BulletData>().destination;
-        myparent = GetComponent<BulletData>().myparent;
-        barriers = new List<string>()
+        myParent = GetComponent<BulletData>().myParent;
+        barriers = new List<string>();
         coroutineFire = StartCoroutine(fire());
     }
 
@@ -97,7 +97,7 @@ public class GrenadeBehaviour : MonoBehaviour
             Debug.Log("!! destinationroy :: "+gameObject.transform.name);
             StopCoroutine(coroutineFire); 
             GM.gm.transform.gameObject.GetComponent<EpisodeMngr>().actionFire-=1; // complete to the other action
-            destinationroy(gameObject);
+            Destroy(gameObject);
         }
     }
 

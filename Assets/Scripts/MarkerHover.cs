@@ -6,10 +6,6 @@ using TMPro;
 
 public class MarkerHover : MonoBehaviour
 {
-
-    [SerializeField] private GameObject moveTarget;
-    [SerializeField] private GameObject fireTarget;
-    [SerializeField] private GameObject targetParent;
     [SerializeField] private float zoomOffset = 1.50f;
 
 

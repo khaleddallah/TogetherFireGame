@@ -22,8 +22,8 @@ public class AIPlayers : MonoBehaviour
         vhstep = sdata.gridCellSize;
         slstep = Mathf.Sqrt(2*Mathf.Pow(vhstep,2));
         
-        layerFire = TargetAssignHelper.tah.layerFire;
-        layerMove = TargetAssignHelper.tah.layerMove;
+        layerFire = TargetAssignHelper.tah.fireLayersFiltered;
+        layerMove = TargetAssignHelper.tah.moveLayersFiltered;
         radiousEnv = TargetAssignHelper.tah.radiousEnv;
        
         golds = new List<Vector3>();

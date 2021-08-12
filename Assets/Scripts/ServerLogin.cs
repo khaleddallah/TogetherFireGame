@@ -64,7 +64,7 @@ public class ServerLogin : MonoBehaviour
         }
         else {
             int data = int.Parse(www.downloadHandler.text);
-            Debug.Log("res:reg:",data);
+            Debug.Log("res:reg:"+data);
             if(data>=0){
                 longTermData.myName=nameInputField.text;
                 longTermData.playerIndex = data;
