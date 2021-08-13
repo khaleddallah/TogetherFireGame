@@ -4240,8 +4240,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93a74e4c51c41a8be89183740f3cc2dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridCellSize: 0.7
-  maxRadius: 7
+  gridCellSize: 0.5
+  maxRadius: 5
   actionIndex: 0
   playerIndex: 3
   episodeIndex: -1
@@ -6349,7 +6349,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 32
+  field of view: 50
   orthographic: 0
   orthographic size: 3.5
   m_Depth: -1
@@ -6374,13 +6374,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1050850343}
-  m_LocalRotation: {x: -0.38268343, y: 0, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: -9.2, z: -9.1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -9.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -45, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1064946805
 GameObject:
   m_ObjectHideFlags: 0
@@ -12861,8 +12861,8 @@ MonoBehaviour:
   stoneParent: {fileID: 622007661}
   diamondObject: {fileID: 5887408850899285984, guid: d710ddb574c6ca5a3b36e000d15eaebb, type: 3}
   diamoneParent: {fileID: 895910427}
-  offsetCameraShift: 9.2
-  offsetCameraRotation: 40
+  offsetCameraShift: 0
+  offsetCameraRotation: 0
   playerPositionOffset: 6
 --- !u!1 &1833233433
 GameObject:

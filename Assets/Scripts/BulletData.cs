@@ -8,7 +8,4 @@ public class BulletData : MonoBehaviour
 
     public int myParent;
 
-
-
-
 }
