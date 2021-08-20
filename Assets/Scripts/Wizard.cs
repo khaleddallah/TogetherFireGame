@@ -34,14 +34,23 @@ public class Wizard : MonoBehaviour
 
 
     public IEnumerator GetUserInput(){
+        TargetAssignHelper.tah.DestroyMarkers();
         ResetGunTypeColors();
         DisableUI();
         yield return new WaitUntil(() => !middleSign.activeSelf);
+
+        // ==== select ====
+        Debug.Log("Characters Selecting");
+        helpText.text = "Select Character";
+        TargetAssignHelper.tah.DrawSelectionMarkers();
+        yield return new WaitUntil(() => sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].characterIndex != -1 );
+
 
         // ==== move act ====
         Debug.Log("Move Selecting");
         SetActionNumType(0,"move");
         helpText.text = "please choose WHERE to MOVE";
+        resetButton.SetActive(true);
         TargetAssignHelper.tah.DrawMoveMarkers();
         yield return new WaitUntil(() => sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].target != new Vector3(-999f,-999f,-999f) );
 
@@ -79,6 +88,7 @@ public class Wizard : MonoBehaviour
     }
 
     public void ResetActions(){
+        sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].characterIndex= -1;
         for(int ind = 0 ; ind<sdata.actionsNum ; ind++){
             sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[ind].type="0"; // type of the action (move | fire)
             sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[ind].target = new Vector3 (-999f,-999f,-999f); // target of the action either move or fire

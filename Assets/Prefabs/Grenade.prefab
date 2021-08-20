@@ -168,4 +168,4 @@ MonoBehaviour:
   GrenadeEffect: {fileID: 7276004562158544158, guid: 0a2d1920ee609510195ff4039be8dbcd, type: 3}
   playersLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8

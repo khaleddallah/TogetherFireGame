@@ -8,7 +8,7 @@ using System;
 // the vidal data of single character
 [Serializable]
 public class VitalData{
-    public float health;
+    public List<float> health = new List<float>();
     public int golds;
     public string name;
 }
@@ -24,6 +24,7 @@ public class Episode{
 // the actionS of one character
 [Serializable]
 public class Roleplay{
+    public int characterIndex=-1;
     public List<Action> actions = new List<Action>();
 }
 

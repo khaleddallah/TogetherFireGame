@@ -7,7 +7,10 @@ public class GridGenerator : MonoBehaviour
     [SerializeField] private Camera cam;
     [SerializeField] private GameObject lineObject;
     [SerializeField] private GameObject playersParent;
-    [SerializeField] private GameObject goldObject;
+    [SerializeField] private GameObject goldObject1;
+    [SerializeField] private GameObject goldObject2;
+    [SerializeField] private GameObject goldObject3;
+
     [SerializeField] private GameObject goldParent;
     [SerializeField] private GameObject stoneObject;
     [SerializeField] private GameObject stoneParent;
@@ -15,13 +18,15 @@ public class GridGenerator : MonoBehaviour
     [SerializeField] private GameObject diamoneParent;
     [SerializeField] private float offsetCameraShift;
     [SerializeField] private float offsetCameraRotation;
-    [SerializeField] private float playerPositionOffset;
+    [SerializeField] private int playerPositionOffset;
+    [SerializeField] private List<GameObject> playersTemplates;
 
     Sdata sdata;
 
     void Start()
     {
         sdata = Sdata.sdata;
+        playerPositionOffset = Mathf.FloorToInt(sdata.maxRadius/sdata.gridCellSize)-2;
         GenerateGrid();
         AdjustPlayersPositions();
         Camera_Players_Adjusting();
@@ -47,17 +52,39 @@ public class GridGenerator : MonoBehaviour
     }
 
     private void AdjustPlayersPositions(){
-        playersParent.transform.GetChild(0).GetChild(0).transform.position = new Vector3(0f, -1*playerPositionOffset*sdata.gridCellSize, 0f);
-        playersParent.transform.GetChild(1).GetChild(0).transform.position = new Vector3(-1*playerPositionOffset*sdata.gridCellSize, 0f, 0f);
-        playersParent.transform.GetChild(2).GetChild(0).transform.position = new Vector3(0f, playerPositionOffset*sdata.gridCellSize, 0f);
-        playersParent.transform.GetChild(3).GetChild(0).transform.position = new Vector3(playerPositionOffset*sdata.gridCellSize, 0f, 0f);
+        int i = 0;
+        int x = -1; 
+        int y = -1;
+        foreach (Transform player in playersParent.transform)
+        {
+            player.gameObject.SetActive(false);
+        }
 
-        for(int i=0 ; i<sdata.participantNum ; i++){
-            if(i==sdata.playerIndex){
-                playersParent.transform.GetChild(i).GetChild(0).GetChild(1).gameObject.SetActive(true);
+        while(i<sdata.participantNum){
+            if(y<=1){
+                // playersParent.transform.GetChild(i).GetChild(0).transform.position = new Vector3(0f, y*playerPositionOffset*sdata.gridCellSize, 0f);      
+                // playersParent.transform.GetChild(i).gameObject.SetActive(true);
+                for(int c = 0; c<sdata.charactersNum; c++){
+                    GameObject g = CreateObject(2*(c-1), y*playerPositionOffset, playersTemplates[i], playersParent.transform.GetChild(i).gameObject);
+                    g.transform.name = "P"+i.ToString()+c.ToString();
+                }
+
+                y+=2;
+                i++;
+                continue;
             }
-            else{
-                playersParent.transform.GetChild(i).GetChild(0).GetChild(1).gameObject.SetActive(false);
+            if(x<=1){
+                // playersParent.transform.GetChild(i).GetChild(0).transform.position = new Vector3(x*playerPositionOffset*sdata.gridCellSize, 0f, 0f);      
+                // playersParent.transform.GetChild(i).gameObject.SetActive(true);
+                // CreateObject(x*playerPositionOffset, -2, playersParent.transform.GetChild(i).GetChild(0).gameObject, playersParent.transform.GetChild(i).gameObject);
+                // CreateObject(x*playerPositionOffset, +2, playersParent.transform.GetChild(i).GetChild(0).gameObject, playersParent.transform.GetChild(i).gameObject);
+                for(int c = 0; c<sdata.charactersNum; c++){
+                    GameObject g = CreateObject(x*playerPositionOffset, 2*(c-1), playersTemplates[i], playersParent.transform.GetChild(i).gameObject);
+                    g.transform.name = "P"+i.ToString()+c.ToString();
+                }
+
+                x+=2;
+                i++;
             }
         }
     }
@@ -66,26 +93,25 @@ public class GridGenerator : MonoBehaviour
         for(int x = -4 ; x<=4 ; x+=2){
             for(int y = -4 ; y<=4 ; y+=2){
                 if(x==0 && y==0){
-                    continue;
+                    CreateObject(x, y, goldObject3, goldParent);
                 }
-                if(Mathf.Abs(x)!=Mathf.Abs(y)){
-                    Debug.Log("("+x+","+y+")");
-                    GameObject g = Instantiate(goldObject) as GameObject;
-                    g.transform.SetParent(goldParent.transform);
-                    g.transform.position = new Vector3(x*sdata.gridCellSize, y*sdata.gridCellSize, 0f);
+                else if(Mathf.Abs(x)!=Mathf.Abs(y)){
+                    if(Mathf.Abs(x)==4 || Mathf.Abs(y)==4){
+                        CreateObject(x, y, goldObject1, goldParent);
+                    }
+                    else{
+                        CreateObject(x, y, goldObject2, goldParent);
+                    }
                 }
             }
         }
-        for(int x = -3 ; x<=3 ; x+=3){
-            for(int y = -3 ; y<=3 ; y+=3){
-                // if(Mathf.Abs(x)!=Mathf.Abs(y)){
-                    // Debug.Log("("+x+","+y+")");
-                    GameObject g = Instantiate(goldObject) as GameObject;
-                    g.transform.SetParent(goldParent.transform);
-                    g.transform.position = new Vector3(x*sdata.gridCellSize, y*sdata.gridCellSize, 0f);
-                // }
-            }
-        }
+    }
+
+    private GameObject CreateObject(int x, int y, GameObject gameObject, GameObject parent){
+        GameObject g = Instantiate(gameObject) as GameObject;
+        g.transform.SetParent(parent.transform);
+        g.transform.position = new Vector3(x*sdata.gridCellSize, y*sdata.gridCellSize, 0f);
+        return g;
     }
 
     private void StoneDistributor(){

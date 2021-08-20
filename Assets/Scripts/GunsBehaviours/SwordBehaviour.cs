@@ -57,11 +57,13 @@ public class SwordBehaviour : MonoBehaviour
 
         if(other.gameObject.CompareTag("Player")){
             int plind= int.Parse(other.transform.name[1].ToString());
+            int chind= int.Parse(other.transform.name[2].ToString());
+
             if(plind != myParent){
                 ShowBlood(other.gameObject);
-                sdata.vitalDatas[plind].health-=healthDecreaseValue;
+                sdata.vitalDatas[plind].health[chind]-=healthDecreaseValue;
                 // Disable chrc if died
-                if(sdata.vitalDatas[plind].health<=0){
+                if(sdata.vitalDatas[plind].health[chind]<=0){
                     other.gameObject.SetActive(false);
                 }
                 GM.gm.updataMGH();

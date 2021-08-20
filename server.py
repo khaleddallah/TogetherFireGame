@@ -41,6 +41,12 @@ def newEpisode():
 
 # =======================================================
 
+@app.route('/playerNum', methods=['POST'])
+def postPlayersNum():
+    global playersNum
+    return(str(playersNum))
+
+
 @app.route('/reg', methods=['POST'])
 def reg():
     global currentPlayersNum, playersNum
@@ -167,7 +173,6 @@ def reset():
     global whoSubmit, vitalPlayer, dead
     gameData = list()
     vitalData = list()
-    playersNum = 4
     currentPlayersNum = 0
     players = dict()
     episodeIndex = -1 

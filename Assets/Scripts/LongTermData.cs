@@ -9,6 +9,7 @@ public class LongTermData : MonoBehaviour
     public string serverURL = "";
     public string myName = "";
     public int playerIndex;
+    public int participantNum = -1; 
 
     void Awake()
     {
@@ -21,4 +22,6 @@ public class LongTermData : MonoBehaviour
 
         DontDestroyOnLoad(this);
     }
+
+
 }

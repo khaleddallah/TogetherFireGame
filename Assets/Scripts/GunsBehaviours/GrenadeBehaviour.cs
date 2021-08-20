@@ -69,6 +69,7 @@ public class GrenadeBehaviour : MonoBehaviour
 
                 Debug.Log("hittt:"+hit.name);
                 int plind= int.Parse(hit.transform.name[1].ToString());
+                int chind= int.Parse(hit.transform.name[2].ToString()); 
                 float dis0 = Vector3.Distance(hit.transform.position,transform.position);
                 
                 // show BLOOODD
@@ -76,13 +77,13 @@ public class GrenadeBehaviour : MonoBehaviour
                 blood.transform.position = hit.transform.position;
 
                 if (dis0<0.8f*radiousExplosion){                
-                    sdata.vitalDatas[plind].health-= healthDecreaseValue;
+                    sdata.vitalDatas[plind].health[chind]-= healthDecreaseValue;
                 }
                 else{
-                    sdata.vitalDatas[plind].health-= healthDecreaseValue*0.5f;
+                    sdata.vitalDatas[plind].health[chind]-= healthDecreaseValue*0.5f;
                 }
 
-                if(sdata.vitalDatas[plind].health<=0){
+                if(sdata.vitalDatas[plind].health[chind]<=0){
                     hit.gameObject.SetActive(false);
                 }
                 GM.gm.updataMGH();

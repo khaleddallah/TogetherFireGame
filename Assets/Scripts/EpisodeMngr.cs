@@ -179,7 +179,7 @@ public class EpisodeMngr : MonoBehaviour
                             Destroy(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[actionT].targetObj);
                         }
                         StartCoroutine(move(
-                            playersParent.transform.GetChild(player).transform.GetChild(0).transform.gameObject,
+                            playersParent.transform.GetChild(player).transform.GetChild(sdata.playerIndex).GetChild(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].characterIndex).transform.gameObject,
                             sdata.episodes[sdata.episodeIndex].roleplays[player].actions[actionT].target
                         ));
                     } 
@@ -197,7 +197,7 @@ public class EpisodeMngr : MonoBehaviour
                         }
                         StartCoroutine(fire(
                             player,
-                            playersParent.transform.GetChild(player).transform.GetChild(0).transform.gameObject,
+                            playersParent.transform.GetChild(player).transform.GetChild(sdata.playerIndex).GetChild(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].characterIndex).transform.gameObject,
                             sdata.episodes[sdata.episodeIndex].roleplays[player].actions[actionT].target,
                             sdata.episodes[sdata.episodeIndex].roleplays[player].actions[actionT].gunTypeObj
                         ));
@@ -212,7 +212,7 @@ public class EpisodeMngr : MonoBehaviour
         
         // Extract LoseWinChecker routine
         GM.gm.updataMGH();
-        int checklose  = GM.gm.checkLose();
+        int checklose  = GM.gm.CheckLose();
         if(checklose==1){
             yield return new WaitForSeconds(2);
             middleSignOff();
@@ -242,7 +242,7 @@ public class EpisodeMngr : MonoBehaviour
         // New Episode
         sdata.CreateNewEpisode();
         GM.gm.startSubmitCoroutine();
-        if(sdata.vitalDatas[sdata.playerIndex].health<=0){
+        if(GM.gm.GetWholeHealth(sdata.playerIndex)<=0){
             submitPress();
         }
         else{

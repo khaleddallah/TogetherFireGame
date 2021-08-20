@@ -6,6 +6,7 @@ using UnityEngine;
 public class Gold : MonoBehaviour
 {
     [SerializeField] private GameObject goldPS;
+    [SerializeField] private int goldValue;
     Sdata sdata;
 
     void Start()
@@ -30,7 +31,7 @@ public class Gold : MonoBehaviour
             gps.transform.rotation = Quaternion.Euler( 0, 0, rotz);
             
             Debug.Log(other.name);
-            sdata.vitalDatas[(int)Char.GetNumericValue(other.gameObject.transform.name[1])].golds +=1;
+            sdata.vitalDatas[(int)Char.GetNumericValue(other.gameObject.transform.name[1])].golds += goldValue;
             GM.gm.updataMGH();
 
             GM.gm.StartCheckGoldWinner();

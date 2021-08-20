@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -51,12 +51,29 @@ public class TargetAssignHelper : MonoBehaviour
     void Start()
     {
         sdata = Sdata.sdata;
-        myCharacter = charactersParent.transform.GetChild(sdata.playerIndex).transform.GetChild(0).gameObject;
-        Debug.Log("myCharacter:"+myCharacter.transform.position);
+        // myCharacter = charactersParent.transform.GetChild(sdata.playerIndex).GetChild(0).gameObject;
+        // Debug.Log("myCharacter:"+myCharacter.transform.position);
         vhStep = sdata.gridCellSize;
         slStep = Mathf.Sqrt(2*Mathf.Pow(vhStep,2));
     }
 
+    // ======= choose selected character =========
+    public void DrawSelectionMarkers(){
+        foreach (var point in GetSelectionMarkers(sdata.playerIndex))
+        {
+            CreateCircleMarker(point, circleMarker);
+        }
+    }
+
+
+
+    public List<Vector3> GetSelectionMarkers(int playerIndex){
+        List<Vector3> res = new List<Vector3>();
+        for(int characterIndex = 0; characterIndex<sdata.charactersNum; characterIndex++){
+            res.Add(charactersParent.transform.GetChild(playerIndex).GetChild(characterIndex).transform.position);
+        }
+        return res;
+    }
 
     // ======= sword =========
 
@@ -90,10 +107,18 @@ public class TargetAssignHelper : MonoBehaviour
     public void DrawGrendeMarkers(){
         DestroyMarkers();
         SetCurrentPositionAfterMove();
-        DrawPointsOnAllGrid();
+        DrawGrenadeMarkers();
     }
 
-    private void DrawPointsOnAllGrid(){
+    private void DrawGrenadeMarkers(){
+        foreach (var point in GetGrenadeMarkers(currentPosition))
+        {
+            CreateCircleMarker(point, circleGrenadeMarker);
+        }
+    }
+
+    public List<Vector3> GetGrenadeMarkers(Vector3 origin){
+        List<Vector3> res = new List<Vector3>();
         float NumLines = Mathf.Floor(sdata.maxRadius/sdata.gridCellSize);
         for (int i=-(int)NumLines ; i<NumLines; i++ ){
             for (int j=-(int)NumLines ; j<NumLines; j++ ){
@@ -104,14 +129,13 @@ public class TargetAssignHelper : MonoBehaviour
                     continue;
                 }
                 else{
-                    GameObject cr = Instantiate(circleGrenadeMarker) as GameObject;
-                    cr.transform.SetParent(markersParent.transform);
-                    cr.transform.position = new Vector3(i*sdata.gridCellSize, j*sdata.gridCellSize, -0.03f);
+                    Vector3 point = new Vector3(i*sdata.gridCellSize, j*sdata.gridCellSize, -0.03f);
+                    res.Add(point);
                 }
             }
         }
+        return res;
     }
-
 
 
     // ======= Pistol =========
@@ -122,22 +146,31 @@ public class TargetAssignHelper : MonoBehaviour
     }
 
     private void DrawPistolLinesPointsMarkers(){
-        // Draw lines & points
-        for(int x=-1 ; x<=1 ; x++){
-            for(int y=-1 ; y<=1 ; y++){
-                RaycastHit2D hit = RaycastToDirection(x, y, fireLayersFiltered);
-                float distance = hit.distance;
-                if(distance>vhStep){
-                    Vector3 lastPoint = currentPosition+(new Vector3(x, y, 0)*vhStep);
-                    CreateLineRenderer(fireLinesTempMarkerColor, 0.05f, lastPoint, markersParent);
-                    CreateArrowMarker(x, y, lastPoint);
-                    
-                }
-            }
+        foreach (var point in GetPistolLinesPointsMarkers(currentPosition))
+        {
+            CreateLineRenderer(fireLinesTempMarkerColor, 0.05f, point, currentPosition, markersParent);
+            CreateArrowMarker(point);
         }
     }
 
-    private void CreateArrowMarker(int x, int y, Vector3 lastPoint){
+
+    public List<Vector3> GetPistolLinesPointsMarkers(Vector3 origin){
+        List<Vector3> res = new List<Vector3>();
+        for(int x=-1 ; x<=1 ; x++){
+            for(int y=-1 ; y<=1 ; y++){
+                RaycastHit2D hit = RaycastToDirection(origin, x, y, fireLayersFiltered);
+                float distance = hit.distance;
+                if(distance>vhStep){
+                    Vector3 lastPoint = origin+(new Vector3(x, y, 0)*vhStep);
+                    res.Add(lastPoint);
+                }
+            }
+        }
+        return res;
+    }
+
+
+    private void CreateArrowMarker(Vector3 lastPoint){
         GameObject cr0 = Instantiate(circlePistolMarker) as GameObject;
         cr0.transform.SetParent(markersParent.transform);
         Vector3 movementDir =  (lastPoint-currentPosition).normalized;    
@@ -158,45 +191,62 @@ public class TargetAssignHelper : MonoBehaviour
     }
 
     private void SetCurrentPosition(){
-        myCharacter = charactersParent.transform.GetChild(sdata.playerIndex).transform.GetChild(0).gameObject;
+        myCharacter = charactersParent.transform.GetChild(sdata.playerIndex).GetChild(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].characterIndex).gameObject;
         currentPosition = myCharacter.transform.position;
     }
 
     private void DrawMoveLinesPointsMarkers(){
-        CreateCircleMarker(currentPosition, circleMarker);
+        foreach (var oneDirectionPoints in GetMovePossiblePoints(currentPosition))
+        {
+            CreateLineRenderer(moveLinesTempMarkerColor, 0.05f, oneDirectionPoints[oneDirectionPoints.Count-1], currentPosition, markersParent);
+            foreach (var point in oneDirectionPoints)
+            {
+                CreateCircleMarker(point, circleMarker);
+            }
+        }
+    }
+
+    public List<List<Vector3>> GetMovePossiblePoints(Vector3 origin){
+        List<List<Vector3>> res = new List<List<Vector3>>();
+        List<Vector3> temp = new List<Vector3>();
+        temp.Add(origin);
+        res.Add(temp);
         for(int x=-1 ; x<=1 ; x++){
             for(int y=-1 ; y<=1 ; y++){
-                PutMoveMarkersOnDirection(x,y);
+                var tempMoveMarkersOnDirection = GetMoveMarkersOnDirection(x, y, origin);
+                if (tempMoveMarkersOnDirection.Count>0){
+                    res.Add(tempMoveMarkersOnDirection);
+                }
             }
         }
+        return res;
     }
 
-    private void PutMoveMarkersOnDirection(int x, int y){
-        RaycastHit2D hit = RaycastToDirection(x, y, moveLayersFiltered);
+
+    private List<Vector3> GetMoveMarkersOnDirection(int x, int y, Vector3 origin){
+        List<Vector3> points = new List<Vector3>();
+        RaycastHit2D hit = RaycastToDirection(origin, x, y, moveLayersFiltered);
         float distance = hit.distance;
-        Debug.Log("distance("+x+","+y+"):"+distance);
         distance += CheckHitGold(hit) ? vhStep : 0.0f;
-        Debug.Log("distance*"+distance);
         if(distance>=vhStep){
-            float NumOfPoints = GetNumOfPoints(distance, x, y);
-            Vector3 lastPoint = currentPosition+new Vector3(x, y, 0)*(NumOfPoints)*vhStep;
-            CreateLineRenderer(moveLinesTempMarkerColor, 0.05f, lastPoint, markersParent);
-
+            float NumOfPoints = GetNumOfPoints(distance, x, y, origin);
+            Vector3 lastPoint = origin+new Vector3(x, y, 0)*(NumOfPoints)*vhStep;
             for(int p=1; p<=NumOfPoints; p++){
-                Vector3 posTemp = currentPosition+new Vector3(x, y, 0)*p*vhStep;
-                CreateCircleMarker(posTemp, circleMarker);
+                Vector3 posTemp = origin+new Vector3(x, y, 0)*p*vhStep;
+                points.Add(posTemp);
             }
         }
+        return points;
     }
 
-    private RaycastHit2D RaycastToDirection(int x, int y, LayerMask LayersFiltered){
+    private RaycastHit2D RaycastToDirection(Vector3 origin, int x, int y, LayerMask LayersFiltered){
         Vector3 dir = new Vector3(x,y,0f);
         RaycastHit2D hit;
-        hit=Physics2D.Raycast(currentPosition, dir, Mathf.Infinity, ~LayersFiltered);
+        hit=Physics2D.Raycast(origin, dir, Mathf.Infinity, ~LayersFiltered);
         return hit;
     }
 
-    private int GetNumOfPoints(float distance, int x, int y){
+    private int GetNumOfPoints(float distance, int x, int y, Vector3 origin){
         int NumOfPoints=0;
         if(x==0 || y==0){
             NumOfPoints = Mathf.FloorToInt(distance/vhStep);
@@ -204,7 +254,7 @@ public class TargetAssignHelper : MonoBehaviour
         else{
             NumOfPoints = Mathf.FloorToInt(distance/slStep);
         }
-        Vector3 initialLastPoint = currentPosition+(new Vector3(x, y, 0)*vhStep*NumOfPoints);
+        Vector3 initialLastPoint = origin+(new Vector3(x, y, 0)*vhStep*NumOfPoints);
         
         NumOfPoints = CheckOutOfCircle(initialLastPoint) ? NumOfPoints-1 : NumOfPoints;
         return NumOfPoints;
@@ -218,7 +268,7 @@ public class TargetAssignHelper : MonoBehaviour
         return Vector3.Distance(Vector3.zero, posTemp)>=radiousEnv;
     }
 
-    private void CreateLineRenderer(Color color, float width, Vector3 lastPoint, GameObject Parent){
+    private void CreateLineRenderer(Color color, float width, Vector3 lastPoint, Vector3 origin, GameObject Parent){
         GameObject gl = Instantiate(lineRendererObject) as GameObject;
         gl.transform.SetParent(Parent.transform);
         LineRenderer lRend = gl.GetComponent<LineRenderer>();
@@ -226,7 +276,7 @@ public class TargetAssignHelper : MonoBehaviour
         lRend.endColor = color;                    
         lRend.startWidth = width;
         lRend.endWidth = width;
-        lRend.SetPosition(0, currentPosition);
+        lRend.SetPosition(0, origin);
         lRend.SetPosition(1, lastPoint); 
     }
 
@@ -244,7 +294,11 @@ public class TargetAssignHelper : MonoBehaviour
         DestroyPriorTargetObject();
         DestroyMarkers();
 
-        if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].type=="move"){
+        if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].type=="0"){
+            SetSelectedCharacter(pos0);
+        }
+
+        else if(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].type=="move"){
             SetFinalMoveMarker(pos0);
         }
 
@@ -260,16 +314,26 @@ public class TargetAssignHelper : MonoBehaviour
         }
     }
 
+    private void SetSelectedCharacter(Vector3 pos0){
+        List<Vector3> charactersPositions = GetSelectionMarkers(sdata.playerIndex);
+        for(int i = 0; i<sdata.charactersNum; i++){
+            if(pos0==charactersPositions[i]){
+                sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].characterIndex = i;
+                break;
+            }
+        }
+    }
+
     private void SetFinalMoveMarker(Vector3 pos0){
         GameObject x = CopyMyCharacterSprite(pos0);
-        CreateLineRenderer(moveLineFinalMarkerColor, 0.1f, pos0, x);
+        CreateLineRenderer(moveLineFinalMarkerColor, 0.1f, pos0, currentPosition, x);
         sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].target = pos0;
         sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].targetObj = x;
     }
 
     private void SetFinalFireTarget(Vector3 pos0){
         GameObject x = CreateFireTarget(pos0);
-        CreateLineRenderer(fireLineFinalMarkerColor, 0.1f, pos0, x);
+        CreateLineRenderer(fireLineFinalMarkerColor, 0.1f, pos0, currentPosition, x);
         sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].targetObj = x;
         sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].target = pos0;
     }

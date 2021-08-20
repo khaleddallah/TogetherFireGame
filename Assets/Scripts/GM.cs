@@ -51,9 +51,6 @@ public class GM : MonoBehaviour
         deads = new List<int>();
         episodeMngr = GetComponent<EpisodeMngr>();
 
-        Sdata.sdata.playerIndex = LongTermData.longTermData.playerIndex;
-        sdata.vitalDatas[sdata.playerIndex].name = LongTermData.longTermData.myName;
-
         SetMiddleSignAnimation("waiting");
         StartCoroutine(PostIsStarted_GetPlayers());
     }
@@ -96,6 +93,9 @@ public class GM : MonoBehaviour
             string[] players = data.Split('/');
             sdata.howMuchPlayersStarted = players.Length;
 
+            // Debug.Log("DD"+PlayersParent.transform.GetChild(sdata.playerIndex).transform.childCount);
+            // yield return new WaitUntil(() => PlayersParent.transform.GetChild(sdata.playerIndex).transform.childCount==sdata.charactersNum);
+
             for(int i=0; i<players.Length; i++){
                 sdata.vitalDatas[i].name  = players[i];
                 EnableNewPlayer(i,players[i]);
@@ -114,10 +114,19 @@ public class GM : MonoBehaviour
         }
     }
 
+
+
+
+
     private void EnableNewPlayer(int playerIndex, string playerName){
-        PlayersParent.transform.GetChild(playerIndex).GetChild(0).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().text = playerName;
-        PlayersParent.transform.GetChild(playerIndex).GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
-        PlayersParent.transform.GetChild(playerIndex).GetChild(0).GetChild(0).GetChild(2).gameObject.SetActive(true);
+        PlayersParent.transform.GetChild(playerIndex).gameObject.SetActive(true);
+        Color tmp = PlayersParent.transform.GetChild(playerIndex).GetChild(0).GetComponent<SpriteRenderer>().color;
+        tmp.a = 1f;
+        for(int i = 0; i<sdata.charactersNum; i++){
+            PlayersParent.transform.GetChild(playerIndex).GetChild(i).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().text = playerName;
+            // PlayersParent.transform.GetChild(playerIndex).GetChild(i).GetComponent<SpriteRenderer>().color = tmp;
+            // PlayersParent.transform.GetChild(playerIndex).GetChild(i).GetChild(0).GetChild(2).gameObject.SetActive(true);
+        }
     }
 
     private UnityWebRequest PostRequest(string msg, string route){
@@ -159,16 +168,18 @@ public class GM : MonoBehaviour
     public void updataMGH(){
         goldText.text = ""+sdata.vitalDatas[sdata.playerIndex].golds.ToString();
         for(int i=0; i<sdata.participantNum; i++){
-            PlayersParent.transform.GetChild(i).GetChild(0).GetChild(0).GetChild(2).GetComponent<Slider>().value=sdata.vitalDatas[i].health/100;
+            for(int c=0; c<sdata.charactersNum; c++){
+                PlayersParent.transform.GetChild(i).GetChild(0).GetChild(0).GetChild(2).GetComponent<Slider>().value=sdata.vitalDatas[i].health[c]/100;
+            }
         }
     }
 
-    public int checkLose(){
+    public int CheckLose(){
         int losersNumber = 0;
         middleSign.GetComponent<TextMeshProUGUI>().color = loseColor;
         SetMiddleSignText("");
         for(int i = 0 ; i<sdata.participantNum ; i++){
-            if (sdata.vitalDatas[i].health<=0){
+            if (CheckIsAlive(i)){
                 losersNumber+=1;
                 if(!deads.Contains(i)){
                     ResetMiddleSignAnimation();
@@ -187,6 +198,7 @@ public class GM : MonoBehaviour
         }
 
 
+
         if(losersNumber==sdata.participantNum-1){
             middleSign.SetActive(true);
             return 2;
@@ -203,9 +215,22 @@ public class GM : MonoBehaviour
 
     }
 
+    public bool CheckIsAlive(int p){
+        float wholeHealth=GetWholeHealth(p);
+        return wholeHealth>=0;
+    }
+
+    public float GetWholeHealth(int p){
+        float wholeHealth=0;
+        for(int c=0; c<sdata.participantNum; c++){
+            wholeHealth+=sdata.vitalDatas[p].health[c];
+        }
+        return wholeHealth;
+    }
+
     public void Winner(){
         for(int i = 0 ; i<sdata.participantNum ; i++){
-            if (sdata.vitalDatas[i].health>0){
+            if (GetWholeHealth(i)>0){
                 ResetMiddleSignAnimation();
                 middleSign.GetComponent<Animator>().enabled=false;
                 middleSign.GetComponent<TextMeshProUGUI>().color = winColor;

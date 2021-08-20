@@ -20,6 +20,7 @@ public class Sdata : MonoBehaviour
     public int actionsNum = 3;
     public int howMuchPlayersStarted = 0;
     public string gamePlayMode;
+    public int charactersNum;
 
     void Awake()
     {
@@ -29,28 +30,35 @@ public class Sdata : MonoBehaviour
         else{
             sdata = this;
         }
-
+        SetSomeInitialValues();
         DontDestroyOnLoad(this);
+
     }
 
     void Start(){
-        SetSomeInitialValues();
     }
 
     private void SetSomeInitialValues(){
+        sdata.participantNum = LongTermData.longTermData.participantNum;
+
         episodes = new List<Episode>(); 
         vitalDatas = new List<VitalData>();
-        sdata.playerIndex=0;
 
         // set players health & golds
         for(int h=0; h< participantNum; h++){
             VitalData x = new VitalData();
             sdata.vitalDatas.Add(x);
-            sdata.vitalDatas[h].health=100.0f;
             sdata.vitalDatas[h].golds=0;
+            for(int c=0; c<sdata.charactersNum; c++){
+                float f = 100f;
+                sdata.vitalDatas[h].health.Add(f);
+            }
         }
 
         CreateNewEpisode();
+
+        Sdata.sdata.playerIndex = LongTermData.longTermData.playerIndex;
+        sdata.vitalDatas[sdata.playerIndex].name = LongTermData.longTermData.myName;
     }
 
     public void CreateNewEpisode(){

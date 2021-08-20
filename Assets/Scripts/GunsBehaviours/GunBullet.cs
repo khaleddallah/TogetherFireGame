@@ -19,7 +19,6 @@ public class GunBullet : MonoBehaviour
     private Coroutine coroutineFire;
     private bool isActive;
     private Sdata sdata;
-    private bool isLaunched;
     private float SwordMaxAngle;
     private Vector3 movementDirection;
     private SpriteRenderer spriteRenderer;
@@ -29,7 +28,6 @@ public class GunBullet : MonoBehaviour
     {
         sdata = Sdata.sdata;
         isActive = true;
-        isLaunched = false;
         destination = GetComponent<BulletData>().destination;
         myParent = GetComponent<BulletData>().myParent;
         coroutineFire = StartCoroutine(Fire());
@@ -44,7 +42,6 @@ public class GunBullet : MonoBehaviour
         yield return new WaitForSeconds(fireParticleSystemWaitTime);
 
         spriteRenderer.enabled = true;
-        transform.position += movementDirection * launchSpeed;
         while (isActive) {
             transform.position += Time.deltaTime * movementDirection * speed;
             yield return null;
@@ -52,9 +49,6 @@ public class GunBullet : MonoBehaviour
             if(isOutsideEnv){
                 Debug.Log("outside");
                 DestroySpecial();
-            }
-            if(!isLaunched){
-                isLaunched=true;
             }
         }
         yield return null;
@@ -91,12 +85,6 @@ public class GunBullet : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if(!isLaunched){
-            Debug.Log("notisLaunched_exit");
-            return;
-        }
-
-
         if(other.gameObject.CompareTag("Gold")){  
             DestroySpecial();
         }
@@ -110,10 +98,6 @@ public class GunBullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(!isLaunched){
-            Debug.Log("notisLaunched_enter");
-            return;
-        }
         Debug.Log(transform.name+":: Enter ::"+other.transform.name);
         if(other.transform.name == "MainBase") {
             DestroySpecial();
@@ -128,6 +112,8 @@ public class GunBullet : MonoBehaviour
 
             Debug.Log("..P..");
             int plind= int.Parse(other.transform.name[1].ToString());
+            int chind= int.Parse(other.transform.name[2].ToString());
+
             if(plind != myParent){
                 // show BLOOODD
                 GameObject blood = Instantiate(bloodObject) as GameObject;
@@ -137,9 +123,9 @@ public class GunBullet : MonoBehaviour
                 blood.transform.rotation = Quaternion.Euler( 0, 0, rotz);
 
                 Debug.Log("000DD))");
-                sdata.vitalDatas[plind].health-=healthDecreaseValue;
+                sdata.vitalDatas[plind].health[chind]-=healthDecreaseValue;
                 // Disable chrc if died
-                if(sdata.vitalDatas[plind].health<=0){
+                if(sdata.vitalDatas[plind].health[chind]<=0){
                     other.gameObject.SetActive(false);
                 }
                 GM.gm.updataMGH();

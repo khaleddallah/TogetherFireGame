@@ -22,6 +22,7 @@ public class ServerLogin : MonoBehaviour
         longTermData = LongTermData.longTermData;
         nameInputField.text = longTermData.myName;
         serverInputField.text = longTermData.serverURL;
+        StartCoroutine(PostGetPlayersNum());
     }
 
 
@@ -53,6 +54,7 @@ public class ServerLogin : MonoBehaviour
     }
 
     IEnumerator PostReg_LoadMainScene() {
+        yield return new WaitUntil(() => longTermData.participantNum!=-1);
         string route = "reg";
         string msg = "{\"name\":\""+nameInputField.text+"\"}";
         UnityWebRequest www = PostRequest(msg, route);
@@ -67,7 +69,7 @@ public class ServerLogin : MonoBehaviour
             Debug.Log("res:reg:"+data);
             if(data>=0){
                 longTermData.myName=nameInputField.text;
-                longTermData.playerIndex = data;
+                longTermData.playerIndex=data;
                 SceneManager.LoadScene(mainScene);
             }
             else if(data==-1){
@@ -79,6 +81,25 @@ public class ServerLogin : MonoBehaviour
             www.Dispose();
         }
     }
+
+
+
+    IEnumerator PostGetPlayersNum() {
+        string route = "playerNum";
+        string msg = "{\"ignore\":\"1\"}";
+        UnityWebRequest www = PostRequest(msg, route);
+        yield return www.SendWebRequest();
+        if (www.result != UnityWebRequest.Result.Success) {
+            Debug.Log(www.error);
+            www.Dispose();
+        }
+        else {
+            string data = www.downloadHandler.text;
+            longTermData.participantNum = int.Parse(data);
+            www.Dispose();
+        }
+    }
+
 
     private UnityWebRequest PostRequest(string msg, string route){
         byte[] jsonBinary = System.Text.Encoding.UTF8.GetBytes(msg);    
