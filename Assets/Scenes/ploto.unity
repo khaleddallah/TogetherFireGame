@@ -1671,7 +1671,7 @@ MonoBehaviour:
   participantNum: 3
   actionsNum: 2
   howMuchPlayersStarted: 0
-  gamePlayMode: ai
+  gamePlayMode: 
   charactersNum: 3
 --- !u!4 &720184894
 Transform:
@@ -5290,7 +5290,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playersParent: {fileID: 1916517903}
-  gunTypesObjects: []
+  gunTypesObjects:
+  - {fileID: 3505746068904520643, guid: 6e093c73b040efd6a9f0e633307e4cc3, type: 3}
+  - {fileID: 346066025382910608, guid: 217a18fc65f04f236938d8649e40ddab, type: 3}
+  - {fileID: 8028529909031204358, guid: a9105a24aea50cc65b99c80973d189d9, type: 3}
+  - {fileID: 7882955963165368079, guid: f15ff0909bb980412ab81124ccc95df1, type: 3}
   ai: {fileID: 1811598033}
   moveSpeed: 4
   wizard: {fileID: 158372134}
@@ -6440,6 +6444,7 @@ MonoBehaviour:
   - {fileID: 4319671195954647881, guid: 7da35c05fa99c06209f72fa1875e32d5, type: 3}
   - {fileID: 6988192169641039812, guid: dd2d7ba56cbf053d4a0096fa46b4e407, type: 3}
   - {fileID: 3394246897690350478, guid: 1c746b4a61e2343cda73a8631e7f4e00, type: 3}
+  ModPosPlayers: 00000000020000000100000003000000
 --- !u!1 &1833233433
 GameObject:
   m_ObjectHideFlags: 0

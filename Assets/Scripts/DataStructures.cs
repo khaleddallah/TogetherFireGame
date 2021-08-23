@@ -24,7 +24,7 @@ public class Episode{
 // the actionS of one character
 [Serializable]
 public class Roleplay{
-    public int characterIndex=-1;
+    public int cindex=-1;
     public List<Action> actions = new List<Action>();
 }
 

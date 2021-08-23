@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, render_template, request, redirect, url_for, make_response
 import socket, random, time
 import copy
-
+import sys
 
 
 app = Flask(__name__)
@@ -9,7 +9,7 @@ app = Flask(__name__)
 gameData = list()
 vitalData = list()
 
-playersNum = 4
+playersNum = int(sys.argv[1])
 currentPlayersNum = 0
 players = dict() # { 1:"khaled", etc}
 
@@ -95,13 +95,16 @@ def isStarted():
 def submit():
     global whoSubmit, gameData, returnSubmit, episodeIndex
     pindex = request.json['pindex']
+    cindex = request.json['cindex']
     data = request.json['data']
     
     print("ep:",episodeIndex)
     print("pind:",pindex)
     print("data:",data)
 
-    gameData[episodeIndex][pindex]=data
+    gameData[episodeIndex][pindex]=dict()
+    gameData[episodeIndex][pindex]["data"]=data
+    gameData[episodeIndex][pindex]["cindex"]=cindex
     whoSubmit[int(pindex)]=1
     while(not(len(whoSubmit.keys())==playersNum)):
         time.sleep(0.1)
@@ -113,7 +116,8 @@ def submit():
     res2 = dict()
     res2["roleplays"]=[]
     for key in keys1:
-        for i in res[key]:
+        # print(res[key])
+        for i in res[key]["data"]:
             # print(i)
             if(i["type"]=="move"):
                 i["ser"]=i["target"]
@@ -127,12 +131,12 @@ def submit():
                     del i["gunType"]
                     del i["target"]
             
-        temp0 = {"actions": res[key] }
+        temp0 = {"cindex":res[key]["cindex"], "actions":res[key]["data"]}
         res2["roleplays"].append(temp0)
     
     
     returnSubmit+=1
-    if(returnSubmit==4):
+    if(returnSubmit==playersNum):
         newEpisode()
     
     print(res2)

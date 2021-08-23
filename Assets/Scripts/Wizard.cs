@@ -43,7 +43,7 @@ public class Wizard : MonoBehaviour
         Debug.Log("Characters Selecting");
         helpText.text = "Select Character";
         TargetAssignHelper.tah.DrawSelectionMarkers();
-        yield return new WaitUntil(() => sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].characterIndex != -1 );
+        yield return new WaitUntil(() => sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].cindex != -1 );
 
 
         // ==== move act ====
@@ -88,7 +88,7 @@ public class Wizard : MonoBehaviour
     }
 
     public void ResetActions(){
-        sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].characterIndex= -1;
+        sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].cindex= -1;
         for(int ind = 0 ; ind<sdata.actionsNum ; ind++){
             sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[ind].type="0"; // type of the action (move | fire)
             sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[ind].target = new Vector3 (-999f,-999f,-999f); // target of the action either move or fire

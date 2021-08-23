@@ -169,7 +169,7 @@ public class GM : MonoBehaviour
         goldText.text = ""+sdata.vitalDatas[sdata.playerIndex].golds.ToString();
         for(int i=0; i<sdata.participantNum; i++){
             for(int c=0; c<sdata.charactersNum; c++){
-                PlayersParent.transform.GetChild(i).GetChild(0).GetChild(0).GetChild(2).GetComponent<Slider>().value=sdata.vitalDatas[i].health[c]/100;
+                PlayersParent.transform.GetChild(i).GetChild(c).GetChild(0).GetChild(2).GetComponent<Slider>().value=sdata.vitalDatas[i].health[c]/100;
             }
         }
     }
@@ -179,7 +179,7 @@ public class GM : MonoBehaviour
         middleSign.GetComponent<TextMeshProUGUI>().color = loseColor;
         SetMiddleSignText("");
         for(int i = 0 ; i<sdata.participantNum ; i++){
-            if (CheckIsAlive(i)){
+            if (CheckIsDead(i)){
                 losersNumber+=1;
                 if(!deads.Contains(i)){
                     ResetMiddleSignAnimation();
@@ -215,14 +215,14 @@ public class GM : MonoBehaviour
 
     }
 
-    public bool CheckIsAlive(int p){
+    public bool CheckIsDead(int p){
         float wholeHealth=GetWholeHealth(p);
-        return wholeHealth>=0;
+        return wholeHealth<=0;
     }
 
     public float GetWholeHealth(int p){
         float wholeHealth=0;
-        for(int c=0; c<sdata.participantNum; c++){
+        for(int c=0; c<sdata.charactersNum; c++){
             wholeHealth+=sdata.vitalDatas[p].health[c];
         }
         return wholeHealth;

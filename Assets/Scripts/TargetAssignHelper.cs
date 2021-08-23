@@ -69,8 +69,8 @@ public class TargetAssignHelper : MonoBehaviour
 
     public List<Vector3> GetSelectionMarkers(int playerIndex){
         List<Vector3> res = new List<Vector3>();
-        for(int characterIndex = 0; characterIndex<sdata.charactersNum; characterIndex++){
-            res.Add(charactersParent.transform.GetChild(playerIndex).GetChild(characterIndex).transform.position);
+        for(int cindex = 0; cindex<sdata.charactersNum; cindex++){
+            res.Add(charactersParent.transform.GetChild(playerIndex).GetChild(cindex).transform.position);
         }
         return res;
     }
@@ -191,7 +191,7 @@ public class TargetAssignHelper : MonoBehaviour
     }
 
     private void SetCurrentPosition(){
-        myCharacter = charactersParent.transform.GetChild(sdata.playerIndex).GetChild(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].characterIndex).gameObject;
+        myCharacter = charactersParent.transform.GetChild(sdata.playerIndex).GetChild(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].cindex).gameObject;
         currentPosition = myCharacter.transform.position;
     }
 
@@ -318,7 +318,7 @@ public class TargetAssignHelper : MonoBehaviour
         List<Vector3> charactersPositions = GetSelectionMarkers(sdata.playerIndex);
         for(int i = 0; i<sdata.charactersNum; i++){
             if(pos0==charactersPositions[i]){
-                sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].characterIndex = i;
+                sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].cindex = i;
                 break;
             }
         }

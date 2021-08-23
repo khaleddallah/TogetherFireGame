@@ -79,6 +79,10 @@ public class AIPlayers : MonoBehaviour
 
     public void PlayerAI(int playerInd){
         Debug.Log("FromPlayerAI:"+playerInd);
+
+        // select the character 
+        sdata.episodes[sdata.episodeIndex].roleplays[playerInd].cindex = Random.Range(0, sdata.charactersNum);
+
         // select the move target 
         List<List<Vector3>> possibleMoves;
         possibleMoves = TargetAssignHelper.tah.GetMovePossiblePoints(GetPlayerPositionByIndex(playerInd));
@@ -137,7 +141,7 @@ public class AIPlayers : MonoBehaviour
 
         for(int p = 0 ; p<sdata.participantNum ; p++)
         {
-            if(GM.gm.CheckIsAlive(p) && p!=sdata.playerIndex){
+            if(GM.gm.GetWholeHealth(p)>0 && p!=sdata.playerIndex){
                 Debug.Log("##P:"+p);
                 PlayerAI(p);
             }

@@ -22,7 +22,6 @@ public class ServerLogin : MonoBehaviour
         longTermData = LongTermData.longTermData;
         nameInputField.text = longTermData.myName;
         serverInputField.text = longTermData.serverURL;
-        StartCoroutine(PostGetPlayersNum());
     }
 
 
@@ -38,7 +37,7 @@ public class ServerLogin : MonoBehaviour
     public void LoadMainScene(){
         longTermData.serverURL = serverInputField.text;
         if(CheckNameValid()){
-            StartCoroutine(PostReg_LoadMainScene());
+            StartCoroutine(PostPlayerNum_PostReg_LoadMainScene());
         }
         else{
             ShowError("enter your name, please");
@@ -53,7 +52,8 @@ public class ServerLogin : MonoBehaviour
         ErrorText.text = e;
     }
 
-    IEnumerator PostReg_LoadMainScene() {
+    IEnumerator PostPlayerNum_PostReg_LoadMainScene() {
+        StartCoroutine(PostGetPlayersNum());    
         yield return new WaitUntil(() => longTermData.participantNum!=-1);
         string route = "reg";
         string msg = "{\"name\":\""+nameInputField.text+"\"}";

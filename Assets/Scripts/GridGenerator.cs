@@ -20,7 +20,7 @@ public class GridGenerator : MonoBehaviour
     [SerializeField] private float offsetCameraRotation;
     [SerializeField] private int playerPositionOffset;
     [SerializeField] private List<GameObject> playersTemplates;
-
+    [SerializeField] private int[] ModPosPlayers = {0,2,1,3};
     Sdata sdata;
 
     void Start()
@@ -136,12 +136,12 @@ public class GridGenerator : MonoBehaviour
     }
 
     private void Camera_Players_Adjusting(){
-        float x = Mathf.Cos((-90*(sdata.playerIndex+1))*Mathf.Deg2Rad) * offsetCameraShift;
-        float y = Mathf.Sin((-90*(sdata.playerIndex+1))*Mathf.Deg2Rad) * offsetCameraShift;
+        float x = Mathf.Cos((-90*(ModPosPlayers[sdata.playerIndex]+1))*Mathf.Deg2Rad) * offsetCameraShift;
+        float y = Mathf.Sin((-90*(ModPosPlayers[sdata.playerIndex]+1))*Mathf.Deg2Rad) * offsetCameraShift;
         
-        float rotx = Mathf.Cos((-90*(sdata.playerIndex+2))*Mathf.Deg2Rad) * offsetCameraRotation;
-        float roty = Mathf.Sin((-90*(sdata.playerIndex+2))*Mathf.Deg2Rad) * offsetCameraRotation;     
-        float rotz = sdata.playerIndex*(-90);
+        float rotx = Mathf.Cos((-90*(ModPosPlayers[sdata.playerIndex]+2))*Mathf.Deg2Rad) * offsetCameraRotation;
+        float roty = Mathf.Sin((-90*(ModPosPlayers[sdata.playerIndex]+2))*Mathf.Deg2Rad) * offsetCameraRotation;     
+        float rotz = ModPosPlayers[sdata.playerIndex]*(-90);
 
 
         // Debug.Log("yangle:"+(-90*(sdata.playerIndex+1)));
@@ -154,7 +154,9 @@ public class GridGenerator : MonoBehaviour
 
         
         for(int i=0; i<sdata.participantNum; i++){
-            playersParent.transform.GetChild(i).GetChild(0).transform.rotation = Quaternion.Euler( 0, 0, rotz);
+            for(int c=0; c<sdata.charactersNum; c++){
+                playersParent.transform.GetChild(i).GetChild(c).transform.rotation = Quaternion.Euler( 0, 0, rotz);
+            }
         }
     
     }

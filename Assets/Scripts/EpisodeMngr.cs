@@ -78,6 +78,11 @@ public class EpisodeMngr : MonoBehaviour
         msg+= "\"pindex\":";
         msg+= "\""+sdata.playerIndex.ToString()+"\"" ;
         msg+= ",";
+
+        msg+= "\"cindex\":";
+        msg+= "\""+sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].cindex.ToString()+"\"" ;
+
+        msg+= ",";
         msg+="\"data\":[";
         foreach(Action a in sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions){
             msg+= "{\"type\":\""+a.type+"\"";
@@ -115,6 +120,7 @@ public class EpisodeMngr : MonoBehaviour
         int actionInd = 0; 
         Episode ep = JsonUtility.FromJson<Episode>(x);
         foreach (Roleplay rp in ep.roleplays){
+            sdata.episodes[sdata.episodeIndex].roleplays[playerInd].cindex = rp.cindex;
             actionInd=0;
             foreach(Action a in rp.actions){
                 if(a.type!="0"){
@@ -179,7 +185,7 @@ public class EpisodeMngr : MonoBehaviour
                             Destroy(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[actionT].targetObj);
                         }
                         StartCoroutine(move(
-                            playersParent.transform.GetChild(player).transform.GetChild(sdata.playerIndex).GetChild(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].characterIndex).transform.gameObject,
+                            playersParent.transform.GetChild(player).GetChild(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].cindex).transform.gameObject,
                             sdata.episodes[sdata.episodeIndex].roleplays[player].actions[actionT].target
                         ));
                     } 
@@ -197,7 +203,7 @@ public class EpisodeMngr : MonoBehaviour
                         }
                         StartCoroutine(fire(
                             player,
-                            playersParent.transform.GetChild(player).transform.GetChild(sdata.playerIndex).GetChild(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].characterIndex).transform.gameObject,
+                            playersParent.transform.GetChild(player).GetChild(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].cindex).transform.gameObject,
                             sdata.episodes[sdata.episodeIndex].roleplays[player].actions[actionT].target,
                             sdata.episodes[sdata.episodeIndex].roleplays[player].actions[actionT].gunTypeObj
                         ));
@@ -278,6 +284,9 @@ public class EpisodeMngr : MonoBehaviour
             }
         }
         else{
+            Debug.Log("dest::"+dest);
+            Debug.Log("playerObj::"+playerObj.transform.name);
+            Debug.Log("bullet::"+bullet.transform.name);
             CreateBullet(playerObj, dest, parent, bullet);
         }
         yield return null;
