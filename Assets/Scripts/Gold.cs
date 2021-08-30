@@ -12,14 +12,14 @@ public class Gold : MonoBehaviour
     void Start()
     {
         sdata = Sdata.sdata;
-        AdjustGoldObjectRotation();
+        // AdjustGoldObjectRotation();
     }
 
     
-    private void AdjustGoldObjectRotation(){
-        float rotz = sdata.playerIndex*(-90);
-        transform.rotation = Quaternion.Euler( 0, 0, rotz);  
-    }
+    // private void AdjustGoldObjectRotation(){
+    //     float rotz = sdata.playerIndex*(-90);
+    //     transform.rotation = Quaternion.Euler( 0, 0, rotz);  
+    // }
 
 
     void OnTriggerEnter2D(Collider2D other)

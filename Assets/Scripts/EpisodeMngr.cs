@@ -40,7 +40,7 @@ public class EpisodeMngr : MonoBehaviour
         if(CheckNotSubmittedBefore()){
             episodeSubmitted = sdata.episodeIndex;
 
-            if(sdata.gamePlayMode=="ai"){
+            if(sdata.gamePlayMode=="auto"){
                 ai.psai();
                 StartCoroutine(performAllPlayers(0, sdata.participantNum));
             }
@@ -185,7 +185,7 @@ public class EpisodeMngr : MonoBehaviour
                             Destroy(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[actionT].targetObj);
                         }
                         StartCoroutine(move(
-                            playersParent.transform.GetChild(player).GetChild(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].cindex).transform.gameObject,
+                            playersParent.transform.GetChild(player).GetChild(sdata.episodes[sdata.episodeIndex].roleplays[player].cindex).transform.gameObject,
                             sdata.episodes[sdata.episodeIndex].roleplays[player].actions[actionT].target
                         ));
                     } 
@@ -203,7 +203,7 @@ public class EpisodeMngr : MonoBehaviour
                         }
                         StartCoroutine(fire(
                             player,
-                            playersParent.transform.GetChild(player).GetChild(sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].cindex).transform.gameObject,
+                            playersParent.transform.GetChild(player).GetChild(sdata.episodes[sdata.episodeIndex].roleplays[player].cindex).transform.gameObject,
                             sdata.episodes[sdata.episodeIndex].roleplays[player].actions[actionT].target,
                             sdata.episodes[sdata.episodeIndex].roleplays[player].actions[actionT].gunTypeObj
                         ));

@@ -8,6 +8,7 @@ public class LongTermData : MonoBehaviour
     public static LongTermData longTermData;
     public string serverURL = "";
     public string myName = "";
+    public string gamePlayMode = "";
     public int playerIndex;
     public int participantNum = -1; 
 

@@ -40,6 +40,7 @@ public class Sdata : MonoBehaviour
 
     private void SetSomeInitialValues(){
         sdata.participantNum = LongTermData.longTermData.participantNum;
+        sdata.gamePlayMode = LongTermData.longTermData.gamePlayMode;
 
         episodes = new List<Episode>(); 
         vitalDatas = new List<VitalData>();

@@ -136,7 +136,10 @@ def submit():
     
     
     returnSubmit+=1
+    print("## returnSubmit = "+str(returnSubmit))
+    print("## playerNum = "+str(playersNum))
     if(returnSubmit==playersNum):
+        returnSubmit=0
         newEpisode()
     
     print(res2)

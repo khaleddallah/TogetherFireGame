@@ -21,6 +21,7 @@ public class GM : MonoBehaviour
     [SerializeField] private Color winColor;
     [SerializeField] private string firstSceneName;
     [SerializeField] private int submitTimeRef;
+    [SerializeField] private GridGenerator gridGenerator;
 
     private readonly string[] MIDDLE_SIGN_ANIMATIONS = {"waiting","epBefore"};
     int submitTime;
@@ -51,8 +52,27 @@ public class GM : MonoBehaviour
         deads = new List<int>();
         episodeMngr = GetComponent<EpisodeMngr>();
 
-        SetMiddleSignAnimation("waiting");
-        StartCoroutine(PostIsStarted_GetPlayers());
+        if(sdata.gamePlayMode=="auto"){
+            gridGenerator.Start0();
+            for(int i=0; i<sdata.participantNum; i++){
+                if(i==sdata.playerIndex){
+                    sdata.vitalDatas[i].name  = LongTermData.longTermData.myName;
+                    EnableNewPlayer(i,LongTermData.longTermData.myName);
+                }
+                else{
+                    sdata.vitalDatas[i].name  = "p"+i.ToString();
+                    EnableNewPlayer(i,"p"+i.ToString());
+                }
+            }
+            ResetMiddleSignAnimation();
+            SetMiddleSignText("");
+            wizard.SetActive(true);
+        }
+        else{
+            SetMiddleSignAnimation("waiting");
+            StartCoroutine(PostIsStarted_GetPlayers());
+        }
+
     }
 
 
@@ -93,9 +113,6 @@ public class GM : MonoBehaviour
             string[] players = data.Split('/');
             sdata.howMuchPlayersStarted = players.Length;
 
-            // Debug.Log("DD"+PlayersParent.transform.GetChild(sdata.playerIndex).transform.childCount);
-            // yield return new WaitUntil(() => PlayersParent.transform.GetChild(sdata.playerIndex).transform.childCount==sdata.charactersNum);
-
             for(int i=0; i<players.Length; i++){
                 sdata.vitalDatas[i].name  = players[i];
                 EnableNewPlayer(i,players[i]);
@@ -124,8 +141,6 @@ public class GM : MonoBehaviour
         tmp.a = 1f;
         for(int i = 0; i<sdata.charactersNum; i++){
             PlayersParent.transform.GetChild(playerIndex).GetChild(i).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().text = playerName;
-            // PlayersParent.transform.GetChild(playerIndex).GetChild(i).GetComponent<SpriteRenderer>().color = tmp;
-            // PlayersParent.transform.GetChild(playerIndex).GetChild(i).GetChild(0).GetChild(2).gameObject.SetActive(true);
         }
     }
 
@@ -162,6 +177,8 @@ public class GM : MonoBehaviour
         Destroy(sdata.gameObject);
         Destroy(TargetAssignHelper.tah.gameObject);
         Destroy(GM.gm.gameObject);
+        // LongTermData.longTermData.myName = sdata.
+        // LongTermData.longTermData.serverURL = 
         SceneManager.LoadScene(firstSceneName);
     }
 

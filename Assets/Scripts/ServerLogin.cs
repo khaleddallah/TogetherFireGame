@@ -11,8 +11,9 @@ public class ServerLogin : MonoBehaviour
     [SerializeField] private string mainScene;
     [SerializeField] private TMP_InputField nameInputField;
     [SerializeField] private TMP_InputField serverInputField;
-    [SerializeField] private TextMeshProUGUI ErrorText;
+    [SerializeField] private TMP_InputField playerNumField;
 
+    [SerializeField] private TextMeshProUGUI ErrorText;
     string tempName;
     LongTermData longTermData;
 
@@ -34,8 +35,24 @@ public class ServerLogin : MonoBehaviour
     }
 
 
+    public void LoadMainSceneAuto(){
+        longTermData.gamePlayMode = "auto" ;
+        if(CheckNameValid()){
+            longTermData.participantNum = int.Parse(playerNumField.text);
+            longTermData.myName=nameInputField.text;
+            longTermData.playerIndex=0;
+            SceneManager.LoadScene(mainScene);
+        }
+        else{
+            ShowError("enter your name, please");
+        }
+    }
+
+
     public void LoadMainScene(){
         longTermData.serverURL = serverInputField.text;
+        longTermData.gamePlayMode = "multiplayer";
+        
         if(CheckNameValid()){
             StartCoroutine(PostPlayerNum_PostReg_LoadMainScene());
         }
@@ -53,7 +70,7 @@ public class ServerLogin : MonoBehaviour
     }
 
     IEnumerator PostPlayerNum_PostReg_LoadMainScene() {
-        StartCoroutine(PostGetPlayersNum());    
+        StartCoroutine(PostGetPlayersNum());
         yield return new WaitUntil(() => longTermData.participantNum!=-1);
         string route = "reg";
         string msg = "{\"name\":\""+nameInputField.text+"\"}";
