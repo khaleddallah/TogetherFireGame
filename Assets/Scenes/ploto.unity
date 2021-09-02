@@ -364,7 +364,7 @@ MonoBehaviour:
   markersParent: {fileID: 964956009}
   fireLinesTempMarkerColor: {r: 0, g: 0.8867924, b: 0.018383224, a: 1}
   fireLineFinalMarkerColor: {r: 0.6226415, g: 0.1321645, b: 0.1321645, a: 0.5803922}
-  moveLinesTempMarkerColor: {r: 0, g: 0.8396226, b: 0.53115356, a: 1}
+  moveLinesTempMarkerColor: {r: 0.120666504, g: 1, b: 0, a: 0.54509807}
   moveLineFinalMarkerColor: {r: 0.687191, g: 0.59527415, b: 0.8584906, a: 0.56078434}
   swordTargetMarker: {fileID: 595415285}
   circleMarkerZoffset: -0.03
@@ -1420,6 +1420,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6917347976728669077, guid: ad3cb80faa0f058649802374cf864e65, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7345457636957494355, guid: ad3cb80faa0f058649802374cf864e65, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.03
@@ -1429,6 +1433,10 @@ PrefabInstance:
       value: 1.03
       objectReference: {fileID: 0}
     - target: {fileID: 7472579956120478132, guid: ad3cb80faa0f058649802374cf864e65, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8086986696817780320, guid: ad3cb80faa0f058649802374cf864e65, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -1662,17 +1670,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridCellSize: 0.5
-  maxRadius: 5
+  maxRadius: 4.5
   actionIndex: 0
   playerIndex: 0
   episodeIndex: -1
   episodes: []
   vitalDatas: []
-  participantNum: 3
+  participantNum: 4
   actionsNum: 2
   howMuchPlayersStarted: 0
-  gamePlayMode: 
+  gamePlayMode: auto
   charactersNum: 3
+  gridRadious: 5
 --- !u!4 &720184894
 Transform:
   m_ObjectHideFlags: 0
@@ -2624,7 +2633,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 50
+  field of view: 25
   orthographic: 0
   orthographic size: 3.5
   m_Depth: -1
@@ -5640,7 +5649,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3723858034641935957, guid: e3d1beb3d7dd1db3e82c748203bc213c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3723858034641935957, guid: e3d1beb3d7dd1db3e82c748203bc213c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
@@ -6361,7 +6370,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1819133840}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.4090204, y: -2.9740605, z: -0.20547491}
+  m_LocalPosition: {x: 0, y: 0, z: -0.20547491}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -6390,9 +6399,10 @@ MonoBehaviour:
   stoneParent: {fileID: 622007661}
   diamondObject: {fileID: 5887408850899285984, guid: d710ddb574c6ca5a3b36e000d15eaebb, type: 3}
   diamoneParent: {fileID: 895910427}
-  offsetCameraShift: 0
-  offsetCameraRotation: 0
-  playerPositionOffset: 6
+  blockGrid: {fileID: 6865145919204624713, guid: a6b7c4a09453756e1b96089e31603549, type: 3}
+  offsetCameraShift: 9.2
+  offsetCameraRotation: 41
+  playerPositionOffset: 8
   playersTemplates:
   - {fileID: 6671197702977672868, guid: 9ee127bbb3ca19d979768f2aded8d30b, type: 3}
   - {fileID: 4319671195954647881, guid: 7da35c05fa99c06209f72fa1875e32d5, type: 3}

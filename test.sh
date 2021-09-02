@@ -1,3 +1,6 @@
+# F19E9E
+#2E4E80
+#1250B0
 # reg="http://fa3b8a8136cd.ngrok.io/reg"
 # is="http://fa3b8a8136cd.ngrok.io/isstarted"
 

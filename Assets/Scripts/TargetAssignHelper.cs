@@ -35,7 +35,7 @@ public class TargetAssignHelper : MonoBehaviour
     private GameObject myCharacter;
     private float vhStep;
     private float slStep;
-
+    private float maxRadius;
 
     void Awake()
     {
@@ -53,6 +53,8 @@ public class TargetAssignHelper : MonoBehaviour
         sdata = Sdata.sdata;
         // myCharacter = charactersParent.transform.GetChild(sdata.playerIndex).GetChild(0).gameObject;
         // Debug.Log("myCharacter:"+myCharacter.transform.position);
+        maxRadius = Mathf.Sqrt(Mathf.Pow(Mathf.Floor(1.5f*sdata.gridRadious)*sdata.gridCellSize,2)+Mathf.Pow(Mathf.Floor(0.5f*sdata.gridRadious)*sdata.gridCellSize,2));
+        Debug.Log(maxRadius);
         vhStep = sdata.gridCellSize;
         slStep = Mathf.Sqrt(2*Mathf.Pow(vhStep,2));
     }
@@ -88,6 +90,7 @@ public class TargetAssignHelper : MonoBehaviour
 
     public void MarkerSwordApply(){
         sdata.episodes[sdata.episodeIndex].roleplays[sdata.playerIndex].actions[sdata.actionIndex].target = currentPosition;
+        swordTargetMarker.SetActive(false);
     }
 
     private void SetCurrentPositionAfterMove(){
@@ -124,7 +127,7 @@ public class TargetAssignHelper : MonoBehaviour
             for (int j=-(int)NumLines ; j<NumLines; j++ ){
                 Vector3 posTemp = new Vector3(i*sdata.gridCellSize, j*sdata.gridCellSize, 0.0f);
                 bool iscurrentPosition = i*sdata.gridCellSize==currentPosition.x && j*sdata.gridCellSize==currentPosition.y ; 
-                bool isOutsideEnv = Vector3.Distance(Vector3.zero, posTemp)>=radiousEnv;
+                bool isOutsideEnv = !CheckIfInsideEnv(posTemp);
                 if(iscurrentPosition || isOutsideEnv){
                     continue;
                 }
@@ -158,10 +161,8 @@ public class TargetAssignHelper : MonoBehaviour
         List<Vector3> res = new List<Vector3>();
         for(int x=-1 ; x<=1 ; x++){
             for(int y=-1 ; y<=1 ; y++){
-                RaycastHit2D hit = RaycastToDirection(origin, x, y, fireLayersFiltered);
-                float distance = hit.distance;
-                if(distance>vhStep){
-                    Vector3 lastPoint = origin+(new Vector3(x, y, 0)*vhStep);
+                Vector3 lastPoint = origin+(new Vector3(x, y, 0)*vhStep);
+                if(CheckIfInsideEnv(lastPoint) && !(x==0 && y==0)){
                     res.Add(lastPoint);
                 }
             }
@@ -227,8 +228,8 @@ public class TargetAssignHelper : MonoBehaviour
         List<Vector3> points = new List<Vector3>();
         RaycastHit2D hit = RaycastToDirection(origin, x, y, moveLayersFiltered);
         float distance = hit.distance;
-        distance += CheckHitGold(hit) ? vhStep : 0.0f;
-        if(distance>=vhStep){
+        if(CheckHitGold(hit)){
+            distance += vhStep;
             float NumOfPoints = GetNumOfPoints(distance, x, y, origin);
             Vector3 lastPoint = origin+new Vector3(x, y, 0)*(NumOfPoints)*vhStep;
             for(int p=1; p<=NumOfPoints; p++){
@@ -236,7 +237,24 @@ public class TargetAssignHelper : MonoBehaviour
                 points.Add(posTemp);
             }
         }
+        else{
+            int tmpX=x, tmpY=y;
+            Vector3 tmp = origin+new Vector3(tmpX, tmpY, 0)*sdata.gridCellSize;
+            while(CheckIfInsideEnv(tmp)){
+                points.Add(tmp);
+                tmpX+=x;
+                tmpY+=y;
+                tmp = origin+new Vector3(tmpX, tmpY, 0)*sdata.gridCellSize;
+                if(x==0 && y==0){
+                    break;
+                }
+            }
+        }
         return points;
+    }
+
+    private bool CheckIfInsideEnv(Vector3 tmp){
+        return Vector3.Distance(Vector3.zero, tmp)<=maxRadius;
     }
 
     private RaycastHit2D RaycastToDirection(Vector3 origin, int x, int y, LayerMask LayersFiltered){

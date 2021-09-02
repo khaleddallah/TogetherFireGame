@@ -10,12 +10,12 @@ public class GridGenerator : MonoBehaviour
     [SerializeField] private GameObject goldObject1;
     [SerializeField] private GameObject goldObject2;
     [SerializeField] private GameObject goldObject3;
-
     [SerializeField] private GameObject goldParent;
     [SerializeField] private GameObject stoneObject;
     [SerializeField] private GameObject stoneParent;
     [SerializeField] private GameObject diamondObject;
     [SerializeField] private GameObject diamoneParent;
+    [SerializeField] private GameObject blockGrid;
     [SerializeField] private float offsetCameraShift;
     [SerializeField] private float offsetCameraRotation;
     [SerializeField] private int playerPositionOffset;
@@ -43,21 +43,58 @@ public class GridGenerator : MonoBehaviour
         }
     }
 
-
-    private void GenerateGrid(){
-        float NumLines = Mathf.Floor(sdata.maxRadius/sdata.gridCellSize);
-        for (int i=-(int)NumLines ; i<NumLines; i++ ){
-            GameObject x = Instantiate(lineObject) as GameObject;
-            x.transform.SetParent(gameObject.transform);
-            x.transform.position = new Vector3(i*sdata.gridCellSize, 0f, 0f);
-        }
-        for (int i=-(int)NumLines ; i<NumLines; i++ ){
-            GameObject x = Instantiate(lineObject) as GameObject;
-            x.transform.SetParent(gameObject.transform);
-            x.transform.Rotate(0,0,90);
-            x.transform.position = new Vector3(0f, i*sdata.gridCellSize, 0f);
+    private void GenerateGrid(){  
+        int radious = Mathf.FloorToInt(1.5f*sdata.gridRadious);
+        for (int i=-(int)radious ; i<=radious; i++ ){
+            for (int j=-(int)radious ; j<=radious; j++ ){
+                Vector3 point = new Vector3(i*sdata.gridCellSize, j*sdata.gridCellSize,0);
+                if(CheckIfInsideEnv(point)){
+                    CreateObject(i,j,blockGrid,gameObject);
+                }
+            }
         }
     }
+
+    private bool CheckIfInsideEnv(Vector3 tmp){
+        Vector3 farPoint = new Vector3(Mathf.FloorToInt(1.5f*sdata.gridRadious)*sdata.gridCellSize, Mathf.FloorToInt(0.5f*sdata.gridRadious)*sdata.gridCellSize, 0f);
+        float maxRadius = Vector3.Distance(Vector3.zero, farPoint);
+        return Vector3.Distance(Vector3.zero, tmp)<=maxRadius;
+    }
+
+
+
+    // private void GenerateGrid(){  
+    //     int y_offset=Mathf.FloorToInt(1.5f*sdata.gridRadious);
+    //     int blockNum = 3*sdata.gridRadious;
+    //     for(int i=-Mathf.FloorToInt(sdata.gridRadious/2); i<=Mathf.FloorToInt(sdata.gridRadious/2); i++){
+    //         for(int j=0; j<3*sdata.gridRadious; j++){
+    //             CreateObject(i,-y_offset+j,blockGrid,gameObject);
+    //         }
+    //     }
+    //     for(int i=Mathf.FloorToInt(sdata.gridRadious/2)+1; i<Mathf.FloorToInt(sdata.gridRadious/2)+1+sdata.gridRadious; i++){
+    //         y_offset-=1;
+    //         blockNum-=2;
+    //         for(int j=0; j<blockNum; j++){
+    //             CreateObject(i,-y_offset+j,blockGrid,gameObject);
+    //             CreateObject(-i,-y_offset+j,blockGrid,gameObject);
+    //         }
+    //     }
+    // }
+
+    // private void GenerateGrid(){
+    //     float NumLines = Mathf.Floor(sdata.maxRadius/sdata.gridCellSize);
+    //     for (int i=-(int)NumLines ; i<NumLines; i++ ){
+    //         GameObject x = Instantiate(lineObject) as GameObject;
+    //         x.transform.SetParent(gameObject.transform);
+    //         x.transform.position = new Vector3(i*sdata.gridCellSize, 0f, 0f);
+    //     }
+    //     for (int i=-(int)NumLines ; i<NumLines; i++ ){
+    //         GameObject x = Instantiate(lineObject) as GameObject;
+    //         x.transform.SetParent(gameObject.transform);
+    //         x.transform.Rotate(0,0,90);
+    //         x.transform.position = new Vector3(0f, i*sdata.gridCellSize, 0f);
+    //     }
+    // }
 
     private void AdjustPlayersPositions(){
         int i = 0;

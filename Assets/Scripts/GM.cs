@@ -56,8 +56,16 @@ public class GM : MonoBehaviour
             gridGenerator.Start0();
             for(int i=0; i<sdata.participantNum; i++){
                 if(i==sdata.playerIndex){
-                    sdata.vitalDatas[i].name  = LongTermData.longTermData.myName;
-                    EnableNewPlayer(i,LongTermData.longTermData.myName);
+                    try{
+                        sdata.vitalDatas[i].name  = LongTermData.longTermData.myName;
+                        EnableNewPlayer(i,LongTermData.longTermData.myName);
+                    }
+                    catch{
+                        Debug.Log("No LongTermData 3");
+                        sdata.vitalDatas[i].name  = "Test";
+                        EnableNewPlayer(i,"Test");
+                    }
+
                 }
                 else{
                     sdata.vitalDatas[i].name  = "p"+i.ToString();

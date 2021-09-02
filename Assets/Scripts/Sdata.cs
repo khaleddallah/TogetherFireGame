@@ -21,6 +21,8 @@ public class Sdata : MonoBehaviour
     public int howMuchPlayersStarted = 0;
     public string gamePlayMode;
     public int charactersNum;
+    public int gridRadious = 5;
+
 
     void Awake()
     {
@@ -39,8 +41,13 @@ public class Sdata : MonoBehaviour
     }
 
     private void SetSomeInitialValues(){
-        sdata.participantNum = LongTermData.longTermData.participantNum;
-        sdata.gamePlayMode = LongTermData.longTermData.gamePlayMode;
+        try{
+            sdata.participantNum = LongTermData.longTermData.participantNum;
+            sdata.gamePlayMode = LongTermData.longTermData.gamePlayMode;
+        }
+        catch{
+            Debug.Log("No LongTermData 1");
+        }  
 
         episodes = new List<Episode>(); 
         vitalDatas = new List<VitalData>();
@@ -57,9 +64,14 @@ public class Sdata : MonoBehaviour
         }
 
         CreateNewEpisode();
-
-        Sdata.sdata.playerIndex = LongTermData.longTermData.playerIndex;
-        sdata.vitalDatas[sdata.playerIndex].name = LongTermData.longTermData.myName;
+        
+        try{
+            sdata.playerIndex = LongTermData.longTermData.playerIndex;
+            sdata.vitalDatas[sdata.playerIndex].name = LongTermData.longTermData.myName;
+        }
+        catch{
+            Debug.Log("No LongTermData 2");
+        }  
     }
 
     public void CreateNewEpisode(){
