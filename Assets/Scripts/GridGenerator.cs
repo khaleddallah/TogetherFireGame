@@ -129,21 +129,23 @@ public class GridGenerator : MonoBehaviour
     }
 
     private void GoldDistributor(){
-        for(int x = -4 ; x<=4 ; x+=2){
-            for(int y = -4 ; y<=4 ; y+=2){
+        for(int x = -5 ; x<=5 ; x+=1){
+            for(int y = -5 ; y<=5 ; y+=1){
                 if(x==0 && y==0){
-                    GameObject g = CreateObject(x, y, goldObject3, goldParent);
+                    continue;
+                    // GameObject g = CreateObject(x, y, goldObject3, goldParent);
+                    // g.transform.rotation =  playersParent.transform.GetChild(0).GetChild(0).transform.rotation;
+                }
+
+                else if(Mathf.Abs(x)!=Mathf.Abs(y) && (Mathf.Abs(x)==4 || Mathf.Abs(y)==4) ){
+                    // continue;
+                    GameObject g = CreateObject(x, y, goldObject1, goldParent);
                     g.transform.rotation =  playersParent.transform.GetChild(0).GetChild(0).transform.rotation;
                 }
-                else if(Mathf.Abs(x)!=Mathf.Abs(y)){
-                    if(Mathf.Abs(x)==4 || Mathf.Abs(y)==4){
-                        GameObject g = CreateObject(x, y, goldObject1, goldParent);
-                        g.transform.rotation =  playersParent.transform.GetChild(0).GetChild(0).transform.rotation;
-                    }
-                    else{
-                        GameObject g = CreateObject(x, y, goldObject2, goldParent);
-                        g.transform.rotation =  playersParent.transform.GetChild(0).GetChild(0).transform.rotation;
-                    }
+                else if( (Mathf.Abs(x)==2 && Mathf.Abs(y)<=2) || (Mathf.Abs(y)==2 && Mathf.Abs(x)<=2)){
+                    continue;
+                    // GameObject g = CreateObject(x, y, goldObject2, goldParent);
+                    // g.transform.rotation =  playersParent.transform.GetChild(0).GetChild(0).transform.rotation;
                 }
             }
         }

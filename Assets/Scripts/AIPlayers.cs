@@ -71,8 +71,8 @@ public class AIPlayers : MonoBehaviour
         }
     }
 
-    private Vector3 GetPlayerPositionByIndex(int index){
-        Vector3 currentPos = PlayersParent.transform.GetChild(index).GetChild(0).position;
+    private Vector3 GetPlayerPositionByIndex(int index, int cindex){
+        Vector3 currentPos = PlayersParent.transform.GetChild(index).GetChild(cindex).position;
         return currentPos;
     }
 
@@ -81,11 +81,12 @@ public class AIPlayers : MonoBehaviour
         Debug.Log("FromPlayerAI:"+playerInd);
 
         // select the character 
-        sdata.episodes[sdata.episodeIndex].roleplays[playerInd].cindex = Random.Range(0, sdata.charactersNum);
+        int cindexTmp = Random.Range(0, sdata.charactersNum);
+        sdata.episodes[sdata.episodeIndex].roleplays[playerInd].cindex = cindexTmp;
 
         // select the move target 
         List<List<Vector3>> possibleMoves;
-        possibleMoves = TargetAssignHelper.tah.GetMovePossiblePoints(GetPlayerPositionByIndex(playerInd));
+        possibleMoves = TargetAssignHelper.tah.GetMovePossiblePoints(GetPlayerPositionByIndex(playerInd,cindexTmp));
         sdata.episodes[sdata.episodeIndex].roleplays[playerInd].actions[0].type = "move";
         List<List<Vector3>> goldDirections = GetGoldDirection(possibleMoves);
         if(goldDirections.Count>0){

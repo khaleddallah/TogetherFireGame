@@ -72,7 +72,9 @@ public class TargetAssignHelper : MonoBehaviour
     public List<Vector3> GetSelectionMarkers(int playerIndex){
         List<Vector3> res = new List<Vector3>();
         for(int cindex = 0; cindex<sdata.charactersNum; cindex++){
-            res.Add(charactersParent.transform.GetChild(playerIndex).GetChild(cindex).transform.position);
+            if(sdata.vitalDatas[playerIndex].health[cindex]>0){
+                res.Add(charactersParent.transform.GetChild(playerIndex).GetChild(cindex).transform.position);
+            }
         }
         return res;
     }
