@@ -3,4 +3,4 @@
 
 # Demo     
 
-<video src='https://drive.google.com/file/d/1Vr2GENVQMDPKIPkREhJzImLObGb-Q67E/view?usp=sharing' width=180/>
+[![Watch the video](https://gitlab.com/khaleddallah/tf/-/raw/master/Demo.png)](https://drive.google.com/file/d/1Vr2GENVQMDPKIPkREhJzImLObGb-Q67E/view?usp=sharing)
